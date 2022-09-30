@@ -3,7 +3,6 @@
         xmlns:vm="using:LabelVoice.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:locale="using:LabelVoice.Locale"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="LabelVoice.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
@@ -13,7 +12,29 @@
     <Design.DataContext>
         <vm:MainWindowViewModel/>
     </Design.DataContext>
-
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    
+    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+        <TextBlock Text="{DynamicResource mainwindow.greeting}" HorizontalAlignment="Center"/>
+        <ComboBox
+            x:Name="LanguageBox"
+            MinWidth="140"
+            Margin="10"
+            HorizontalAlignment="Center"
+            HorizontalContentAlignment="Center"
+            SelectedIndex="0"
+            SelectionChanged="SelectingItemsControl_OnSelectionChanged">
+            <ComboBoxItem Content="zh-CN"/>
+            <ComboBoxItem Content="en-US"/>
+            <ComboBoxItem Content="ja-JP"/>
+            <ComboBoxItem Content="zh-TW"/>
+        </ComboBox>
+        <TextBlock
+            Margin="10"
+            MaxWidth="400"
+            LineHeight="20"
+            Text="{DynamicResource mainwindow.testculture}"
+            TextAlignment="Center"
+            TextWrapping="Wrap"/>
+    </StackPanel>
 
 </Window>
