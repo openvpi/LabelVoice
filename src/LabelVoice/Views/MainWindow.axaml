@@ -3,10 +3,12 @@
         xmlns:vm="using:LabelVoice.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:locale="using:LabelVoice.Locale"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="LabelVoice.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
-        Title="LabelVoice">
+        Title="LabelVoice"
+        FontFamily="Microsoft YaHei UI">
 
     <Design.DataContext>
         <vm:MainWindowViewModel/>
