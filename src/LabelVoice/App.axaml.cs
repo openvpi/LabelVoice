@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
@@ -10,6 +11,7 @@ using Avalonia.Markup.Xaml.MarkupExtensions;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Threading;
+using Avalonia.Collections;
 using DynamicData;
 
 namespace LabelVoice;
@@ -73,12 +75,12 @@ public class App : Application
                 .Except(new[] { _defaultLocaleResource }));
 
         var language = culture?.Split('-')[0].ToLowerInvariant();
-        if (language == null || !_appLocaleResources.ContainsKey(language)) return;
+        if (string.IsNullOrWhiteSpace(language) || !_appLocaleResources.ContainsKey(language)) return;
 
         // Add back the default culture of this language.
         Current.Resources.MergedDictionaries.Add(_appLocaleResources[language][0]);
         var resDict = _appLocaleResources[language].FirstOrDefault(d => d.Source!.OriginalString.Contains(culture ?? "", StringComparison.InvariantCultureIgnoreCase));
-        
+
         // Add back the specific culture if found and different from the default.
         if (resDict != null && resDict != _appLocaleResources[language][0])
         {

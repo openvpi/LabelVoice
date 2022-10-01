@@ -21,6 +21,7 @@
             Margin="10"
             HorizontalAlignment="Center"
             HorizontalContentAlignment="Center"
+            VerticalContentAlignment="Center"
             SelectedIndex="0"
             SelectionChanged="SelectingItemsControl_OnSelectionChanged">
             <ComboBoxItem Content="zh-CN"/>
