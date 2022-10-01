@@ -1,6 +1,7 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <FontFamily x:Key="ui.fontfamily">Microsoft YaHei UI,Segoe UI,San Francisco,Helvetica Neue,PingFang-SC</FontFamily>
     <sys:String x:Key="mainwindow.greeting">Welcome to Avalonia!</sys:String>
-    <sys:String x:Key="mainwindow.testculture">This content has zh-CN version but no ja-JP version. When the language is set to ja-JP, it falls back to en-US instead of zh-CN; when the language is set to zh-TW, it falls back to zh-CN instead of en-US.</sys:String>
+    <sys:String x:Key="mainwindow.testculture">This content has zh-CN and en-US versions but no ja-JP or zh-TW version. When the language is set to ja-JP, it falls back to en-US instead of zh-CN; when the language is set to zh-TW, it falls back to zh-CN instead of en-US.</sys:String>
 </ResourceDictionary>
