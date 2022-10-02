@@ -11,7 +11,6 @@ using Avalonia.Markup.Xaml.MarkupExtensions;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Threading;
-using Avalonia.Collections;
 using DynamicData;
 
 namespace LabelVoice;
