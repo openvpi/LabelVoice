@@ -1,7 +1,7 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
-	<FontFamily x:Key="ui.fontfamily">Microsoft YaHei UI,Segoe UI,San Francisco,Helvetica Neue,苹方-简</FontFamily>
+	<FontFamily x:Key="ui.fontfamily">Microsoft YaHei UI,PingFang-SC,Segoe UI,San Francisco,Helvetica Neue</FontFamily>
     <sys:String x:Key="mainwindow.greeting">欢迎来到 Avalonia！</sys:String>
     <sys:String x:Key="mainwindow.testculture">此内容有 zh-CN 和 en-US 版本，但没有 ja-JP 版本和 zh-TW 版本。如果将语言设置为 ja-JP，它将显示为 en-US，而不是 zh-CN；如果将语言设置为 zh-TW，它将显示为 zh-CN，而不是 en-US。</sys:String>
 </ResourceDictionary>

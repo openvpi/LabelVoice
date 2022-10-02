@@ -21,5 +21,6 @@
     <Application.Styles>
         <!-- <FluentTheme Mode="Dark"/> -->
         <sty:FluentAvaloniaTheme/>
+        <StyleInclude Source="/Styles/Localization.axaml"/>
     </Application.Styles>
 </Application>
