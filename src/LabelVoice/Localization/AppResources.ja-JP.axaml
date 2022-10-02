@@ -2,5 +2,5 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
     <FontFamily x:Key="ui.fontfamily">MS Mincho,MS Gothic,Hiragino Mincho,Hiragino KakuGothic,Hiragino MaruGothic</FontFamily>
-    <sys:String x:Key="mainwindow.greeting">Avalonia へようこそ！</sys:String>
+    <sys:String x:Key="mainwindow.greeting">LabelVoice へようこそ！</sys:String>
 </ResourceDictionary>
