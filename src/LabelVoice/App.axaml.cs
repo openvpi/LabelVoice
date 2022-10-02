@@ -33,8 +33,8 @@ public class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            // String mainWindow = "main";
-            String mainWindow = "wav";
+            String mainWindow = "main";
+            //String mainWindow = "wav";
             if (mainWindow == "main")
             {
                 desktop.MainWindow = new MainWindow
