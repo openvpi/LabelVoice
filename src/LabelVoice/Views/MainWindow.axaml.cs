@@ -15,12 +15,9 @@ namespace LabelVoice.Views
 
         private void SelectingItemsControl_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
         {
-            var item = (ComboBoxItem)LanguageBox?.SelectedItem;
-            var lang = item?.Content.ToString();
-            if (lang != null)
-            {
-                App.SetCulture(lang);
-            }
+            var item = (ComboBoxItem)((ComboBox)sender).SelectedItem;
+            var lang = item.Content.ToString();
+            App.SetCulture(lang);
         }
     }
 }

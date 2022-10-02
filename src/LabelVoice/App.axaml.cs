@@ -58,8 +58,6 @@ public class App : Application
                 .Split('-')[0]
                 .ToLowerInvariant())
             .ToDictionary(group => group.Key, group => group.ToArray());
-        
-        SetCulture(CultureInfo.InstalledUICulture.Name);
 
         // Force using InvariantCulture to prevent issues caused by culture dependent string conversion, especially for floating point numbers.
         Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
