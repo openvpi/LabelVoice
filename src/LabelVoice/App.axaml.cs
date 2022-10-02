@@ -34,10 +34,19 @@ public class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            desktop.MainWindow = new MainWindow
+            // String mainWindow = "main";
+            String mainWindow = "wav";
+            if (mainWindow == "main")
             {
-                DataContext = new MainWindowViewModel(),
-            };
+                desktop.MainWindow = new MainWindow
+                {
+                    DataContext = new MainWindowViewModel(),
+                };
+            }
+            else if (mainWindow == "wav")
+            {
+                desktop.MainWindow = new WavPlotWindow();
+            }
         }
 
         base.OnFrameworkInitializationCompleted();
