@@ -1,6 +1,8 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Windows.Input;
@@ -16,6 +18,7 @@ public class MainWindowViewModel : ViewModelBase
     private ObservableCollection<Node>? _Items;
     public ObservableCollection<Node>? SelectedItems { set; get; }
     private string? _strFolder;
+
     public string? strFolder
     {
         get => _strFolder;
@@ -40,10 +43,12 @@ public class MainWindowViewModel : ViewModelBase
             }
         };
     }
+
     public ObservableCollection<Node> GetSubfolders(string strPath)
     {
         ObservableCollection<Node> subfolders = new ObservableCollection<Node>();
         string[] subdirs = Directory.GetDirectories(strPath, "*", SearchOption.TopDirectoryOnly);
+        Array.Sort(subdirs, new Comparer(CultureInfo.InstalledUICulture));
 
         foreach (string dir in subdirs)
         {

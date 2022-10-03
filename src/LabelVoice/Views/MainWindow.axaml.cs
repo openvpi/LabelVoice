@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.IO;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -11,13 +12,11 @@ namespace LabelVoice.Views
 {
     public partial class MainWindow : Window
     {
-        private Button _btnGetProjectRoot;
         public MainWindow()
         {
             InitializeComponent();
-
-            _btnGetProjectRoot = this.FindControl<Button>("btnGetProjectRoot");
-            _btnGetProjectRoot.Click += async (sender, e) => await GetProjectRoot();
+            
+            btnGetProjectRoot.Click += async (sender, e) => await GetProjectRoot();
         }
 
         private void SelectingItemsControl_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
