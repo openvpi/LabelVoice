@@ -42,8 +42,9 @@
 			<Button Name="btnGetProjectRoot"
 	            Content="打开工程..." />
 			<TreeView Items="{Binding Items}"
-	            Width="200" Height="200"
-	            HorizontalAlignment="Left">
+	            HorizontalAlignment="Left"
+                Height="{Binding Height, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                Width="300">
 				<TreeView.ItemTemplate>
 					<TreeDataTemplate ItemsSource="{Binding Subfolders}">
 						<TextBlock Text="{Binding strNodeText}"/>
@@ -51,7 +52,6 @@
 				</TreeView.ItemTemplate>
 			</TreeView>
 		</StackPanel>
-
-	</Grid>
+    </Grid>
 		
 </Window>
