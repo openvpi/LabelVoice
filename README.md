@@ -1,5 +1,6 @@
 # LabelVoice Dev Note
 ## 2022/10/2 added wav plot:
+- Note: As for now, the wav plot needs some extra setup on Linux and Mac, see: https://scottplot.net/faq/dependencies/.
 In `App.axaml.cs`:
 ```
 String mainWindow = "main";
