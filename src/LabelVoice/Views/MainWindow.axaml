@@ -11,30 +11,47 @@
     <Design.DataContext>
         <vm:MainWindowViewModel/>
     </Design.DataContext>
-    
-    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-        <TextBlock Text="{DynamicResource mainwindow.greeting}" HorizontalAlignment="Center"/>
-        <ComboBox
-            x:Name="LanguageBox"
-            MinWidth="140"
-            Margin="10"
-            HorizontalAlignment="Center"
-            HorizontalContentAlignment="Center"
-            VerticalContentAlignment="Center"
-            SelectedIndex="0"
-            SelectionChanged="SelectingItemsControl_OnSelectionChanged">
-            <ComboBoxItem Content="zh-CN"/>
-            <ComboBoxItem Content="en-US"/>
-            <ComboBoxItem Content="ja-JP"/>
-            <ComboBoxItem Content="zh-TW"/>
-        </ComboBox>
-        <TextBlock
-            Margin="10"
-            MaxWidth="400"
-            LineHeight="20"
-            Text="{DynamicResource mainwindow.testculture}"
-            TextAlignment="Center"
-            TextWrapping="Wrap"/>
-    </StackPanel>
 
+	<Grid Name="mainLayout" ColumnDefinitions="200,1*" RowDefinitions="*">
+        <StackPanel Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <TextBlock Text="{DynamicResource mainwindow.greeting}" HorizontalAlignment="Center"/>
+            <ComboBox
+                x:Name="LanguageBox"
+                MinWidth="140"
+                Margin="10"
+                HorizontalAlignment="Center"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+                SelectedIndex="0"
+                SelectionChanged="SelectingItemsControl_OnSelectionChanged">
+                <ComboBoxItem Content="zh-CN"/>
+                <ComboBoxItem Content="en-US"/>
+                <ComboBoxItem Content="ja-JP"/>
+                <ComboBoxItem Content="zh-TW"/>
+            </ComboBox>
+            <TextBlock
+                Margin="10"
+                MaxWidth="400"
+                LineHeight="20"
+                Text="{DynamicResource mainwindow.testculture}"
+                TextAlignment="Center"
+                TextWrapping="Wrap"/>
+        </StackPanel>
+
+		<StackPanel Grid.Column="0" Grid.Row="0" VerticalAlignment="Top">
+			<Button Name="btnGetProjectRoot"
+	            Content="打开工程..." />
+			<TreeView Items="{Binding Items}"
+	            Width="200" Height="200"
+	            HorizontalAlignment="Left">
+				<TreeView.ItemTemplate>
+					<TreeDataTemplate ItemsSource="{Binding Subfolders}">
+						<TextBlock Text="{Binding strNodeText}"/>
+					</TreeDataTemplate>
+				</TreeView.ItemTemplate>
+			</TreeView>
+		</StackPanel>
+
+	</Grid>
+		
 </Window>
