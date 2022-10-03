@@ -1,6 +1,8 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
-    <FontFamily x:Key="ui.fontfamily">MS Mincho,MS Gothic,Hiragino Mincho,Hiragino KakuGothic,Hiragino MaruGothic</FontFamily>
+    <FontFamily x:Key="ui.fontfamily.win">MS Mincho,MS Gothic</FontFamily>
+    <FontFamily x:Key="ui.fontfamily.mac">Hiragino Mincho,Hiragino KakuGothic,Hiragino MaruGothic</FontFamily>
+    <FontFamily x:Key="ui.fontfamily.linux">sanserif</FontFamily>
     <sys:String x:Key="mainwindow.greeting">LabelVoice へようこそ！</sys:String>
 </ResourceDictionary>

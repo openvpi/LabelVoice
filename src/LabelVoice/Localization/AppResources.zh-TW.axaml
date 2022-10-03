@@ -1,6 +1,8 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
-    <FontFamily x:Key="ui.fontfamily">Microsoft JhengHei,PingFang-TC,Segoe UI,San Francisco,Helvetica Neue</FontFamily>
+    <FontFamily x:Key="ui.fontfamily.win">Microsoft JhengHei</FontFamily>
+    <FontFamily x:Key="ui.fontfamily.mac">PingFang-TC</FontFamily>
+    <FontFamily x:Key="ui.fontfamily.linux">sansserif</FontFamily>
     <sys:String x:Key="mainwindow.greeting">歡迎來到 LabelVoice！</sys:String>
 </ResourceDictionary>

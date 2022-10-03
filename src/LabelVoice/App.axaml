@@ -21,6 +21,8 @@
     <Application.Styles>
         <!-- <FluentTheme Mode="Dark"/> -->
         <sty:FluentAvaloniaTheme/>
-        <StyleInclude Source="/Styles/Fonts.axaml"/>
+        <StyleInclude Source="/Styles/Fonts.Win.axaml"/>
+        <StyleInclude Source="/Styles/Fonts.Linux.axaml"/>
+        <StyleInclude Source="/Styles/Fonts.Mac.axaml"/>
     </Application.Styles>
 </Application>

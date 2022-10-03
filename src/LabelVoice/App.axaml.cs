@@ -9,8 +9,10 @@ using LabelVoice.Views;
 using System.Linq;
 using Avalonia.Markup.Xaml.MarkupExtensions;
 using System.Globalization;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Threading;
+using Avalonia.Markup.Xaml.Styling;
 using DynamicData;
 
 namespace LabelVoice;
@@ -20,9 +22,18 @@ public class App : Application
 #pragma warning disable CS8618
     private static Dictionary<string, ResourceInclude[]> _appLocaleResources;
 #pragma warning restore CS8618
-
     private static ResourceInclude _defaultLocaleResource => _appLocaleResources[""][0];
+    public static bool IsWin() => RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+    public static bool IsMac() => RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
+    public static bool IsLinux() => RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
 
+    public static string GetPlatformName()
+    {
+        if (IsWin()) return "Win";
+        if (IsMac()) return "Mac";
+        if (IsLinux()) return "Linux";
+        return "";
+    }
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
@@ -66,7 +77,16 @@ public class App : Application
                 .Split('-')[0]
                 .ToLowerInvariant())
             .ToDictionary(group => group.Key, group => group.ToArray());
-
+        
+        //Only keep the font style of the current operating system.
+        for (var i = 0;i<Current.Styles.Count;i++)
+        {
+            if (Current.Styles[i] is not StyleInclude) continue;
+            if (((StyleInclude)Current.Styles[i]).Source.OriginalString == "/Styles/Fonts." + GetPlatformName()+".axaml")continue;
+            Current.Styles.Remove(Current.Styles[i]);
+            i--;
+        }
+        
         // Force using InvariantCulture to prevent issues caused by culture dependent string conversion, especially for floating point numbers.
         Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
         Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
