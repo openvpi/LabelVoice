@@ -40,8 +40,8 @@ namespace LabelVoice.Views
                 (double[] audio, int sampleRate) = ReadWav(result[0]);
 
                 AvaPlot avaPlot1 = this.Find<AvaPlot>("avaPlot1");
+                avaPlot1.Plot.Clear();
                
-
                 // Signal plots require a data array and a sample rate (points per unit)
                 avaPlot1.Plot.AddSignal(audio, sampleRate);
                 //avaPlot1.Plot.Title("WAV File Data");
