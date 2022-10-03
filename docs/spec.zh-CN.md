@@ -24,11 +24,11 @@
             ...
     |-- items    [10]
         |-- a54c548a_GuangNianZhiWai    [11]
-            |-- GuangNianZhiWai.lvitem    [12]
-            |-- GuangNianZhiWai_001.lvtext    [13]
-            |-- GuangNianZhiWai_001.lvfeat    [14]
-            |-- GuangNianZhiWai_002.lvtext
-            |-- GuangNianZhiWai_002.lvfeat
+            |-- a54c548a_GuangNianZhiWai.lvitem    [12]
+            |-- 527a23a9_GanShouTingZaiWoFaDuanDeZhiJian.lvtext    [13]
+            |-- 527a23a9_GanShouTingZaiWoFaDuanDeZhiJian.lvfeat    [14]
+            |-- 88d4562a_RuHeShunJianDongJieShiJian.lvtext
+            |-- 88d4562a_RuHeShunJianDongJieShiJian.lvfeat
         |-- 50deb91b_WoHuaiNianDe
             ...
         |-- 09692e28_PaoMo
@@ -64,9 +64,9 @@
 
 [11] 存储单个项目，目录名格式为“随机编号_项目名称”，其中项目名称可由用户指定和修改
 
-[12] 项目描述文件，包含项目的属性，文件名格式为“项目名称.lvitem”
+[12] 项目描述文件，包含项目的属性，文件名格式为“项目编号_项目名称.lvitem”
 
-[13] 单个切片的标注文件，结构在类似于 TextGrid 的基础上添加了绑定组，文件名格式为“项目名称_切片名称.lvtext”
+[13] 单个切片的标注文件，结构在类似于 TextGrid 的基础上添加绑定组，文件名格式为“随机编号_切片名称.lvtext”
 
 [14] 单个切片的特征数据，由程序自动分析得到，包括 f0、力度、气声等信息，存储为二进制格式，文件名格式同上
 
