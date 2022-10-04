@@ -76,16 +76,21 @@
 
 ## 2 工程描述文件（.lvproj）
 
+文件示例如下：
+
 ```xml
 <?xml version="1.0" encoding="utf-8" ?>
 <Project>
     <Version>0.0.1</Version>
     <Name>LabelVoice Example Dataset</Name>
-    <!-- Not finished yet! -->
     <LabelSchema>
-        
+        <Layer Class="Sentence" Name="lyrics"/>
+        <Layer Class="Grapheme" Name="pinyin" SubdivisionOf="0"/>
+        <Layer Class="Pitch" Name="midi" SubdivisionOf="1"/>
+        <Layer Class="Phoneme" Name="phone" SubdivisionOf="1"/>
+        <Layer Class="Duration" Name="dur" AlignedWith="3"/>
+        <Layer Class="Custom" Name="slur" AlignedWith="3" DataType="Binary"/>
     </LabelSchema>
-    <!-- ----------------- -->
     <Languages>
         <Language Id="fe67" Name="CHN" Dictionary="dict.txt" PhonemeSet="phoneset.txt" Aligner="aligner"/>
         <Language Id="a61c" Name="JPN" Dictionary="dict.txt" PhonemeSet="phoneset.txt"/>
