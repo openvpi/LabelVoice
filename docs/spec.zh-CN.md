@@ -79,6 +79,21 @@
 ```xml
 <?xml version="1.0" encoding="utf-8" ?>
 <Project>
+    <Version>0.0.1</Version>
+    <Name>LabelVoice Example Dataset</Name>
+    <!-- Not finished yet! -->
+    <LabelSchema>
+        
+    </LabelSchema>
+    <!-- ----------------- -->
+    <Languages>
+        <Language Id="fe67" Name="CHN" Dictionary="dict.txt" PhonemeSet="phoneset.txt" Aligner="aligner"/>
+        <Language Id="a61c" Name="JPN" Dictionary="dict.txt" PhonemeSet="phoneset.txt"/>
+    </Languages>
+    <Speakers>
+        <Speaker Id="32e9" Name="Opencpop"/>
+        <Speaker Id="08cd" Name="ZhiBin"/>
+    </Speakers>
     <Items>
         <Item Id="a54c548a" Name="GuangNianZhiWai" Speaker="32e9" VisualPath=""/>
         <Item Id="50deb91b" Name="WoHuaiNianDe" Speaker="32e9" VisualPath="foo/bar"/>
