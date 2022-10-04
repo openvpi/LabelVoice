@@ -76,8 +76,6 @@
 
 ## 2 工程描述文件（.lvproj）
 
-方案一：
-
 ```xml
 <?xml version="1.0" encoding="utf-8" ?>
 <Project>
@@ -86,35 +84,8 @@
         <Item Id="50deb91b" Name="WoHuaiNianDe" Speaker="32e9" VisualPath="foo/bar"/>
         <Item Id="61cfc89a" Name="BuWeiXia" Speaker="08cd" VisualPath="foo"/>
         <Item Id="38db2292" Name="ZheGanJue" Speaker="08cd" VisualPath="foo/bar"/>
+        <Placeholder Speaker="08cd" VisualPath="empty"/>
     </Items>
-</Project>
-```
-
-方案二：
-
-```xml
-<?xml version="1.0" encoding="utf-8" ?>
-<Project>
-    <ItemResources>
-        <Speaker Id="32e9" Name="Opencpop">
-            <Item Id="a54c548a" Name="GuangNianZhiWai"/>
-            <Folder Name="foo">
-                <Folder Name="bar">
-                    <Item Id="50deb91b" Name="WoHuaiNianDe"/>
-                </Folder>
-            </Folder>
-        </Speaker>
-        <Speaker Id="08cd" Name="ZhiBin">
-            <Folder Name="foo">
-                <Item Id="61cfc89a" Name="BuWeiXia"/>
-                <Folder Name="bar">
-                    <Item Id="38db2292" Name="ZheGanJue"/>
-                </Folder>
-            </Folder>
-            <Folder Name="empty">
-            </Folder>
-        </Speaker>
-    </ItemResources>
 </Project>
 ```
 
