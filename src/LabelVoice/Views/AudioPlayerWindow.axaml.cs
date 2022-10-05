@@ -19,12 +19,18 @@ namespace LabelVoice.Views
             ButtonPause.Click += Pause;
             ButtonStop.Click += Stop;
             ButtonSetProgressHalf.Click += SetProgressHalf;
+            ButtonPlayTestSound.Click += ButtonPlayTestSound_Click;
+        }
+
+        private void ButtonPlayTestSound_Click(object? sender, RoutedEventArgs e)
+        {
+            PlaybackManager.Instance.PlayTestSound();
         }
 
         private void SetProgressHalf(object? sender, RoutedEventArgs e)
         {
-            var totalTime = PlaybackManager.Instance.GetTotalTime();
-            PlaybackManager.Instance.SetCurrentTime(totalTime / 2);
+            //var totalTime = PlaybackManager.Instance.GetTotalTime();
+            //PlaybackManager.Instance.SetCurrentTime(totalTime / 2);
         }
 
         private void Stop(object? sender, RoutedEventArgs e)
@@ -73,7 +79,7 @@ namespace LabelVoice.Views
             {
                 string strFolder = result.First();
                 ((AudioPlayerWindowViewModel)DataContext!).OpenAudioFile(strFolder);
-                sliderProgress.Maximum = (int)PlaybackManager.Instance.GetTotalTime().TotalMilliseconds;
+                //sliderProgress.Maximum = (int)PlaybackManager.Instance.GetTotalTime().TotalMilliseconds;
             }
         }
     }

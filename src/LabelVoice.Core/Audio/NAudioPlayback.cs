@@ -3,7 +3,7 @@ using NAudio.Wave;
 
 namespace LabelVoice.Core.Audio
 {
-    public class AudioPlayback : IDisposable
+    public class NAudioPlayback : IAudioPlayback, IDisposable
     {
         #region Private Fields
 
@@ -73,7 +73,7 @@ namespace LabelVoice.Core.Audio
         public void Play()
         {
             if (_playbackDevice != null
-                && _fileStream != null
+                //&& _fileStream != null
                 && _playbackDevice.PlaybackState != PlaybackState.Playing)
                 _playbackDevice.Play();
         }
@@ -136,6 +136,13 @@ namespace LabelVoice.Core.Audio
             _playbackDevice != null
             ? _playbackDevice.PlaybackState
             : PlaybackState.Stopped;
+
+        public void Init(ISampleProvider sampleProvider)
+        {
+            Stop();
+            EnsureDeviceCreated();
+            _playbackDevice.Init(sampleProvider);
+        }
     }
 
     #endregion Methods

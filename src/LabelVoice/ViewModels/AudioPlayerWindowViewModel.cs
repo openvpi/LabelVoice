@@ -63,16 +63,16 @@ namespace LabelVoice.ViewModels
         public void OpenAudioFile(string path)
         {
             AudioFilePath = path;
-            PlaybackManager.Instance.Load(path);
+            //PlaybackManager.Instance.Load(path);
             CurrentTimeString = "00:00";
-            TotalTimeString = PlaybackManager.Instance.GetTotalTime().ToString(@"mm\:ss");
+            //TotalTimeString = PlaybackManager.Instance.GetTotalTime().ToString(@"mm\:ss");
             IsReady = true;
         }
 
         public void UpdateProgress()
         {
-            CurrentTimeString = PlaybackManager.Instance.GetCurrentTime().ToString(@"mm\:ss");
-            Progress = PlaybackManager.Instance.GetCurrentTime().TotalMilliseconds;
+            //CurrentTimeString = PlaybackManager.Instance.GetCurrentTime().ToString(@"mm\:ss");
+            //Progress = PlaybackManager.Instance.GetCurrentTime().TotalMilliseconds;
         }
 
         public void StartUpdateProgress()

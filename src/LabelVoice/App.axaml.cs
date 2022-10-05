@@ -14,6 +14,8 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using Avalonia.Markup.Xaml.Styling;
 using DynamicData;
+using LabelVoice.Core.Managers;
+using LabelVoice.Core.Audio;
 
 namespace LabelVoice;
 
@@ -38,6 +40,14 @@ public class App : Application
     {
         AvaloniaXamlLoader.Load(this);
         InitializeCulture();
+        if (IsWin())
+        {
+            PlaybackManager.Instance.SetAudioBackend(AudioBackend.NAudio);
+        }
+        else
+        {
+            PlaybackManager.Instance.SetAudioBackend(AudioBackend.PortAudio);
+        }
     }
 
     public override void OnFrameworkInitializationCompleted()

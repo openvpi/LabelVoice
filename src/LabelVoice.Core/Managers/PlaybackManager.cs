@@ -1,6 +1,7 @@
 ﻿using LabelVoice.Core.Audio;
 using LabelVoice.Core.Utils;
 using NAudio.Wave;
+using NAudio.Wave.SampleProviders;
 
 namespace LabelVoice.Core.Managers
 {
@@ -11,35 +12,65 @@ namespace LabelVoice.Core.Managers
     {
         #region Private Fields
 
-        private readonly AudioPlayback _audioPlayback = new();
+        private IAudioPlayback? _audioPlayback;
+
+        //private ISampleProvider _audioSampleProvider;
 
         #endregion Private Fields
 
         #region Methods
 
-        public void Load(string path) => _audioPlayback.Load(path);
+        //public void Load(string path) => _audioPlayback.Load(path);
 
-        public void Play() => _audioPlayback.Play();
+        public void Init(ISampleProvider sampleProvider) => _audioPlayback?.Init(sampleProvider);
 
-        public void Pause() => _audioPlayback.Pause();
+        public void SetAudioBackend(AudioBackend backend)
+        {
+            _audioPlayback = backend switch
+            {
+                AudioBackend.NAudio => new NAudioPlayback(),
+                AudioBackend.PortAudio => new PortAudioPlayback(),
+                _ => null,
+            };
+        }
 
-        public void Stop() => _audioPlayback.Stop();
+        public void PlayTestSound()
+        {
+            Stop();
+            Init(new SignalGenerator(44100, 1).Take(TimeSpan.FromSeconds(1)));
+            Play();
+        }
 
-        public PlaybackState GetPlaybackState() => _audioPlayback.GetPlaybackState();
+        public void Play() => _audioPlayback?.Play();
 
-        public TimeSpan GetCurrentTime() => _audioPlayback.GetCurrentTime();
+        public void Pause() => _audioPlayback?.Pause();
 
-        public void SetCurrentTime(TimeSpan time) => _audioPlayback.SetCurrentTime(time);
+        public void Stop() => _audioPlayback?.Stop();
 
-        public TimeSpan GetTotalTime() => _audioPlayback.GetTotalTime();
+        public PlaybackState GetPlaybackState() =>
+            _audioPlayback != null
+            ? _audioPlayback.GetPlaybackState()
+            : PlaybackState.Stopped;
 
-        public long GetPosition() => _audioPlayback.GetPosition();
+        //public TimeSpan GetCurrentTime() => _audioPlayback.GetCurrentTime();
 
-        public void SetPosition(long pos) => _audioPlayback.SetPosition(pos);
+        //public void SetCurrentTime(TimeSpan time) => _audioPlayback.SetCurrentTime(time);
 
-        public long GetLength() => _audioPlayback.GetLength();
+        //public TimeSpan GetTotalTime() => _audioPlayback.GetTotalTime();
 
-        public void Dispose() => _audioPlayback.Dispose();
+        public long GetPosition() =>
+            _audioPlayback != null
+            ? _audioPlayback.GetPosition()
+            : 0;
+
+        //public void SetPosition(long pos) => _audioPlayback.SetPosition(pos);
+
+        public long GetLength() =>
+            _audioPlayback != null
+            ? _audioPlayback.GetLength()
+            : 0;
+
+        public void Dispose() => _audioPlayback?.Dispose();
 
         #endregion Methods
     }

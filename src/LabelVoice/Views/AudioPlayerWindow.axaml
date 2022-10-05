@@ -51,7 +51,7 @@
 		</Grid>
 		<Grid
             Grid.Row="2"
-			ColumnDefinitions="*, *, *, *">
+			ColumnDefinitions="*, *, *, *, *">
 			<Button
                 x:Name="ButtonPlay"
                 IsEnabled="{Binding IsReady}"
@@ -72,12 +72,18 @@
                 Grid.Column="2"
                 Content="停止"
 				HorizontalAlignment="Stretch"
-                Margin="4,0,0,0"/>
+                Margin="4,0,4,0"/>
 			<Button
                 x:Name="ButtonSetProgressHalf"
                 IsEnabled="{Binding IsReady}"
                 Grid.Column="3"
                 Content="设置进度50%"
+				HorizontalAlignment="Stretch"
+                Margin="4,0,4,0"/>
+			<Button
+                x:Name="ButtonPlayTestSound"
+                Grid.Column="4"
+                Content="播放测试音频"
 				HorizontalAlignment="Stretch"
                 Margin="4,0,0,0"/>
 		</Grid>
