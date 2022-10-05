@@ -44,18 +44,26 @@ public class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            String mainWindow = "main";
+            //String mainWindow = "main";
             //String mainWindow = "wav";
-            if (mainWindow == "main")
+            string mainWindow = "player";
+            switch (mainWindow)
             {
-                desktop.MainWindow = new MainWindow
-                {
-                    DataContext = new MainWindowViewModel(),
-                };
-            }
-            else if (mainWindow == "wav")
-            {
-                desktop.MainWindow = new WavPlotWindow();
+                case "main":
+                    desktop.MainWindow = new MainWindow
+                    {
+                        DataContext = new MainWindowViewModel(),
+                    };
+                    break;
+                case "wav":
+                    desktop.MainWindow = new WavPlotWindow();
+                    break;
+                case "player":
+                    desktop.MainWindow = new AudioPlayerWindow
+                    {
+                        DataContext = new AudioPlayerWindowViewModel()
+                    };
+                    break;
             }
         }
 
