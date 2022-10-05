@@ -4,7 +4,14 @@ namespace LabelVoice.Core.Audio
 {
     internal class PortAudioPlayback : IAudioPlayback, IDisposable
     {
+        public int DeviceNumber => throw new NotImplementedException();
+
         public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<AudioDevice> GetDevices()
         {
             throw new NotImplementedException();
         }
@@ -35,6 +42,11 @@ namespace LabelVoice.Core.Audio
         }
 
         public void Play()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SelectDevice(Guid guid, int deviceNumber)
         {
             throw new NotImplementedException();
         }

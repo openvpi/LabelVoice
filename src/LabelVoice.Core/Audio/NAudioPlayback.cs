@@ -11,6 +11,8 @@ namespace LabelVoice.Core.Audio
 
         private WaveStream? _fileStream;
 
+        public int DeviceNumber => throw new NotImplementedException();
+
         #endregion Private Fields
 
         #region Events
@@ -142,6 +144,16 @@ namespace LabelVoice.Core.Audio
             Stop();
             EnsureDeviceCreated();
             _playbackDevice.Init(sampleProvider);
+        }
+
+        public void SelectDevice(Guid guid, int deviceNumber)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<AudioDevice> GetDevices()
+        {
+            throw new NotImplementedException();
         }
     }
 
