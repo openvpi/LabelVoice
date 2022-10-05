@@ -80,7 +80,7 @@
 
 ```xml
 <?xml version="1.0" encoding="utf-8" ?>
-<Project>
+<LVProject>
     <Version>0.0.1</Version>
     <Name>LabelVoice Example Dataset</Name>
     <LabelSchema>
@@ -100,22 +100,22 @@
         <Speaker Id="08cd" Name="ZhiBin"/>
     </Speakers>
     <ItemResources>
-        <Item Id="a54c548a" Name="GuangNianZhiWai" Speaker="32e9" VisualPath=""/>
-        <Item Id="50deb91b" Name="WoHuaiNianDe" Speaker="32e9" VisualPath="foo/bar"/>
-        <Item Id="61cfc89a" Name="BuWeiXia" Speaker="08cd" VisualPath="foo"/>
-        <Item Id="38db2292" Name="ZheGanJue" Speaker="08cd" VisualPath="foo/bar"/>
+        <Item Id="a54c548a" Name="GuangNianZhiWai" Speaker="32e9" Language="fe67" VisualPath=""/>
+        <Item Id="50deb91b" Name="WoHuaiNianDe" Speaker="32e9" Language="fe67" VisualPath="foo/bar"/>
+        <Item Id="61cfc89a" Name="BuWeiXia" Speaker="08cd" Language="fe67" VisualPath="foo"/>
+        <Item Id="38db2292" Name="ZheGanJue" Speaker="08cd" Language="fe67" VisualPath="foo/bar"/>
         <Placeholder Speaker="08cd" VisualPath="empty"/>
     </ItemResources>
-</Project>
+</LVProject>
 ```
 
 ### 2.1 Version
 
-`<Version>` 子标签存储工程文件格式的版本号。
+`<Version>` 子标签存储工程描述文件格式的版本号。
 
 ### 2.2 Name
 
-`<Name>` 子标签存储工程文件的名称，由用户指定并可修改。
+`<Name>` 子标签存储工程的名称，由用户指定并可修改。
 
 ### 2.3 LabelSchema
 
@@ -145,7 +145,7 @@
 - Pitch：音高类型，接受国际谱音名或 MIDI 编号输入
 - Category(n)：类别类型，接受 0 ~ n-1 的数字输入
 
-### 2.3 Languages
+### 2.4 Languages
 
 `<Languages>` 子标签中存储了工程中定义的所有语言。每种语言具有以下属性：
 
@@ -155,14 +155,14 @@
 - PhoneSet：该语言的音素表路径，包含该语言的所有音素，用于 Phoneme 层的输入补全，可由词典自动生成
 - Aligner：该语言的音素对齐器目录，通常为 MFA
 
-### 2.4 Speakers
+### 2.5 Speakers
 
 `<Speakers>` 子标签中存储了工程中定义的所有说话人，每位说话人具有以下属性：
 
 - Id：说话人的编号，为 4 位随机十六进制字符串，一旦确定不可变更
 - Name：说话人的名称，由用户设置并可修改
 
-### 2.5 ItemResources
+### 2.6 ItemResources
 
 `<ItemResources>` 子标签中存储了纳入工程管理的所有项目。该子标签中有两类元素：
 
@@ -171,6 +171,7 @@
 - Id：项目的编号，为 8 位随机十六进制字符串，一旦确定不可变更
 - Name：项目的名称，由用户设置并可修改
 - Speaker：该项目所属的说话人的编号
+- Language: 该项目所包含语言的编号
 - VisualPath：该项目在资源浏览器中所处的虚拟路径
 
 `<Placeholder>` 标签代表的是一个占位符，用于代表一个不包含任何真实项目或其他占位符的空虚拟路径，具有以下属性：
@@ -178,3 +179,45 @@
 - Speaker：该占位符所属的说话人的编号
 - VisualPath：该占位符所代表的虚拟路径
 
+## 3 项目描述文件（.lvitem)
+
+文件示例如下：
+
+```xml
+<?xml version="1.0" encoding="utf-8" ?>
+<LVItem>
+    <Version>0.0.1</Version>
+    <Name>GuangNianZhiWai</Name>
+    <OwnerProject>../../example.lvproj</OwnerProject>
+    <AudioSource>../../wavs/a54c548a.wav</AudioSource>
+    <Slices>
+        <Slice Id="cc370027" In="1.14" Out="5.14"/>
+        <Slice Id="a4be0a3f" In="8.17" Out="19.26" Language="a61c"/>
+    </Slices>
+</LVItem>
+```
+
+### 3.1 Version
+
+`<Version>` 子标签存储项目描述文件格式的版本号。
+
+### 3.2 Name
+
+`<Name>` 子标签存储项目的名称，由用户指定并可修改。
+
+### 3.3 OwnerProject
+
+`<OwnerProject>` 子标签存储该项目所属的工程描述文件路径。
+
+### 3.4 AudioSource
+
+`<AudioSource>` 子标签存储该项目的音频源文件路径。
+
+### 3.5 Slices
+
+`<Slices>` 子标签存储该项目下的所有切片信息。每个切片具有以下属性：
+
+- Id：切片的编号，为 8 位随机十六进制字符串，一旦确定不可变更
+- In：切片在源音频文件中的入点
+- Out：切片在源音频文件中的出点
+- Language：该切片的语言编号（对应工程描述文件中的语言编号），该属性将覆盖项目本身的语言属性
