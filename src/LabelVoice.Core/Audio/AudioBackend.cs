@@ -3,6 +3,7 @@
     public enum AudioBackend
     {
         NAudio,
-        PortAudio
+        PortAudio,
+        SDL,
     }
 }

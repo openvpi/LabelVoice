@@ -45,6 +45,7 @@ namespace LabelVoice.Core.Managers
             {
                 AudioBackend.NAudio => new NAudioPlayback(),
                 AudioBackend.PortAudio => new PortAudioPlayback(),
+                AudioBackend.SDL => new SDLPlayback(),
                 _ => null,
             };
         }
@@ -71,13 +72,13 @@ namespace LabelVoice.Core.Managers
 
         public PlaybackState GetPlaybackState() =>
             _audioPlayback != null
-            ? _audioPlayback.GetPlaybackState()
-            : PlaybackState.Stopped;
+                ? _audioPlayback.GetPlaybackState()
+                : PlaybackState.Stopped;
 
         public TimeSpan GetCurrentTime() =>
             _fileStream != null
-            ? _fileStream.CurrentTime
-            : TimeSpan.Zero;
+                ? _fileStream.CurrentTime
+                : TimeSpan.Zero;
 
         public void SetCurrentTime(TimeSpan time)
         {
@@ -87,13 +88,13 @@ namespace LabelVoice.Core.Managers
 
         public TimeSpan GetTotalTime() =>
             _fileStream != null
-            ? _fileStream.TotalTime
-            : TimeSpan.Zero;
+                ? _fileStream.TotalTime
+                : TimeSpan.Zero;
 
         public long GetPosition() =>
             _fileStream != null
-            ? _fileStream.Position
-            : 0;
+                ? _fileStream.Position
+                : 0;
 
         public void SetPosition(long pos)
         {
@@ -103,8 +104,8 @@ namespace LabelVoice.Core.Managers
 
         public long GetLength() =>
             _fileStream != null
-            ? _fileStream.Length
-            : 0;
+                ? _fileStream.Length
+                : 0;
 
         public void Dispose() => _audioPlayback?.Dispose();
 

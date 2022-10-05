@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LabelVoice", "LabelVoice\La
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LabelVoice.Core", "LabelVoice.Core\LabelVoice.Core.csproj", "{340ADDD3-5B13-4328-A836-34A87EC8DEC5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Playback", "Test.Playback\Test.Playback.csproj", "{EFE88D45-1EFD-4E3A-879F-6A03ECFECCDB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{340ADDD3-5B13-4328-A836-34A87EC8DEC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{340ADDD3-5B13-4328-A836-34A87EC8DEC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{340ADDD3-5B13-4328-A836-34A87EC8DEC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFE88D45-1EFD-4E3A-879F-6A03ECFECCDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFE88D45-1EFD-4E3A-879F-6A03ECFECCDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFE88D45-1EFD-4E3A-879F-6A03ECFECCDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFE88D45-1EFD-4E3A-879F-6A03ECFECCDB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

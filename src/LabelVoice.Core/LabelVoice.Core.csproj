@@ -6,9 +6,18 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="NAudio" Version="2.1.0" />
     <PackageReference Include="NAudio.Extras" Version="2.1.0" />
+    <PackageReference Include="ppy.SDL2-CS" Version="1.0.596-alpha" />
   </ItemGroup>
 
 </Project>
