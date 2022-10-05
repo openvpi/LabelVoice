@@ -46,7 +46,7 @@ namespace LabelVoice.Core.Audio
             throw new NotImplementedException();
         }
 
-        public void SelectDevice(Guid guid, int deviceNumber)
+        public void SwitchDevice(Guid guid, int deviceNumber)
         {
             throw new NotImplementedException();
         }

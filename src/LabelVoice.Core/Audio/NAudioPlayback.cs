@@ -11,11 +11,13 @@ namespace LabelVoice.Core.Audio
 
         private WaveStream? _fileStream;
 
+        private int _deviceNumber;
+
         #endregion Private Fields
 
         #region Properties
 
-        public int DeviceNumber => throw new NotImplementedException();
+        public int DeviceNumber => _deviceNumber;
 
         #endregion Properties
 
@@ -44,7 +46,10 @@ namespace LabelVoice.Core.Audio
         private void CreateDevice()
         {
             //_playbackDevice = new WaveOut { DesiredLatency = 200 };
-            _playbackDevice = new WaveOutEvent();
+            _playbackDevice = new WaveOutEvent
+            {
+                DeviceNumber = _deviceNumber
+            };
         }
 
         public void Play()
@@ -85,14 +90,27 @@ namespace LabelVoice.Core.Audio
             _playbackDevice.Init(sampleProvider);
         }
 
-        public void SelectDevice(Guid guid, int deviceNumber)
+        public void SwitchDevice(Guid guid, int deviceNumber)
         {
-            throw new NotImplementedException();
+            _deviceNumber = deviceNumber;
         }
 
         public List<AudioDevice> GetDevices()
         {
-            throw new NotImplementedException();
+            var devices = new List<AudioDevice>();
+            int i = 0;
+            foreach (var device in DirectSoundOut.Devices)
+            {
+                devices.Add(new AudioDevice
+                {
+                    api = "DirectSoundOut",
+                    name = device.Description,
+                    deviceNumber = i,
+                    guid = device.Guid,
+                });
+                i++;
+            }
+            return devices;
         }
     }
 

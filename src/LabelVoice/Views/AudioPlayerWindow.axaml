@@ -13,7 +13,7 @@
 
 	<Grid x:Name="audioPlayerLayout"
 		  Margin="8"
-		  RowDefinitions="40, 40, 40, *">
+		  RowDefinitions="40, 40, 40, 120, *">
 		<Grid Grid.Row="0"
 			  ColumnDefinitions="*, *">
 			<Button
@@ -87,6 +87,8 @@
 				HorizontalAlignment="Stretch"
                 Margin="4,0,0,0"/>
 		</Grid>
+		<TextBlock Grid.Row="3"
+				   Text="{Binding AudioDevices}" />
 	</Grid>
 
 </Window>

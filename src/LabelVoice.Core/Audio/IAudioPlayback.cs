@@ -24,7 +24,7 @@ namespace LabelVoice.Core.Audio
 
         PlaybackState GetPlaybackState();
 
-        void SelectDevice(Guid guid, int deviceNumber);
+        void SwitchDevice(Guid guid, int deviceNumber);
 
         List<AudioDevice> GetDevices();
 

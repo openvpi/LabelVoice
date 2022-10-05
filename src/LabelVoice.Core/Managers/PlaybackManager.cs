@@ -108,6 +108,11 @@ namespace LabelVoice.Core.Managers
 
         public void Dispose() => _audioPlayback?.Dispose();
 
+        public List<AudioDevice> GetAudioDevices() =>
+            _audioPlayback != null
+            ? _audioPlayback.GetDevices()
+            : new List<AudioDevice>();
+
         #endregion Methods
     }
 }
