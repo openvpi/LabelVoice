@@ -187,6 +187,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <LVItem>
     <Version>0.0.1</Version>
+    <Id>a54c548a</Id>
     <Name>GuangNianZhiWai</Name>
     <OwnerProject>../../example.lvproj</OwnerProject>
     <AudioSource>../../wavs/a54c548a.wav</AudioSource>
@@ -201,19 +202,23 @@
 
 `<Version>` 子标签存储项目描述文件格式的版本号。
 
-### 3.2 Name
+### 3.2 Id
 
-`<Name>` 子标签存储项目的名称，由用户指定并可修改。
+`<Id>` 子标签存储该项目的编号，仅为方便反向链接到工程而设置。
 
-### 3.3 OwnerProject
+### 3.3 Name
+
+`<Name>` 子标签存储项目的名称，仅为方便单独读写而设置，在工程中打开时以工程为准。
+
+### 3.4 OwnerProject
 
 `<OwnerProject>` 子标签存储该项目所属的工程描述文件路径。
 
-### 3.4 AudioSource
+### 3.5 AudioSource
 
 `<AudioSource>` 子标签存储该项目的音频源文件路径。
 
-### 3.5 Slices
+### 3.6 Slices
 
 `<Slices>` 子标签存储该项目下的所有切片信息。每个切片具有以下属性：
 
@@ -221,3 +226,4 @@
 - In：切片在源音频文件中的入点
 - Out：切片在源音频文件中的出点
 - Language：该切片的语言编号（对应工程描述文件中的语言编号），该属性将覆盖项目本身的语言属性
+
