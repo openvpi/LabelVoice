@@ -1,5 +1,6 @@
 ﻿using LabelVoice.Core.Audio;
 using LabelVoice.Core.Utils;
+using NAudio.Extras;
 using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
 
@@ -14,7 +15,7 @@ namespace LabelVoice.Core.Managers
 
         private IAudioPlayback? _audioPlayback;
 
-        //private ISampleProvider _audioSampleProvider;
+        private WaveStream? _fileStream;
 
         #endregion Private Fields
 
@@ -22,7 +23,21 @@ namespace LabelVoice.Core.Managers
 
         //public void Load(string path) => _audioPlayback.Load(path);
 
-        public void Init(ISampleProvider sampleProvider) => _audioPlayback?.Init(sampleProvider);
+        public void Load(string audioFilePath)
+        {
+            Stop();
+            _fileStream?.Dispose();
+            _fileStream = null;
+            AudioFileReader inputStream = new(audioFilePath);
+            _fileStream = inputStream;
+            SampleAggregator? aggregator = new(inputStream);
+            Init(aggregator);
+        }
+
+        public void Init(ISampleProvider sampleProvider)
+        {
+            _audioPlayback?.Init(sampleProvider);
+        }
 
         public void SetAudioBackend(AudioBackend backend)
         {
@@ -45,29 +60,50 @@ namespace LabelVoice.Core.Managers
 
         public void Pause() => _audioPlayback?.Pause();
 
-        public void Stop() => _audioPlayback?.Stop();
+        public void Stop()
+        {
+            _audioPlayback?.Stop();
+            if (_fileStream != null)
+            {
+                _fileStream.Position = 0;
+            }
+        }
 
         public PlaybackState GetPlaybackState() =>
             _audioPlayback != null
             ? _audioPlayback.GetPlaybackState()
             : PlaybackState.Stopped;
 
-        //public TimeSpan GetCurrentTime() => _audioPlayback.GetCurrentTime();
+        public TimeSpan GetCurrentTime() =>
+            _fileStream != null
+            ? _fileStream.CurrentTime
+            : TimeSpan.Zero;
 
-        //public void SetCurrentTime(TimeSpan time) => _audioPlayback.SetCurrentTime(time);
+        public void SetCurrentTime(TimeSpan time)
+        {
+            if (_fileStream != null)
+                _fileStream.CurrentTime = time;
+        }
 
-        //public TimeSpan GetTotalTime() => _audioPlayback.GetTotalTime();
+        public TimeSpan GetTotalTime() =>
+            _fileStream != null
+            ? _fileStream.TotalTime
+            : TimeSpan.Zero;
 
         public long GetPosition() =>
-            _audioPlayback != null
-            ? _audioPlayback.GetPosition()
+            _fileStream != null
+            ? _fileStream.Position
             : 0;
 
-        //public void SetPosition(long pos) => _audioPlayback.SetPosition(pos);
+        public void SetPosition(long pos)
+        {
+            if (_fileStream != null)
+                _fileStream.Position = pos;
+        }
 
         public long GetLength() =>
-            _audioPlayback != null
-            ? _audioPlayback.GetLength()
+            _fileStream != null
+            ? _fileStream.Length
             : 0;
 
         public void Dispose() => _audioPlayback?.Dispose();

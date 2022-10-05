@@ -29,8 +29,8 @@ namespace LabelVoice.Views
 
         private void SetProgressHalf(object? sender, RoutedEventArgs e)
         {
-            //var totalTime = PlaybackManager.Instance.GetTotalTime();
-            //PlaybackManager.Instance.SetCurrentTime(totalTime / 2);
+            var totalTime = PlaybackManager.Instance.GetTotalTime();
+            PlaybackManager.Instance.SetCurrentTime(totalTime / 2);
         }
 
         private void Stop(object? sender, RoutedEventArgs e)
@@ -79,7 +79,7 @@ namespace LabelVoice.Views
             {
                 string strFolder = result.First();
                 ((AudioPlayerWindowViewModel)DataContext!).OpenAudioFile(strFolder);
-                //sliderProgress.Maximum = (int)PlaybackManager.Instance.GetTotalTime().TotalMilliseconds;
+                sliderProgress.Maximum = (int)PlaybackManager.Instance.GetTotalTime().TotalMilliseconds;
             }
         }
     }
