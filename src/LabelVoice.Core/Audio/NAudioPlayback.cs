@@ -31,12 +31,6 @@ namespace LabelVoice.Core.Audio
 
         #region Methods
 
-        private void CloseFile()
-        {
-            _fileStream?.Dispose();
-            _fileStream = null;
-        }
-
         private void EnsureDeviceCreated()
         {
             if (_playbackDevice == null)
@@ -48,12 +42,13 @@ namespace LabelVoice.Core.Audio
             //_playbackDevice = new WaveOut { DesiredLatency = 200 };
             _playbackDevice = new WaveOutEvent
             {
-                DeviceNumber = _deviceNumber
+                DeviceNumber = _deviceNumber,
             };
         }
 
         public void Play()
         {
+            EnsureDeviceCreated();
             if (_playbackDevice != null
                 //&& _fileStream != null
                 && _playbackDevice.PlaybackState != PlaybackState.Playing)
@@ -62,6 +57,7 @@ namespace LabelVoice.Core.Audio
 
         public void Pause()
         {
+            EnsureDeviceCreated();
             _playbackDevice?.Pause();
         }
 
@@ -73,7 +69,6 @@ namespace LabelVoice.Core.Audio
         public void Dispose()
         {
             Stop();
-            CloseFile();
             _playbackDevice?.Dispose();
             _playbackDevice = null;
         }
@@ -92,7 +87,8 @@ namespace LabelVoice.Core.Audio
 
         public void SwitchDevice(Guid guid, int deviceNumber)
         {
-            _deviceNumber = deviceNumber;
+            _deviceNumber = deviceNumber - 1;
+            Dispose();
         }
 
         public List<AudioDevice> GetDevices()

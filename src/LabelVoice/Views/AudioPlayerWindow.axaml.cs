@@ -12,6 +12,7 @@ namespace LabelVoice.Views
 {
     public partial class AudioPlayerWindow : Window
     {
+        private bool _isDeviceLoaded = false;
         public AudioPlayerWindow()
         {
             InitializeComponent();
@@ -21,6 +22,19 @@ namespace LabelVoice.Views
             ButtonStop.Click += Stop;
             ButtonSetProgressHalf.Click += SetProgressHalf;
             ButtonPlayTestSound.Click += ButtonPlayTestSound_Click;
+            ComboBoxAudioDevices.SelectionChanged += ComboBoxAudioDevices_SelectionChanged;
+            var deviceNames = PlaybackManager.Instance.GetDevices().Select(d => d.name);
+            ComboBoxAudioDevices.Items = deviceNames;
+            if (!_isDeviceLoaded)
+            {
+                ComboBoxAudioDevices.SelectedIndex = 0;
+                _isDeviceLoaded = true;
+            }
+        }
+
+        private void ComboBoxAudioDevices_SelectionChanged(object? sender, SelectionChangedEventArgs e)
+        {
+            PlaybackManager.Instance.SwitchDevice(ComboBoxAudioDevices.SelectedIndex);
         }
 
         private void ButtonPlayTestSound_Click(object? sender, RoutedEventArgs e)

@@ -8,12 +8,12 @@
         Title="AudioPlayerWindow">
 
 	<Design.DataContext>
-		<vm:AudioPlayerWindowViewModel/>
+		<vm:AudioPlayerWindowViewModel />
 	</Design.DataContext>
 
 	<Grid x:Name="audioPlayerLayout"
 		  Margin="8"
-		  RowDefinitions="40, 40, 40, 120, *">
+		  RowDefinitions="40, 40, 40, 40, *">
 		<Grid Grid.Row="0"
 			  ColumnDefinitions="*, *">
 			<Button
@@ -21,7 +21,7 @@
                 Grid.Row="0"
                 HorizontalAlignment="Left"
 				VerticalContentAlignment="Stretch"
-                Content="选择音频文件"/>
+                Content="选择音频文件" />
 			<TextBlock
                 x:Name="textBlockAudioPath"
                 Grid.Column="1"
@@ -35,19 +35,19 @@
                 Grid.Column="0"
                 Text="{Binding CurrentTimeString}"
                 HorizontalAlignment="Center"
-                VerticalAlignment="Center"/>
+                VerticalAlignment="Center" />
 			<Slider
                 x:Name="sliderProgress"
                 Grid.Column="1"
                 Value="{Binding Progress}"
                 IsEnabled="{Binding IsReady}"
-                VerticalAlignment="Center"/>
+                VerticalAlignment="Center" />
 			<TextBlock
                 x:Name="TextBlockTotalTime"
                 Grid.Column="2"
                 Text="{Binding TotalTimeString}"
 				HorizontalAlignment="Center"
-                VerticalAlignment="Center"/>
+                VerticalAlignment="Center" />
 		</Grid>
 		<Grid
             Grid.Row="2"
@@ -58,37 +58,48 @@
                 Grid.Column="0"
                 Content="播放"
 				HorizontalAlignment="Stretch"
-                Margin="0,0,4,0"/>
+                Margin="0,0,4,0" />
 			<Button
                 x:Name="ButtonPause"
                 IsEnabled="{Binding IsReady}"
                 Grid.Column="1"
                 Content="暂停"
 				HorizontalAlignment="Stretch"
-                Margin="4,0,4,0"/>
+                Margin="4,0,4,0" />
 			<Button
                 x:Name="ButtonStop"
                 IsEnabled="{Binding IsReady}"
                 Grid.Column="2"
                 Content="停止"
 				HorizontalAlignment="Stretch"
-                Margin="4,0,4,0"/>
+                Margin="4,0,4,0" />
 			<Button
                 x:Name="ButtonSetProgressHalf"
                 IsEnabled="{Binding IsReady}"
                 Grid.Column="3"
                 Content="设置进度50%"
 				HorizontalAlignment="Stretch"
-                Margin="4,0,4,0"/>
+                Margin="4,0,4,0" />
 			<Button
                 x:Name="ButtonPlayTestSound"
                 Grid.Column="4"
                 Content="播放测试音频"
 				HorizontalAlignment="Stretch"
-                Margin="4,0,0,0"/>
+                Margin="4,0,0,0" />
 		</Grid>
-		<TextBlock Grid.Row="3"
-				   Text="{Binding AudioDevices}" />
+		<ComboBox
+			Grid.Row="3"
+            x:Name="ComboBoxAudioDevices"
+            MinWidth="140"
+            HorizontalAlignment="Left"
+            HorizontalContentAlignment="Center"
+            VerticalContentAlignment="Center"
+            SelectedIndex="0">
+			<ComboBox.ItemTemplate>
+				<DataTemplate>
+					<TextBlock Text="{Binding}" />
+				</DataTemplate>
+			</ComboBox.ItemTemplate>
+		</ComboBox>
 	</Grid>
-
 </Window>
