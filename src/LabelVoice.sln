@@ -5,9 +5,11 @@ VisualStudioVersion = 17.4.32916.344
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LabelVoice", "LabelVoice\LabelVoice.csproj", "{C7639302-E10B-4FBC-AD48-A645E4403C67}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LabelVoice.Core", "LabelVoice.Core\LabelVoice.Core.csproj", "{340ADDD3-5B13-4328-A836-34A87EC8DEC5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LabelVoice.Core", "LabelVoice.Core\LabelVoice.Core.csproj", "{340ADDD3-5B13-4328-A836-34A87EC8DEC5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Playback", "Test.Playback\Test.Playback.csproj", "{EFE88D45-1EFD-4E3A-879F-6A03ECFECCDB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LabelVoice.Toolkit", "LabelVoice.Toolkit\LabelVoice.Toolkit.csproj", "{09B69A2A-6F91-4CA6-8629-87BE08E26149}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{EFE88D45-1EFD-4E3A-879F-6A03ECFECCDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EFE88D45-1EFD-4E3A-879F-6A03ECFECCDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EFE88D45-1EFD-4E3A-879F-6A03ECFECCDB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09B69A2A-6F91-4CA6-8629-87BE08E26149}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09B69A2A-6F91-4CA6-8629-87BE08E26149}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09B69A2A-6F91-4CA6-8629-87BE08E26149}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09B69A2A-6F91-4CA6-8629-87BE08E26149}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
