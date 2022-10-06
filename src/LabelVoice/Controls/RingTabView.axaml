@@ -1,0 +1,331 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:LabelVoice.Controls">
+    <Design.PreviewWith>
+        <controls:RingTabView />
+    </Design.PreviewWith>
+
+    <Style Selector="controls|RingTabView">
+        <!-- Set Defaults -->
+        <Setter Property="Template">
+            <ControlTemplate>
+
+                <!-- 最外层三行三列 -->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <!-- 上双栏 -->
+                    <Grid Grid.Row="0" Grid.Column="1" Name="TopDoubleBar">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <!-- 上左栏 -->
+                        <StackPanel Grid.Column="0" HorizontalAlignment="Left" Orientation="Horizontal"
+                                    Name="TopLeftBar">
+                            <Button>
+                                <StackPanel>
+                                    <TextBlock Text="TL"></TextBlock>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                        <!-- 上右栏 -->
+                        <StackPanel Grid.Column="1" HorizontalAlignment="Right" Orientation="Horizontal"
+                                    Name="TopRightBar">
+                            <Button>
+                                <StackPanel>
+                                    <TextBlock Text="TR"></TextBlock>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- 左双栏 -->
+                    <Grid Grid.Row="1" Grid.Column="0" Name="LeftDoubleBar">
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <!-- 左上栏 -->
+                        <StackPanel Grid.Row="0" Orientation="Vertical" VerticalAlignment="Top"
+                                    Name="LeftTopBar">
+                            <LayoutTransformControl>
+                                <LayoutTransformControl.LayoutTransform>
+                                    <RotateTransform Angle="270"></RotateTransform>
+                                </LayoutTransformControl.LayoutTransform>
+                                <Button Content="LT"></Button>
+                            </LayoutTransformControl>
+                        </StackPanel>
+                        <!-- 左下栏 -->
+                        <StackPanel Grid.Row="1" Orientation="Vertical" VerticalAlignment="Bottom"
+                                    Name="LeftBottomBar">
+                            <LayoutTransformControl>
+                                <LayoutTransformControl.LayoutTransform>
+                                    <RotateTransform Angle="270"></RotateTransform>
+                                </LayoutTransformControl.LayoutTransform>
+                                <Button Content="LB"></Button>
+                            </LayoutTransformControl>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- 右双栏 -->
+                    <Grid Grid.Row="1" Grid.Column="2" Name="RightDoubleBar">
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <!-- 右上栏 -->
+                        <StackPanel Grid.Row="0" Orientation="Vertical" VerticalAlignment="Top"
+                                    Name="RightTopBar">
+                            <LayoutTransformControl>
+                                <LayoutTransformControl.LayoutTransform>
+                                    <RotateTransform Angle="90"></RotateTransform>
+                                </LayoutTransformControl.LayoutTransform>
+                                <Button Content="RT"></Button>
+                            </LayoutTransformControl>
+                        </StackPanel>
+                        <!-- 右下栏 -->
+                        <StackPanel Grid.Row="1" Orientation="Vertical" VerticalAlignment="Bottom"
+                                    Name="RightBottomBar">
+                            <LayoutTransformControl>
+                                <LayoutTransformControl.LayoutTransform>
+                                    <RotateTransform Angle="90"></RotateTransform>
+                                </LayoutTransformControl.LayoutTransform>
+                                <Button Content="RB"></Button>
+                            </LayoutTransformControl>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- 下双栏 -->
+                    <Grid Grid.Row="2" Grid.Column="1" Name="BottomDoubleBar">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <!-- 下左栏 -->
+                        <StackPanel Grid.Column="0" HorizontalAlignment="Left" Orientation="Horizontal"
+                                    Name="BottomLeftBar">
+                            <Button>
+                                <StackPanel>
+                                    <TextBlock Text="BL"></TextBlock>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                        <!-- 下右栏 -->
+                        <StackPanel Grid.Column="1" HorizontalAlignment="Right" Orientation="Horizontal"
+                                    Name="BottomRightBar">
+                            <Button>
+                                <StackPanel>
+                                    <TextBlock Text="BR"></TextBlock>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- 中间整体 -->
+                    <Grid Grid.Row="1" Grid.Column="1" Name="CentralContainer">
+                        <Grid>
+                            <!-- 五行（两行是Splitter） -->
+                            <Grid.RowDefinitions>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                            </Grid.RowDefinitions>
+
+                            <!-- 上双面板 -->
+                            <Grid Grid.Row="0" Name="TopDoubleWidget">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition></ColumnDefinition>
+                                        <ColumnDefinition></ColumnDefinition>
+                                        <ColumnDefinition></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- 上左面板 -->
+                                    <Grid Grid.Column="0" Name="TopLeftWidget">
+                                        <Button Content="TopLeftWidget" 
+                                                HorizontalAlignment="Stretch"
+                                                VerticalAlignment="Stretch">
+                                        </Button>
+                                    </Grid>
+
+                                    <!-- 分界线 -->
+                                    <GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Center"
+                                                  VerticalAlignment="Stretch"
+                                                  Name="TopWidgetSplitter">
+                                    </GridSplitter>
+
+                                    <!-- 上右面板 -->
+                                    <Grid Grid.Column="2" Name="TopRightWidget">
+                                        <Button Content="TopRightWidget" 
+                                                HorizontalAlignment="Stretch"
+                                                VerticalAlignment="Stretch">
+                                        </Button>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+
+                            <!-- 上分界线 -->
+                            <GridSplitter Grid.Row="1" Height="2" HorizontalAlignment="Stretch"
+                                          VerticalAlignment="Center"
+                                          Name="TopSplitter">
+                            </GridSplitter>
+
+                            <!-- 中间层 -->
+                            <Grid Grid.Row="2" Name="CentralTripleWidget">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition></ColumnDefinition>
+                                    <ColumnDefinition></ColumnDefinition>
+                                    <ColumnDefinition></ColumnDefinition>
+                                    <ColumnDefinition></ColumnDefinition>
+                                    <ColumnDefinition></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- 左双面板 -->
+                                <Grid Grid.Column="0" Name="LeftDoubleWidget">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition></RowDefinition>
+                                            <RowDefinition></RowDefinition>
+                                            <RowDefinition></RowDefinition>
+                                        </Grid.RowDefinitions>
+
+                                        <!-- 左上面板 -->
+                                        <Grid Grid.Row="0" Name="LeftTopWidget">
+                                            <Button Content="LeftTopWidget" 
+                                                    HorizontalAlignment="Stretch"
+                                                    VerticalAlignment="Stretch">
+                                            </Button>
+                                        </Grid>
+
+                                        <!-- 分界线 -->
+                                        <GridSplitter Grid.Row="1" Height="2" HorizontalAlignment="Stretch"
+                                                      VerticalAlignment="Center"
+                                                      Name="LeftWidgetSplitter">
+                                        </GridSplitter>
+
+                                        <!-- 左下面板 -->
+                                        <Grid Grid.Row="2" Name="LeftBottomWidget">
+                                            <Button Content="LeftBottomWidget" 
+                                                    HorizontalAlignment="Stretch"
+                                                    VerticalAlignment="Stretch">
+                                            </Button>
+                                        </Grid>
+                                    </Grid>
+                                </Grid>
+
+                                <!-- 分界线 -->
+                                <GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Center"
+                                              VerticalAlignment="Stretch"
+                                              Name="CentralLeftSplitter">
+                                </GridSplitter>
+
+                                <!-- 中心窗体 -->
+                                <Grid Column="2" Name="CentralWidget">
+                                    <Button Content="CentralWidget" 
+                                            HorizontalAlignment="Stretch"
+                                            VerticalAlignment="Stretch">
+                                    </Button>
+                                </Grid>
+
+                                <!-- 分界线 -->
+                                <GridSplitter Grid.Column="3" Width="2" HorizontalAlignment="Center"
+                                              VerticalAlignment="Stretch"
+                                              Name="CentralRightSplitter">
+                                </GridSplitter>
+
+                                <!-- 右双面板 -->
+                                <Grid Grid.Column="4" Name="RightDoubleWidget">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition></RowDefinition>
+                                            <RowDefinition></RowDefinition>
+                                            <RowDefinition></RowDefinition>
+                                        </Grid.RowDefinitions>
+
+                                        <!-- 右上面板 -->
+                                        <Grid Grid.Row="0" Name="RightTopWidget">
+                                            <Button Content="RightTopWidget" 
+                                                    HorizontalAlignment="Stretch"
+                                                    VerticalAlignment="Stretch">
+                                            </Button>
+                                        </Grid>
+
+                                        <!-- 分界线 -->
+                                        <GridSplitter Grid.Row="1" Height="2" HorizontalAlignment="Stretch"
+                                                      VerticalAlignment="Center"
+                                                      Name="RightWidgetSplitter">
+                                        </GridSplitter>
+
+                                        <!-- 右下面板 -->
+                                        <Grid Grid.Row="2" Name="RightBottomWidget">
+                                            <Button Content="RightBottomWidget" 
+                                                    HorizontalAlignment="Stretch"
+                                                    VerticalAlignment="Stretch">
+                                            </Button>
+                                        </Grid>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+
+                            <!-- 下分界线 -->
+                            <GridSplitter Grid.Row="3" Height="2" HorizontalAlignment="Stretch"
+                                          VerticalAlignment="Center"
+                                          Name="BottomSplitter">
+                            </GridSplitter>
+
+
+                            <!-- 下双面板 -->
+                            <Grid Grid.Row="4" Name="BottomDoubleWidget">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition></ColumnDefinition>
+                                        <ColumnDefinition></ColumnDefinition>
+                                        <ColumnDefinition></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- 下左面板 -->
+                                    <Grid Grid.Column="0" Name="BottomLeftWidget">
+                                        <Button Content="BottomLeftWidget" 
+                                                HorizontalAlignment="Stretch"
+                                                VerticalAlignment="Stretch">
+                                        </Button>
+                                    </Grid>
+
+
+                                    <!-- 分界线 -->
+                                    <GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Center"
+                                                  VerticalAlignment="Stretch"
+                                                  Name="BottomWidgetSplitter">
+                                    </GridSplitter>
+
+                                    <!-- 下右面板 -->
+                                    <Grid Grid.Column="2" Name="BottomRightWidget">
+                                        <Button Content="BottomRightWidget" 
+                                                HorizontalAlignment="Stretch"
+                                                VerticalAlignment="Stretch">
+                                        </Button>
+                                    </Grid>
+
+                                </Grid>
+                            </Grid>
+
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>
