@@ -6,6 +6,7 @@ using LabelVoice.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.ComponentModel;
 
 namespace LabelVoice.Views
 {
@@ -81,6 +82,12 @@ namespace LabelVoice.Views
                 ((AudioPlayerWindowViewModel)DataContext!).OpenAudioFile(strFolder);
                 sliderProgress.Maximum = (int)PlaybackManager.Instance.GetTotalTime().TotalMilliseconds;
             }
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            PlaybackManager.Instance.Dispose();
+            base.OnClosing(e);
         }
     }
 }

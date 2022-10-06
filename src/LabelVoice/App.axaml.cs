@@ -46,7 +46,7 @@ public class App : Application
         }
         else
         {
-            PlaybackManager.Instance.SetAudioBackend(AudioBackend.PortAudio);
+            PlaybackManager.Instance.SetAudioBackend(AudioBackend.SDL);
         }
     }
 

@@ -28,7 +28,7 @@ namespace LabelVoice.Core.Managers
             Stop();
             _fileStream?.Dispose();
             _fileStream = null;
-            AudioFileReader inputStream = new(audioFilePath);
+            LvAudioFileReader inputStream = new(audioFilePath);
             _fileStream = inputStream;
             SampleAggregator? aggregator = new(inputStream);
             Init(aggregator);
@@ -107,7 +107,11 @@ namespace LabelVoice.Core.Managers
                 ? _fileStream.Length
                 : 0;
 
-        public void Dispose() => _audioPlayback?.Dispose();
+        public void Dispose()
+        {
+            _audioPlayback?.Dispose();
+            _fileStream?.Dispose();
+        }
 
         public List<AudioDevice> GetAudioDevices() =>
             _audioPlayback != null
