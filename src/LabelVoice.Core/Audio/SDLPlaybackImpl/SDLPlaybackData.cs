@@ -32,7 +32,7 @@ public class SDLPlaybackData
     // 控制块
     public struct CallbackBlock
     {
-        public byte[] audio_chunk;
+        public IntPtr audio_chunk;
         public int audio_len;
         public int audio_pos;
     }
@@ -56,7 +56,7 @@ public class SDLPlaybackData
     public void start()
     {
         // 初始化控制块
-        scb.audio_chunk = new byte[spec.samples * spec.channels * 4]; // 采样数 * 声道数 * 4
+        scb.audio_chunk = IntPtr.Zero;
         scb.audio_len = 0;
         scb.audio_pos = 0;
 
@@ -73,29 +73,27 @@ public class SDLPlaybackData
         // 等待结束
         producer.Join();
         producer = null;
-
-        // 删除控制块
-        scb.audio_chunk = null;
     }
 
-    public void setDevId(uint id)
+    public void setDevId(uint newId)
     {
         var orgId = curDevId;
-        curDevId = id;
+        curDevId = newId;
 
         if (orgId > 0)
         {
             SDL.SDL_CloseAudioDevice(orgId);
         }
 
-        if (id > 0)
+        if (newId > 0)
         {
             var cnt = spec.samples * spec.channels;
-            
+
             // 初始化临时浮点数组
             if (cnt == 0)
             {
                 pcm_buffer = null;
+                // scb.audio_chunk = IntPtr.Zero;
             }
             else if (pcm_buffer == null || cnt != pcm_buffer.Length)
             {
@@ -104,21 +102,21 @@ public class SDLPlaybackData
         }
 
         // 通知音频设备已更改
-        if (id != orgId)
+        if (newId != orgId)
         {
-            devChanged?.Invoke(id, orgId);
+            devChanged?.Invoke(newId, orgId);
         }
     }
 
-    public void setState(PlaybackState state)
+    public void setState(PlaybackState newState)
     {
         var orgState = state;
-        this.state = state;
+        state = newState;
 
         // 通知播放状态已更改
-        if (this.state != orgState)
+        if (state != orgState)
         {
-            stateChanged?.Invoke(this.state, orgState);
+            stateChanged?.Invoke(state, orgState);
         }
     }
 
@@ -131,17 +129,14 @@ public class SDLPlaybackData
         // 缓冲区置为静音
         SDLReimpl.SDL_memset(stream, 0, (IntPtr)len);
 
-        if (scb.audio_len > 0)
+        if (scb.audio_len > 0 && scb.audio_chunk != IntPtr.Zero)
         {
             len = Math.Min(len, scb.audio_len);
-
-            // 固定数组地址
-            var _ = GCHandle.Alloc(scb.audio_chunk, GCHandleType.Pinned);
 
             // 将缓冲区中的声音写入流
             SDL.SDL_MixAudioFormat(
                 stream,
-                Marshal.UnsafeAddrOfPinnedArrayElement(scb.audio_chunk, scb.audio_pos),
+                IntPtr.Add(scb.audio_chunk, scb.audio_pos),
                 spec.format,
                 (uint)len,
                 SDL.SDL_MIX_MAXVOLUME
@@ -180,6 +175,9 @@ public class SDLPlaybackData
     // 生产者
     public void poll()
     {
+        // 固定缓冲区
+        var gch = GCHandle.Alloc(pcm_buffer, GCHandleType.Pinned);
+
         // 设置暂停标识位
         SDL.SDL_PauseAudioDevice(curDevId, 0);
         setState(PlaybackState.Playing);
@@ -213,13 +211,9 @@ public class SDLPlaybackData
                         }
                         else
                         {
-                            // 浮点转字节
-                            int cnt = samples;
-                            SDLGlobal.FloatsToBytes(pcm_buffer, scb.audio_chunk, cnt);
-
                             // 重置缓冲区
-                            // scb.audio_chunk = (Uint8*)pcm_buffer;
-                            scb.audio_len = cnt * 4; // 长度为读出数据长度，在read_audio_data中做减法
+                            scb.audio_chunk = Marshal.UnsafeAddrOfPinnedArrayElement(pcm_buffer, 0);
+                            scb.audio_len = samples * 4; // 长度为读出数据长度，在read_audio_data中做减法
                             scb.audio_pos = 0; // 设置当前位置为缓冲区头部
                         }
 
@@ -263,5 +257,8 @@ public class SDLPlaybackData
         // 设置暂停标识位
         SDL.SDL_PauseAudioDevice(curDevId, 1);
         setState(PlaybackState.Stopped);
+
+        // 解除固定缓冲区
+        gch.Free();
     }
 }
