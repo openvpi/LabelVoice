@@ -32,7 +32,7 @@ public class SDLHost
         // 初始化单例
         if (self != null)
         {
-            throw new Exception("Duplicated SDL Host.");
+            throw new Exception("SDLHost: Duplicated SDL Host.");
         }
 
         self = this;
@@ -46,7 +46,7 @@ public class SDLHost
         // 初始化
         if (SDL.SDL_Init(SDL.SDL_INIT_AUDIO) < 0)
         {
-            throw new Exception($"Failed to initialize SDL: {SDL.SDL_GetError()}.");
+            throw new Exception($"SDLHost: Failed to initialize SDL: {SDL.SDL_GetError()}.");
         }
     }
 

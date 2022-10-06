@@ -154,7 +154,7 @@ namespace LabelVoice.Core.Audio
                     out _,
                     0)) == 0)
             {
-                throw new IOException("SDLPlayback: Failed to open audio device.");
+                throw new IOException($"SDLPlayback: Failed to open audio device: {SDL.SDL_GetError()}.");
             }
 
             Console.WriteLine($"SDLPlayback: {SDL.SDL_GetAudioDeviceName(_d.devNum, 0)}");
