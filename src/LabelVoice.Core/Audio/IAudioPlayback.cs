@@ -2,6 +2,9 @@
 
 namespace LabelVoice.Core.Audio
 {
+    /// <summary>
+    ///  Generic interface for all audio playback backends.
+    /// </summary>
     public interface IAudioPlayback
     {
         #region Properties
