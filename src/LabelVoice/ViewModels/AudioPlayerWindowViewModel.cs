@@ -1,6 +1,7 @@
 ﻿using LabelVoice.Core.Managers;
 using NAudio.Wave;
 using ReactiveUI;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,6 +21,8 @@ namespace LabelVoice.ViewModels
         private string? _totalTimeString = "--:--";
 
         private string? _audioDevices = "音频设备：";
+
+        private List<string>? _audioDevicesNameList;
 
         private CancellationTokenSource? _cts;
 
@@ -65,6 +68,12 @@ namespace LabelVoice.ViewModels
             set => this.RaiseAndSetIfChanged(ref _audioDevices, value);
         }
 
+        public List<string>? AudioDevicesNameList
+        {
+            get => _audioDevicesNameList;
+            set => this.RaiseAndSetIfChanged(ref _audioDevicesNameList, value);
+        }
+
         #endregion Properties
 
         #region Methods
@@ -76,8 +85,8 @@ namespace LabelVoice.ViewModels
             CurrentTimeString = "00:00";
             TotalTimeString = PlaybackManager.Instance.GetTotalTime().ToString(@"mm\:ss");
             IsReady = true;
-            var deviceNames = PlaybackManager.Instance.GetAudioDevices().Select(d => d.name);
-            AudioDevices = "音频设备：\n" + string.Join("\n", deviceNames);
+            //var deviceNames = PlaybackManager.Instance.GetDevices().Select(d => d.name);
+            //AudioDevices = "音频设备：\n" + string.Join("\n", deviceNames);
         }
 
         public void UpdateProgress()

@@ -31,12 +31,12 @@ namespace LabelVoice.Core.Audio
             _d.devChanged = (newVal, oldVal) =>
             {
                 AudioDeviceChangedHandler?.Invoke(newVal, oldVal);
-                // Console.WriteLine($"SDLPLayback: Audio device change to {i}.");
+                // Console.WriteLine($"SDLPLayback: Audio device change to {newVal}.");
             };
             _d.stateChanged = (newVal, oldVal) =>
             {
                 PlayStateChangedHandler?.Invoke(newVal, oldVal);
-                // Console.WriteLine($"SDLPLayback: Play state change to {i}.");
+                // Console.WriteLine($"SDLPLayback: Play state change to {newVal}.");
             };
         }
 
@@ -154,7 +154,7 @@ namespace LabelVoice.Core.Audio
                     out _,
                     0)) == 0)
             {
-                throw new IOException("SDLPlayback: Failed to open audio device.");
+                throw new IOException($"SDLPlayback: Failed to open audio device: {SDL.SDL_GetError()}.");
             }
 
             Console.WriteLine($"SDLPlayback: {SDL.SDL_GetAudioDeviceName(_d.devNum, 0)}");
