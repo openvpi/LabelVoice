@@ -91,7 +91,7 @@ public unsafe class FFmpegWaveProvider : WaveStream, ISampleProvider
         // int samplesRead = Read(waveBuffer.FloatBuffer, offset / 4, samplesRequired);
         // return samplesRead * 4;
 
-        int res;
+        int res = 0;
         lock (lockObject)
         {
             if (offset > 0)
@@ -99,9 +99,12 @@ public unsafe class FFmpegWaveProvider : WaveStream, ISampleProvider
                 _ = decode(IntPtr.Zero, offset);
             }
 
-            var gch = GCHandle.Alloc(buffer, GCHandleType.Pinned);
-            res = decode(Marshal.UnsafeAddrOfPinnedArrayElement(buffer, 0), count);
-            gch.Free();
+            if (count > 0)
+            {
+                var gch = GCHandle.Alloc(buffer, GCHandleType.Pinned);
+                res = decode(Marshal.UnsafeAddrOfPinnedArrayElement(buffer, 0), count);
+                gch.Free();
+            }
         }
 
         return res;
@@ -114,7 +117,7 @@ public unsafe class FFmpegWaveProvider : WaveStream, ISampleProvider
             throw new NotImplementedException("FFmpeg: Set the sample format to FLT.");
         }
 
-        int res;
+        int res = 0;
         lock (lockObject)
         {
             int bytesPerSample = 4;
@@ -125,9 +128,12 @@ public unsafe class FFmpegWaveProvider : WaveStream, ISampleProvider
                 _ = decode(IntPtr.Zero, offset);
             }
 
-            var gch = GCHandle.Alloc(buffer, GCHandleType.Pinned);
-            res = decode(Marshal.UnsafeAddrOfPinnedArrayElement(buffer, 0), count);
-            gch.Free();
+            if (count > 0)
+            {
+                var gch = GCHandle.Alloc(buffer, GCHandleType.Pinned);
+                res = decode(Marshal.UnsafeAddrOfPinnedArrayElement(buffer, 0), count);
+                gch.Free();
+            }
 
             res /= bytesPerSample;
         }
@@ -172,6 +178,8 @@ public unsafe class FFmpegWaveProvider : WaveStream, ISampleProvider
     private AVChannelLayout _channelLayout; // 输出声道布局
 
     private LinkedList<byte> _cachedBuffer;
+
+    private int _remainSamples;
 
     private Object lockObject;
 
@@ -346,6 +354,17 @@ public unsafe class FFmpegWaveProvider : WaveStream, ISampleProvider
             ffmpeg.av_channel_layout_copy(&out_ch_layout, ch_layout_ptr);
         }
 
+        // 跳过上次重采样器的余量
+        int remained = 0;
+        if (_remainSamples > 0)
+        {
+            remained = (int)ffmpeg.av_rescale_rnd(
+                _remainSamples,
+                _arguments.SampleRate,
+                _waveFormat.SampleRate, AVRounding.AV_ROUND_UP);
+            _remainSamples = 0;
+        }
+
         while (_cachedBuffer.Count < size)
         {
             int ret = ffmpeg.av_read_frame(fmt_ctx, pkt);
@@ -395,7 +414,6 @@ public unsafe class FFmpegWaveProvider : WaveStream, ISampleProvider
 
                 // 记录当前时间
                 _pos = (long)(frame->best_effort_timestamp / (float)stream->duration * _length);
-                Console.WriteLine(frame->best_effort_timestamp);
 
                 // 进行重采样
                 var resampled_frame = ffmpeg.av_frame_alloc();
@@ -409,9 +427,20 @@ public unsafe class FFmpegWaveProvider : WaveStream, ISampleProvider
                 {
                     int sz = ffmpeg.av_samples_get_buffer_size(null, resampled_frame->ch_layout.nb_channels,
                         resampled_frame->nb_samples, _arguments.SampleFormat, 1);
+
+                    int skip = remained == 0
+                        ? 0
+                        : ffmpeg.av_samples_get_buffer_size(null, resampled_frame->ch_layout.nb_channels,
+                            remained, _arguments.SampleFormat, 1);
+
                     var arr = resampled_frame->data[0];
                     for (int i = 0; i < sz; ++i)
                     {
+                        if (skip > 0)
+                        {
+                            skip--;
+                            continue;
+                        }
                         _cachedBuffer.AddLast(arr[i]);
                     }
                 }
@@ -522,9 +551,13 @@ public unsafe class FFmpegWaveProvider : WaveStream, ISampleProvider
             _cachedBuffer.Clear();
         }
 
+        ffmpeg.avcodec_flush_buffers(codec_ctx);
+
         var stream = fmt_ctx->streams[_audioIndex];
         var timestamp = (long)(_pos / (float)_length * stream->duration);
         ffmpeg.av_seek_frame(fmt_ctx, _audioIndex, timestamp, ffmpeg.AVSEEK_FLAG_FRAME);
+
+        _remainSamples = (int)ffmpeg.swr_get_delay(swr_ctx, _waveFormat.SampleRate);
     }
 
     private void quitDecoder()
