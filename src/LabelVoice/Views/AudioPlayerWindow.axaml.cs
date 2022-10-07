@@ -1,18 +1,19 @@
 using Avalonia.Controls;
-using Avalonia.VisualTree;
 using Avalonia.Interactivity;
+using Avalonia.VisualTree;
 using LabelVoice.Core.Managers;
 using LabelVoice.ViewModels;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
-using System.ComponentModel;
 
 namespace LabelVoice.Views
 {
     public partial class AudioPlayerWindow : Window
     {
         private bool _isDeviceLoaded = false;
+
         public AudioPlayerWindow()
         {
             InitializeComponent();
@@ -23,12 +24,31 @@ namespace LabelVoice.Views
             ButtonSetProgressHalf.Click += SetProgressHalf;
             ButtonPlayTestSound.Click += ButtonPlayTestSound_Click;
             ComboBoxAudioDevices.SelectionChanged += ComboBoxAudioDevices_SelectionChanged;
+            ComboBoxAudioDecoders.SelectionChanged += ComboBoxAudioDecoders_SelectionChanged;
             var deviceNames = PlaybackManager.Instance.GetDevices().Select(d => d.name);
             ComboBoxAudioDevices.Items = deviceNames;
             if (!_isDeviceLoaded)
             {
                 ComboBoxAudioDevices.SelectedIndex = 0;
                 _isDeviceLoaded = true;
+            }
+        }
+
+        private void ComboBoxAudioDecoders_SelectionChanged(object? sender, SelectionChangedEventArgs e)
+        {
+            var item = ComboBoxAudioDecoders.SelectedItem as TextBlock;
+            switch (item?.Text)
+            {
+                case "NAudio":
+                    PlaybackManager.Instance.SwitchAudioDecoder(Core.Audio.AudioDecoder.NAudio);
+                    break;
+
+                case "FFmpeg":
+                    PlaybackManager.Instance.SwitchAudioDecoder(Core.Audio.AudioDecoder.FFmpeg);
+                    break;
+
+                default:
+                    break;
             }
         }
 

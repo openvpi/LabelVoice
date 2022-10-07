@@ -13,6 +13,12 @@ namespace LabelVoice.Core.Managers
     /// </summary>
     public class PlaybackManager : SingletonBase<PlaybackManager>, IDisposable
     {
+        #region Properties
+
+        public AudioDecoder AudioDecoder { get; private set; } = AudioDecoder.NAudio;
+
+        #endregion Properties
+
         #region Private Fields
 
         private IAudioPlayback? _audioPlayback;
@@ -41,13 +47,21 @@ namespace LabelVoice.Core.Managers
             Stop();
             _fileStream?.Dispose();
             _fileStream = null;
+            ISampleProvider inputStream;
+            switch (AudioDecoder)
+            {
+                case AudioDecoder.FFmpeg:
+                    //ffmpeg.RootPath = @"D:\软件\实用\ffmpeg\dll"; // 改成你放FFmpeg动态库的目录
+                    inputStream = new FFmpegWaveProvider(audioFilePath,
+                        new FFmpegWaveProvider.WaveArguments(44100, AVSampleFormat.AV_SAMPLE_FMT_FLT, 2));
+                    break;
 
-            // ffmpeg.RootPath = "C:\\ffmpeg"; // 改成你放FFmpeg动态库的目录
-            FFmpegWaveProvider inputStream = new(audioFilePath,
-                new FFmpegWaveProvider.WaveArguments(44100, AVSampleFormat.AV_SAMPLE_FMT_FLT, 2));
-            // LvAudioFileReader inputStream = new(audioFilePath);
-
-            _fileStream = inputStream;
+                case AudioDecoder.NAudio:
+                default:
+                    inputStream = new LvAudioFileReader(audioFilePath);
+                    break;
+            }
+            _fileStream = (WaveStream?)inputStream;
             SampleAggregator? aggregator = new(inputStream);
             Init(aggregator);
         }
@@ -69,6 +83,15 @@ namespace LabelVoice.Core.Managers
         public void Init(ISampleProvider sampleProvider)
         {
             _audioPlayback?.Init(sampleProvider);
+        }
+
+        public void SwitchAudioDecoder(AudioDecoder decoder)
+        {
+            SavePlaybackStatus();
+            Stop();
+            AudioDecoder = decoder;
+            Reload();
+            RestorePlaybackStatus();
         }
 
         /// <summary>
@@ -213,10 +236,10 @@ namespace LabelVoice.Core.Managers
             Reload();
             //SDL needs to set device after initialization, because once initialized, the device will return to the default.
             if (_audioBackend == AudioBackend.SDL)
-                _audioPlayback?.SwitchDevice(new Guid(), deviceNumber); 
+                _audioPlayback?.SwitchDevice(new Guid(), deviceNumber);
             RestorePlaybackStatus();
         }
-        
+
         /// <summary>
         /// Switch audio playback device by both guid and device number.
         /// </summary>
@@ -250,6 +273,7 @@ namespace LabelVoice.Core.Managers
                 case PlaybackState.Playing:
                     Play();
                     break;
+
                 case PlaybackState.Paused:
                     Pause();
                     break;

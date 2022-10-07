@@ -3,7 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="using:LabelVoice.ViewModels"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="176" Height="176"
         x:Class="LabelVoice.Views.AudioPlayerWindow"
         Title="AudioPlayerWindow">
 
@@ -15,7 +15,7 @@
 		  Margin="8"
 		  RowDefinitions="40, 40, 40, 40, *">
 		<Grid Grid.Row="0"
-			  ColumnDefinitions="*, *">
+			  ColumnDefinitions="128, *">
 			<Button
                 x:Name="buttonOpenAudioFile"
                 Grid.Row="0"
@@ -34,7 +34,7 @@
 			<TextBlock Name="textBlockCurrentTime"
                 Grid.Column="0"
                 Text="{Binding CurrentTimeString}"
-                HorizontalAlignment="Center"
+                HorizontalAlignment="Left"
                 VerticalAlignment="Center" />
 			<Slider
                 x:Name="sliderProgress"
@@ -46,7 +46,7 @@
                 x:Name="TextBlockTotalTime"
                 Grid.Column="2"
                 Text="{Binding TotalTimeString}"
-				HorizontalAlignment="Center"
+				HorizontalAlignment="Right"
                 VerticalAlignment="Center" />
 		</Grid>
 		<Grid
@@ -87,19 +87,44 @@
 				HorizontalAlignment="Stretch"
                 Margin="4,0,0,0" />
 		</Grid>
-		<ComboBox
+		<StackPanel
 			Grid.Row="3"
-            x:Name="ComboBoxAudioDevices"
-            MinWidth="140"
-            HorizontalAlignment="Left"
-            HorizontalContentAlignment="Center"
-            VerticalContentAlignment="Center"
-            SelectedIndex="0">
-			<ComboBox.ItemTemplate>
-				<DataTemplate>
-					<TextBlock Text="{Binding}" />
-				</DataTemplate>
-			</ComboBox.ItemTemplate>
-		</ComboBox>
+			Orientation="Horizontal">
+			<TextBlock
+				Text="解码器："
+				VerticalAlignment="Center"
+				Width="64"/>
+			<ComboBox
+                x:Name="ComboBoxAudioDecoders"
+                MinWidth="128"
+				Margin="0,0,4,0"
+                HorizontalAlignment="Left"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+				VerticalAlignment="Center"
+                SelectedIndex="0">
+				<TextBlock Text="NAudio" />
+				<TextBlock Text="FFmpeg" />
+			</ComboBox>
+			<TextBlock
+				Margin="4,0,0,0"
+				Text="回放设备："
+				VerticalAlignment="Center"
+				Width="80"/>
+			<ComboBox
+                x:Name="ComboBoxAudioDevices"
+                MinWidth="140"
+                HorizontalAlignment="Left"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+				VerticalAlignment="Center"
+                SelectedIndex="0">
+				<ComboBox.ItemTemplate>
+					<DataTemplate>
+						<TextBlock Text="{Binding}" />
+					</DataTemplate>
+				</ComboBox.ItemTemplate>
+			</ComboBox>
+		</StackPanel>
 	</Grid>
 </Window>
