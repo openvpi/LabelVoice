@@ -37,7 +37,7 @@
             ...
         |-- 38db2292_ZheGanJue
             ...
-    |-- wavs    [15]
+    |-- audios    [15]
         |-- a54c548a.wav    [16]
         |-- 38db2292.wav
 ```
@@ -190,7 +190,7 @@
     <Id>a54c548a</Id>
     <Name>GuangNianZhiWai</Name>
     <OwnerProject>../../example.lvproj</OwnerProject>
-    <AudioSource>../../wavs/a54c548a.wav</AudioSource>
+    <AudioSource>../../audios/a54c548a.wav</AudioSource>
     <Slices>
         <Slice Id="cc370027" In="1.14" Out="5.14"/>
         <Slice Id="a4be0a3f" In="8.17" Out="19.26" Language="a61c"/>
@@ -227,63 +227,64 @@
 - Out：切片在源音频文件中的出点
 - Language：该切片的语言编号（对应工程描述文件中的语言编号），该属性将覆盖项目本身的语言属性
 
-
 ## 4 音频切片标注文件（.lvtext）（yaml格式）
+
+文件示例如下：
+
 ```yaml
 # LabelVoice Slice Annotation File
 version: 1
 audio:
-  filepath: '../../wavs/145ed1c8.wav'
+  path: '../../audios/145ed1c8.wav'
   in: 14.63
   out: 16.63
 layers:
-  - name: 句子
-    type: text
-    slices:
-      - id: 57
+  - name: sentence
+    boundaries:
+      - id: 1
         pos: 0.0000
-        text: 我
-      - id: 13
+        text: '我人'
+      - id: 2
+        pos: 2.0000
+        text: 
+  - name: pinyin
+    boundaries:
+      - id: 3
+        pos: 0.0000
+        text: 'wo'
+      - id: 4
         pos: 1.0000
-        text: 人
-  - name: 拼音
-    type: text
-    slices:
-      - id: 24
+        text: 'ren'
+      - id: 5
+        pos: 2.0000
+        text: 
+  - name: phoneme
+    boundaries:
+      - id: 6
         pos: 0.0000
-        text: wo
-      - id: 25
-        pos: 1.0000
-        text: ren
-  - name: 音素
-    type: text
-    slices:
-      - id: 33
-        pos: 0.0000
-        text: w
-      - id: 34
+        text: 'w'
+      - id: 7
         pos: 0.1000
-        text: u
-      - id: 35
+        text: 'u'
+      - id: 8
         pos: 0.3000
-        text: o
-      - id: 36
+        text: 'o'
+      - id: 9
         pos: 1.0000
-        text: r
-      - id: 37
+        text: 'r'
+      - id: 10
         pos: 1.1500
         text: '3'
-      - id: 38
+      - id: 11
         pos: 1.6500
         text: 'n'
-      - id: 50
-        pos: 4.0000
-        text:
+      - id: 12
+        pos: 2.0000
+        text: 
 groups:
-  - [24, 33, 57] # 0.0000
-  - [13, 25, 36] # 1.0000
-  - [18, 31]     # 2.0000
-                 # 此处展示“打破约束”不把音素层50号切点带进这组的样式
+  - [1, 3, 6]   # 0.0000
+  - [4, 9]      # 1.0000
+  - [2, 5, 12]  # 2.0000
 ```
 
 ### 4.1 version
@@ -298,7 +299,7 @@ lvtext文件结构版本号。
 - in：浮点数，对应切片的开始时间点。单位为秒。
 - out：浮点数，对应切片的结束时间点。单位为秒。
 
-如果标注内容超出了meta中记录的范围，则超出部分会在读取后被强制截断。若左边界提前于首个切割点，则左侧的空缺以一个工程中（per project）可自定义的字符串（默认为SP）补充。
+如果标注内容超出了meta中记录的范围，则超出部分会在读取后被强制截断。若左边界提前于首个切割点，则左侧的空缺以空白标记补充（暂定；可能允许指定默认空白标记，例如 SP）。
 
 ### 4.3 layers
 
@@ -307,10 +308,10 @@ lvtext文件结构版本号。
 
 #### 4.4.1 (layer对象)
 
-- name：字符串，在layers中所有层中都不重复的名称。
-- slices：列表，包含一系列slice对象，表示该层中所有切割标记点。slices中的切点应当允许乱序。
+- name：字符串，层的名称。
+- boundaries：列表，包含一系列boundary对象，表示该层中所有切割标记点。boundaries中的切点应当允许乱序。
 
-#### 4.4.2 (slice对象)
+#### 4.4.2 (boundary对象)
 
 一个切割标记点。
 
@@ -318,14 +319,17 @@ lvtext文件结构版本号。
 - pos：浮点数，切割的时间点。单位为秒。
 - text：字符串，该切割点右侧的块包含的内容字符串。
 
-左右端点不作标记，而由meta中记录的长度推断而来。
+每一层的最左边界pos应恒为0，当最左边界pos不为0或视图将左边界向右移动时，将会在pos等于0处生成一个新的边界对象。
+
+每一层的最右边界（pos等于切片长度）的text属性恒为空并不可修改，且任何修改都将被忽略；当文件中不存在右边界，或试图将右边界向左移动时，将会在右边界所处位置重新生成一个新的边界对象。
 
 id自切点创建起永远不改变，直到切点删除。id用于*切点间相对位置绑定（groups）* 以及 *便于VCS对某个切点变动的记录*。
 id的生成应当类似自增主键（从0开始），新加入的切点id必须大于未修改的文件中最大的id。这个最大id可以由软件加载时得出。
 
 ### 4.5 groups 切点绑定
 
-列表，内含所有切点的绑定关系。绑定后的一组切点，在移动一个切点时，其他点会跟随移动相同的量。
+列表，内含所有切点的绑定关系。在移动绑定组中的一个切点时，其他点会跟随移动相同的量。
 
 groups的子元素是一个子元素全为整型的列表。如有不是列表的group对象，则忽略。如group列表中的元素有非整型的或者不对应于任何一个切割点的，则忽略。
+
 如果文件中出现一个切点被绑定到多个组中，则应按读取顺序，将其从原来所属组中拆除，排入新组。
