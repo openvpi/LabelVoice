@@ -31,12 +31,12 @@ namespace LabelVoice.Core.Audio
             _d.devChanged = (newVal, oldVal) =>
             {
                 AudioDeviceChangedHandler?.Invoke(newVal, oldVal);
-                // Console.WriteLine($"SDLPLayback: Audio device change to {i}.");
+                // Console.WriteLine($"SDLPLayback: Audio device change to {newVal}.");
             };
             _d.stateChanged = (newVal, oldVal) =>
             {
                 PlayStateChangedHandler?.Invoke(newVal, oldVal);
-                // Console.WriteLine($"SDLPLayback: Play state change to {i}.");
+                // Console.WriteLine($"SDLPLayback: Play state change to {newVal}.");
             };
         }
 

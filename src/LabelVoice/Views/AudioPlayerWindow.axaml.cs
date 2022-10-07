@@ -56,7 +56,9 @@ namespace LabelVoice.Views
             List<string> formats = new()
             {
                 "wav",
-                "mp3"
+                "mp3",
+                "m4a",
+                "flac"
             };
             FileDialogFilter filter = new()
             {

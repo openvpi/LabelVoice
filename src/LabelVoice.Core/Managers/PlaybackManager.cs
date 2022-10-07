@@ -1,8 +1,10 @@
-﻿using LabelVoice.Core.Audio;
+﻿using FFmpeg.AutoGen;
+using LabelVoice.Core.Audio;
 using LabelVoice.Core.Utils;
 using NAudio.Extras;
 using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
+using Test.Playback;
 
 namespace LabelVoice.Core.Managers
 {
@@ -28,7 +30,12 @@ namespace LabelVoice.Core.Managers
             Stop();
             _fileStream?.Dispose();
             _fileStream = null;
-            LvAudioFileReader inputStream = new(audioFilePath);
+
+            // ffmpeg.RootPath = "C:\\ffmpeg"; // 改成你放FFmpeg动态库的目录
+            FFmpegWaveProvider inputStream = new(audioFilePath,
+                new FFmpegWaveProvider.WaveArguments(44100, AVSampleFormat.AV_SAMPLE_FMT_FLT, 2));
+            // LvAudioFileReader inputStream = new(audioFilePath);
+
             _fileStream = inputStream;
             SampleAggregator? aggregator = new(inputStream);
             Init(aggregator);
@@ -115,8 +122,8 @@ namespace LabelVoice.Core.Managers
 
         public List<AudioDevice> GetAudioDevices() =>
             _audioPlayback != null
-            ? _audioPlayback.GetDevices()
-            : new List<AudioDevice>();
+                ? _audioPlayback.GetDevices()
+                : new List<AudioDevice>();
 
         #endregion Methods
     }

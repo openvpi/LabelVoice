@@ -15,6 +15,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FFmpeg.AutoGen" Version="5.1.1" />
     <PackageReference Include="NAudio" Version="2.1.0" />
     <PackageReference Include="NAudio.Extras" Version="2.1.0" />
     <PackageReference Include="ppy.SDL2-CS" Version="1.0.596-alpha" />
