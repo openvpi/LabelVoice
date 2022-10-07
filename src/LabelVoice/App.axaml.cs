@@ -42,7 +42,7 @@ public class App : Application
         InitializeCulture();
         if (IsWin())
         {
-            PlaybackManager.Instance.SetAudioBackend(AudioBackend.SDL);
+            PlaybackManager.Instance.SetAudioBackend(AudioBackend.NAudio);
         }
         else
         {

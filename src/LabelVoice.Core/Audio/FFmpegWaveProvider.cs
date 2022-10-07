@@ -37,10 +37,12 @@ public unsafe class FFmpegWaveProvider : WaveStream, ISampleProvider
         public int BytesPerSample => ffmpeg.av_get_bytes_per_sample(SampleFormat);
     }
 
+    // 输出参数缺省为与输入一致
     public FFmpegWaveProvider(string fileName) : this(fileName, new WaveArguments())
     {
     }
 
+    // 输出参数自定义，如果某一个参数要与输入一致，就指定一个负数
     public FFmpegWaveProvider(string fileName, WaveArguments args)
     {
         _fileName = fileName;
@@ -61,10 +63,15 @@ public unsafe class FFmpegWaveProvider : WaveStream, ISampleProvider
     }
 
     public string FileName => _fileName;
+
     public WaveArguments Arguments => _arguments;
 
+    // 输入音频的格式
     public WaveFormat OriginalWaveFormat => _waveFormat;
 
+    public int OriginalBytesPerSample => _waveFormat.BitsPerSample / 8;
+
+    // 输出音频的格式
     public override WaveFormat WaveFormat => _resampledFormat;
 
     // This value is estimated from bitrate, may be inaccurate
@@ -114,7 +121,7 @@ public unsafe class FFmpegWaveProvider : WaveStream, ISampleProvider
     {
         if (Arguments.SampleFormat != AVSampleFormat.AV_SAMPLE_FMT_FLT)
         {
-            throw new NotImplementedException("FFmpeg: Set the sample format to FLT.");
+            throw new ArgumentException("FFmpeg: Set the sample format to FLT.");
         }
 
         int res = 0;
@@ -123,6 +130,7 @@ public unsafe class FFmpegWaveProvider : WaveStream, ISampleProvider
             int bytesPerSample = 4;
             offset *= bytesPerSample;
             count *= bytesPerSample;
+
             if (offset > 0)
             {
                 _ = decode(IntPtr.Zero, offset);
@@ -143,6 +151,34 @@ public unsafe class FFmpegWaveProvider : WaveStream, ISampleProvider
 
     public float Volume => throw new NotImplementedException();
 
+    // Wrapper for setting ffmpeg root dir
+    public static void RegisterLibraries(string dir)
+    {
+        ffmpeg.RootPath = dir;
+    }
+
+    // Check if the libraries are available
+    public static bool LibrariesExists()
+    {
+        var libs = new string[] { "avcodec", "avutil", "avformat", "swresample" };
+        bool flag = true;
+
+        foreach (var lib in libs)
+        {
+            var ver = ffmpeg.LibraryVersionMap[lib];
+            var nativeLibraryName = FFmpeg.AutoGen.Native.LibraryLoader.GetNativeLibraryName(lib, ver);
+            var fullName = Path.Combine(ffmpeg.RootPath, nativeLibraryName);
+            if (!File.Exists(fullName))
+            {
+                flag = false;
+                break;
+            }
+        }
+
+        return flag;
+    }
+
+    
     /*
      *
      * Private part
@@ -160,15 +196,19 @@ public unsafe class FFmpegWaveProvider : WaveStream, ISampleProvider
 
     private AVFrame* _frame;
 
-    // 标准音频信息
+    // 输入音频信息
     private WaveFormat _waveFormat;
 
+    // 输出音频信息
     private WaveFormat _resampledFormat;
 
+    // 文件名参数
     private string _fileName;
 
+    // 输出参数
     private WaveArguments _arguments;
 
+    // 音频信息
     private long _length; // 不包括声道
 
     private long _pos; // 不包括声道
@@ -177,6 +217,7 @@ public unsafe class FFmpegWaveProvider : WaveStream, ISampleProvider
 
     private AVChannelLayout _channelLayout; // 输出声道布局
 
+    // 类内数据结构
     private LinkedList<byte> _cachedBuffer;
 
     private int _remainSamples;
@@ -370,12 +411,18 @@ public unsafe class FFmpegWaveProvider : WaveStream, ISampleProvider
             int ret = ffmpeg.av_read_frame(fmt_ctx, pkt);
 
             // 判断是否结束
-            if (ret != 0)
+            if (ret == ffmpeg.AVERROR_EOF)
             {
+                //标记为最终时间
                 _pos = _length;
 
                 ffmpeg.av_packet_unref(pkt);
                 break;
+            }
+            else if (ret != 0)
+            {
+                // 忽略
+                Console.WriteLine("FFmpeg: Error getting next frame with code {0:x}, ignored.", -ret);
             }
 
             // 跳过其他流
@@ -441,6 +488,7 @@ public unsafe class FFmpegWaveProvider : WaveStream, ISampleProvider
                             skip--;
                             continue;
                         }
+
                         _cachedBuffer.AddLast(arr[i]);
                     }
                 }
@@ -479,7 +527,6 @@ public unsafe class FFmpegWaveProvider : WaveStream, ISampleProvider
         return cnt;
     }
 
-    // 参数pos表示输入参数下包括声道的字节偏移
     private void seek()
     {
         var fmt_ctx = _formatContext;
@@ -494,9 +541,8 @@ public unsafe class FFmpegWaveProvider : WaveStream, ISampleProvider
         //     var delay = ffmpeg.swr_get_delay(swr_ctx, _waveFormat.SampleRate);
         //     if (delay > 0)
         //     {
-        //         int src_nb_samples = 44100;
         //         int dst_nb_samples = (int)ffmpeg.av_rescale_rnd(
-        //             delay + src_nb_samples,
+        //             delay,
         //             _arguments.SampleRate,
         //             _waveFormat.SampleRate, AVRounding.AV_ROUND_UP);
         //
@@ -504,19 +550,9 @@ public unsafe class FFmpegWaveProvider : WaveStream, ISampleProvider
         //
         //         byte** dst_data;
         //         int dst_linesize;
-        //         byte** src_data;
-        //         int src_linesize;
         //
         //         double t = 0;
         //         int ret = 0;
-        //
-        //         // 分配空的源
-        //         ret = ffmpeg.av_samples_alloc_array_and_samples(&src_data, &src_linesize, _waveFormat.Channels,
-        //             src_nb_samples, codec_ctx->sample_fmt, 0);
-        //         if (ret < 0)
-        //         {
-        //             throw new OutOfMemoryException("FFmpeg: Fail to av_samples_alloc_array_and_samples.");
-        //         }
         //
         //         // // 分配目标
         //         ret = ffmpeg.av_samples_alloc_array_and_samples(&dst_data, &dst_linesize, _arguments.Channels,
@@ -527,7 +563,6 @@ public unsafe class FFmpegWaveProvider : WaveStream, ISampleProvider
         //         }
         //
         //         // 转换
-        //         // fill_samples((double*)src_data[0], src_nb_samples, _waveFormat.Channels, _waveFormat.SampleRate, &t);
         //         ret = ffmpeg.swr_convert(swr_ctx, dst_data, dst_nb_samples, null, 0);
         //         if (ret < 0)
         //         {
@@ -540,23 +575,22 @@ public unsafe class FFmpegWaveProvider : WaveStream, ISampleProvider
         //
         //         ffmpeg.av_freep(&dst_data[0]);
         //         ffmpeg.av_freep(&dst_data);
-        //
-        //         ffmpeg.av_freep(&src_data[0]);
-        //         ffmpeg.av_freep(&src_data);
         //     }
         // }
-        Console.WriteLine($"seek {_pos}");
+
         if (_cachedBuffer != null && _cachedBuffer.First != null)
         {
             _cachedBuffer.Clear();
         }
 
+        // 必须清空内部缓存
         ffmpeg.avcodec_flush_buffers(codec_ctx);
 
         var stream = fmt_ctx->streams[_audioIndex];
         var timestamp = (long)(_pos / (float)_length * stream->duration);
         ffmpeg.av_seek_frame(fmt_ctx, _audioIndex, timestamp, ffmpeg.AVSEEK_FLAG_FRAME);
 
+        // 保存重采样器内部余量
         _remainSamples = (int)ffmpeg.swr_get_delay(swr_ctx, _waveFormat.SampleRate);
     }
 
@@ -608,42 +642,15 @@ public unsafe class FFmpegWaveProvider : WaveStream, ISampleProvider
         }
     }
 
-    public static void RegisterLibraries(string dir)
-    {
-        ffmpeg.RootPath = dir;
-    }
-
     private long src2dest_bytes(long bytes)
     {
-        return (long)(bytes / (_waveFormat.BitsPerSample / (float)8) / _waveFormat.SampleRate *
+        return (long)(bytes / OriginalBytesPerSample / _waveFormat.SampleRate *
                       _arguments.SampleRate * _arguments.BytesPerSample);
     }
 
     private long dest2src_bytes(long bytes)
     {
         return (long)(bytes / (float)_arguments.BytesPerSample / _arguments.SampleRate *
-                      _waveFormat.SampleRate * (_waveFormat.BitsPerSample / (float)8));
-    }
-
-    private static void fill_samples(double* dst, int nb_samples, int nb_channels, int sample_rate, double* t)
-    {
-        Console.WriteLine("Fill Samples Begin");
-
-        double tincr = 1.0 / sample_rate;
-        double* dstp = dst;
-        const double c = 2 * ffmpeg.M_PI * 440.0;
-
-        // generate sin tone with 440Hz frequency and duplicated channels
-        for (int i = 0; i < nb_samples; i++)
-        {
-            *dstp = Math.Sin(c * *t);
-            for (int j = 1; j < nb_channels; j++)
-                dstp[j] = dstp[0];
-
-            dstp += nb_channels;
-            *t += tincr;
-        }
-
-        Console.WriteLine("Fill Samples End");
+                      _waveFormat.SampleRate * OriginalBytesPerSample);
     }
 }
