@@ -43,6 +43,7 @@ namespace LabelVoice.Core.Audio
             _playbackDevice = new WaveOutEvent
             {
                 DeviceNumber = _deviceNumber,
+                DesiredLatency = 200,
             };
         }
 

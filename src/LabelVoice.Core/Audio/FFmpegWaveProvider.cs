@@ -124,13 +124,14 @@ public unsafe class FFmpegWaveProvider : WaveStream, ISampleProvider
     {
         if (Arguments.SampleFormat != AVSampleFormat.AV_SAMPLE_FMT_FLT)
         {
-            throw new ArgumentException("FFmpeg: Set the sample format to FLT.");
+            throw new ArgumentException("FFmpeg: Sample format should be FLT.");
         }
 
         int res = 0;
         lock (lockObject)
         {
-            int bytesPerSample = 4;
+            const int bytesPerSample = 4;
+
             offset *= bytesPerSample;
             count *= bytesPerSample;
 
@@ -227,7 +228,7 @@ public unsafe class FFmpegWaveProvider : WaveStream, ISampleProvider
 
     private int _remainSamples;
 
-    private Object lockObject;
+    private object lockObject;
 
     private void initDecoder()
     {
@@ -278,7 +279,7 @@ public unsafe class FFmpegWaveProvider : WaveStream, ISampleProvider
         ret = ffmpeg.avcodec_parameters_to_context(codec_ctx, codec_param);
         if (ret < 0)
         {
-            throw new DecoderFallbackException("FFmpeg: Failed to pass params to context.");
+            throw new DecoderFallbackException("FFmpeg: Failed to pass params to codec.");
         }
 
         // 打开解码器
@@ -324,7 +325,7 @@ public unsafe class FFmpegWaveProvider : WaveStream, ISampleProvider
 
         if (_arguments.Channels > 2)
         {
-            throw new NotImplementedException("FFmpeg: Only support basic mono and stereo.");
+            throw new ArgumentException("FFmpeg: Only support basic mono and stereo.");
         }
 
         // 对外表现的格式
