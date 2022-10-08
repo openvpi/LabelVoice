@@ -11,6 +11,9 @@ namespace Test.Playback;
 // http://dranger.com/ffmpeg/tutorial07.html
 // https://blog.csdn.net/edzjx/article/details/108645085
 
+// AAC格式计算时间不准
+// https://juejin.cn/post/6844904105203204109
+
 public unsafe class FFmpegWaveProvider : WaveStream, ISampleProvider
 {
     public struct WaveArguments
@@ -367,6 +370,11 @@ public unsafe class FFmpegWaveProvider : WaveStream, ISampleProvider
         // 等待进一步的解码
         _packet = pkt;
         _frame = frame;
+
+        // if (fmt_ctx->iformat->raw_codec_id == (int)AVCodecID.AV_CODEC_ID_AAC)
+        // {
+        //     ffmpeg.av_seek_frame(fmt_ctx, audio_idx, stream->duration, AVFrame)
+        // }
 
         ffmpeg.av_channel_layout_uninit(&in_ch_layout);
         ffmpeg.av_channel_layout_uninit(&out_ch_layout);
