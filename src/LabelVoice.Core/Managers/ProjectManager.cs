@@ -1,4 +1,4 @@
-﻿using LabelVoice.Core.ProjectModel;
+﻿using LabelVoice.Models;
 using LabelVoice.Core.Utils;
 
 namespace LabelVoice.Core.Managers
@@ -9,14 +9,14 @@ namespace LabelVoice.Core.Managers
 
         private ProjectManager()
         {
-            Project = new LvProject();
+            Project = new LabelVoiceProject();
         }
 
         #endregion Constructor
 
         #region Properties
 
-        public LvProject Project { get; private set; }
+        public LabelVoiceProject Project { get; private set; }
 
         #endregion Properties
 
