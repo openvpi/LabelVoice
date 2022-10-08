@@ -1,12 +1,7 @@
-using System.Collections.ObjectModel;
-using System.Globalization;
-using System.IO;
 using System.Threading.Tasks;
 using Avalonia.Controls;
-using Avalonia.Interactivity;
 using Avalonia.VisualTree;
 using LabelVoice.ViewModels;
-using ReactiveUI;
 
 namespace LabelVoice.Views
 {
@@ -21,7 +16,7 @@ namespace LabelVoice.Views
 
         private void SelectingItemsControl_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
         {
-            var item = (ComboBoxItem)((ComboBox)sender).SelectedItem;
+            var item = (ComboBoxItem)((ComboBox)sender!).SelectedItem!;
             var lang = item.Content.ToString();
             App.SetCulture(lang);
         }
