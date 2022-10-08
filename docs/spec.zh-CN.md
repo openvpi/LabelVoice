@@ -242,44 +242,44 @@ layers:
   - name: sentence
     boundaries:
       - id: 1
-        pos: 0.0000
+        position: 0.0000
         text: '我人'
       - id: 2
-        pos: 2.0000
+        position: 2.0000
         text: 
   - name: pinyin
     boundaries:
       - id: 3
-        pos: 0.0000
+        position: 0.0000
         text: 'wo'
       - id: 4
-        pos: 1.0000
+        position: 1.0000
         text: 'ren'
       - id: 5
-        pos: 2.0000
+        position: 2.0000
         text: 
   - name: phoneme
     boundaries:
       - id: 6
-        pos: 0.0000
+        position: 0.0000
         text: 'w'
       - id: 7
-        pos: 0.1000
+        position: 0.1000
         text: 'u'
       - id: 8
-        pos: 0.3000
+        position: 0.3000
         text: 'o'
       - id: 9
-        pos: 1.0000
+        position: 1.0000
         text: 'r'
       - id: 10
-        pos: 1.1500
+        position: 1.1500
         text: '3'
       - id: 11
-        pos: 1.6500
+        position: 1.6500
         text: 'n'
       - id: 12
-        pos: 2.0000
+        position: 2.0000
         text: 
 groups:
   - [1, 3, 6]   # 0.0000
@@ -316,12 +316,12 @@ lvtext文件结构版本号。
 一个切割标记点。
 
 - id：整数，切点在该lvtext文件中的唯一编号。
-- pos：浮点数，切割的时间点。单位为秒。
+- position：浮点数，切割的时间点。单位为秒。
 - text：字符串，该切割点右侧的块包含的内容字符串。
 
-每一层的最左边界pos应恒为0，当最左边界pos不为0或视图将左边界向右移动时，将会在pos等于0处生成一个新的边界对象。
+每一层的最左边界position应恒为0，当最左边界position不为0或视图将左边界向右移动时，将会在position等于0处生成一个新的边界对象。
 
-每一层的最右边界（pos等于切片长度）的text属性恒为空并不可修改，且任何修改都将被忽略；当文件中不存在右边界，或试图将右边界向左移动时，将会在右边界所处位置重新生成一个新的边界对象。
+每一层的最右边界（position等于切片长度）的text属性恒为空并不可修改，且任何修改都将被忽略；当文件中不存在右边界，或试图将右边界向左移动时，将会在右边界所处位置重新生成一个新的边界对象。
 
 id自切点创建起永远不改变，直到切点删除。id用于*切点间相对位置绑定（groups）* 以及 *便于VCS对某个切点变动的记录*。
 id的生成应当类似自增主键（从0开始），新加入的切点id必须大于未修改的文件中最大的id。这个最大id可以由软件加载时得出。
