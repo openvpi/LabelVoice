@@ -4,7 +4,6 @@ using LabelVoice.Core.Utils;
 using NAudio.Extras;
 using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
-using Test.Playback;
 
 namespace LabelVoice.Core.Managers
 {

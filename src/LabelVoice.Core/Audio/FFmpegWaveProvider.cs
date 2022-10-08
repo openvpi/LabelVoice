@@ -5,7 +5,7 @@ using System.Threading.Tasks.Dataflow;
 using FFmpeg.AutoGen;
 using NAudio.Wave;
 
-namespace Test.Playback;
+namespace LabelVoice.Core.Audio;
 
 // 部分参考
 // http://dranger.com/ffmpeg/tutorial07.html
@@ -161,27 +161,29 @@ public unsafe class FFmpegWaveProvider : WaveStream, ISampleProvider
     }
 
     // Check if the libraries are available
-    public static bool LibrariesExists()
+    public static bool LibrariesExist
     {
-        var libs = new string[] { "avcodec", "avutil", "avformat", "swresample" };
-        bool flag = true;
-
-        foreach (var lib in libs)
+        get
         {
-            var ver = ffmpeg.LibraryVersionMap[lib];
-            var nativeLibraryName = FFmpeg.AutoGen.Native.LibraryLoader.GetNativeLibraryName(lib, ver);
-            var fullName = Path.Combine(ffmpeg.RootPath, nativeLibraryName);
-            if (!File.Exists(fullName))
-            {
-                flag = false;
-                break;
-            }
-        }
+            var libs = new[] { "avcodec", "avutil", "avformat", "swresample" };
+            bool flag = true;
 
-        return flag;
+            foreach (var lib in libs)
+            {
+                var ver = ffmpeg.LibraryVersionMap[lib];
+                var nativeLibraryName = FFmpeg.AutoGen.Native.LibraryLoader.GetNativeLibraryName(lib, ver);
+                var fullName = Path.Combine(ffmpeg.RootPath, nativeLibraryName);
+                if (!File.Exists(fullName))
+                {
+                    flag = false;
+                    break;
+                }
+            }
+
+            return flag;
+        }
     }
 
-    
     /*
      *
      * Private part

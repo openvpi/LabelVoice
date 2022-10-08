@@ -96,6 +96,9 @@ public class App : Application
                 .ToLowerInvariant())
             .ToDictionary(group => group.Key, group => group.ToArray());
         
+        // This line may be useless afterwards, since culture will be bound to some preference settings.
+        SetCulture(CultureInfo.InstalledUICulture.Name);
+
         //Only keep the font style of the current operating system.
         for (var i = 0;i<Current.Styles.Count;i++)
         {

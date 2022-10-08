@@ -3,6 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="using:LabelVoice.ViewModels"
+        xmlns:audio="clr-namespace:LabelVoice.Core.Audio;assembly=LabelVoice.Core"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="176" Height="176"
         x:Class="LabelVoice.Views.AudioPlayerWindow"
         Title="AudioPlayerWindow">
@@ -102,8 +103,8 @@
                 VerticalContentAlignment="Center"
 				VerticalAlignment="Center"
                 SelectedIndex="0">
-				<TextBlock Text="NAudio" />
-				<TextBlock Text="FFmpeg" />
+				<ComboBoxItem Content="NAudio" />
+				<ComboBoxItem Content="FFmpeg" IsVisible="{x:Static audio:FFmpegWaveProvider.LibrariesExist}" />
 			</ComboBox>
 			<TextBlock
 				Margin="4,0,0,0"
