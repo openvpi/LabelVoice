@@ -13,7 +13,7 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-	<Grid Name="mainLayout" ColumnDefinitions="200,1*" RowDefinitions="*">
+	<Grid Name="mainLayout" ColumnDefinitions="200,*">
         <StackPanel Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center">
             <TextBlock Text="{DynamicResource mainwindow.greeting}" HorizontalAlignment="Center"/>
             <ComboBox
@@ -39,21 +39,23 @@
                 TextWrapping="Wrap"/>
         </StackPanel>
 
-		<WrapPanel Grid.Column="0" Grid.Row="0" VerticalAlignment="Stretch">
+		<DockPanel Grid.Column="0" VerticalAlignment="Stretch">
             <Grid RowDefinitions="Auto,*">
                 <Button Grid.Row="0" Name="btnGetProjectRoot"
                         Content="打开工程..." />
-			    <TreeView Grid.Row="1" Items="{Binding Items}"
+			    <TreeView Grid.Row="1"
 	                HorizontalAlignment="Left"
-                    Width="300">
+                    Padding="10"
+                    Width="300"
+	                Items="{Binding Items}">
 				    <TreeView.ItemTemplate>
 					    <TreeDataTemplate ItemsSource="{Binding Subfolders}">
-						    <TextBlock Text="{Binding strNodeText}"/>
+						    <TextBlock Text="{Binding strNodeText}" HorizontalAlignment="Left"/>
 					    </TreeDataTemplate>
 				    </TreeView.ItemTemplate>
 			    </TreeView>
             </Grid>
-		</WrapPanel>
+		</DockPanel>
     </Grid>
 		
 </Window>
