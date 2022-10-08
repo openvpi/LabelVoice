@@ -116,7 +116,7 @@ namespace LabelVoice.Views
             {
                 string strFolder = result.First();
                 ((AudioPlayerWindowViewModel)DataContext!).OpenAudioFile(strFolder);
-                sliderProgress.Maximum = (int)PlaybackManager.Instance.GetTotalTime().TotalMilliseconds;
+                progressBar.Maximum = (int)PlaybackManager.Instance.GetTotalTime().TotalMilliseconds;
             }
         }
 
