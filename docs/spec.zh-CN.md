@@ -37,7 +37,7 @@
             ...
         |-- 38db2292_ZheGanJue
             ...
-    |-- audios    [15]
+    |-- audio    [15]
         |-- a54c548a.wav    [16]
         |-- 38db2292.wav
 ```
@@ -190,7 +190,7 @@
     <Id>a54c548a</Id>
     <Name>GuangNianZhiWai</Name>
     <OwnerProject>../../example.lvproj</OwnerProject>
-    <AudioSource>../../audios/a54c548a.wav</AudioSource>
+    <AudioSource>../../audio/a54c548a.wav</AudioSource>
     <Slices>
         <Slice Id="cc370027" In="1.14" Out="5.14"/>
         <Slice Id="a4be0a3f" In="8.17" Out="19.26" Language="a61c"/>
@@ -235,7 +235,7 @@
 # LabelVoice Slice Annotation File
 version: 1
 audio:
-  path: '../../audios/145ed1c8.wav'
+  path: '../../audio/145ed1c8.wav'
   in: 14.63
   out: 16.63
 layers:
