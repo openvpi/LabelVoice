@@ -36,8 +36,8 @@ namespace LabelVoice.Views
 
         private void ComboBoxAudioDecoders_SelectionChanged(object? sender, SelectionChangedEventArgs e)
         {
-            var item = ComboBoxAudioDecoders.SelectedItem as TextBlock;
-            switch (item?.Text)
+            var item = ComboBoxAudioDecoders.SelectedItem as ComboBoxItem;
+            switch (item?.Content)
             {
                 case "NAudio":
                     PlaybackManager.Instance.SwitchAudioDecoder(Core.Audio.AudioDecoder.NAudio);
