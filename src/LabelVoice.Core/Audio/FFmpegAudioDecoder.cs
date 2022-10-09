@@ -14,7 +14,7 @@ namespace LabelVoice.Core.Audio;
 // AAC格式计算时间不准
 // https://juejin.cn/post/6844904105203204109
 
-public unsafe class FFmpegWaveProvider : WaveStream, ISampleProvider
+public unsafe class FFmpegAudioDecoder : WaveStream, ISampleProvider
 {
     public struct WaveArguments
     {
@@ -41,12 +41,12 @@ public unsafe class FFmpegWaveProvider : WaveStream, ISampleProvider
     }
 
     // 输出参数缺省为与输入一致
-    public FFmpegWaveProvider(string fileName) : this(fileName, new WaveArguments())
+    public FFmpegAudioDecoder(string fileName) : this(fileName, new WaveArguments())
     {
     }
 
     // 输出参数自定义，如果某一个参数要与输入一致，就指定一个负数
-    public FFmpegWaveProvider(string fileName, WaveArguments args)
+    public FFmpegAudioDecoder(string fileName, WaveArguments args)
     {
         _fileName = fileName;
         _arguments = args;
@@ -54,10 +54,13 @@ public unsafe class FFmpegWaveProvider : WaveStream, ISampleProvider
         // 初始化互斥量
         lockObject = new object();
 
+        // 初始化缓冲区
+        _cachedBuffer = new LinkedList<byte>();
+
         initDecoder();
     }
 
-    ~FFmpegWaveProvider()
+    ~FFmpegAudioDecoder()
     {
         lock (lockObject)
         {
@@ -224,9 +227,9 @@ public unsafe class FFmpegWaveProvider : WaveStream, ISampleProvider
     private AVChannelLayout _channelLayout; // 输出声道布局
 
     // 类内数据结构
-    private LinkedList<byte> _cachedBuffer;
+    private LinkedList<byte> _cachedBuffer; // 内部缓冲区
 
-    private int _remainSamples;
+    private int _remainSamples; // 重采样器余量
 
     private object lockObject;
 
@@ -240,7 +243,7 @@ public unsafe class FFmpegWaveProvider : WaveStream, ISampleProvider
         {
             ffmpeg.avformat_free_context(fmt_ctx);
 
-            throw new FileLoadException($"FFmpeg: Failed to load file {_fileName}.");
+            throw new FileLoadException($"FFmpeg: Failed to load file {_fileName}.", _fileName);
         }
 
         _formatContext = fmt_ctx;
@@ -339,13 +342,17 @@ public unsafe class FFmpegWaveProvider : WaveStream, ISampleProvider
                 new WaveFormat(_arguments.SampleRate, _arguments.BytesPerSample * 8, _arguments.Channels);
         }
 
-        AVChannelLayout in_ch_layout;
+        // 初始化默认输出声道结构
         AVChannelLayout out_ch_layout;
-        ffmpeg.av_channel_layout_copy(&in_ch_layout, &codec_ctx->ch_layout);
         ffmpeg.av_channel_layout_default(&out_ch_layout, _arguments.Channels);
         fixed (AVChannelLayout* ch_layout_ptr = &_channelLayout)
         {
-            ffmpeg.av_channel_layout_copy(ch_layout_ptr, &out_ch_layout);
+            ret = ffmpeg.av_channel_layout_copy(ch_layout_ptr, &out_ch_layout);
+            if (ret < 0)
+            {
+                ffmpeg.av_channel_layout_uninit(&out_ch_layout);
+                error_on_channel_copy(-ret);
+            }
         }
 
         // 初始化重采样器
@@ -353,8 +360,10 @@ public unsafe class FFmpegWaveProvider : WaveStream, ISampleProvider
         _swrContext = swr;
 
         ret = ffmpeg.swr_alloc_set_opts2(&swr, &out_ch_layout, _arguments.SampleFormat,
-            _arguments.SampleRate, &in_ch_layout,
+            _arguments.SampleRate, &codec_ctx->ch_layout,
             codec_ctx->sample_fmt, codec_ctx->sample_rate, 0, null);
+        ffmpeg.av_channel_layout_uninit(&out_ch_layout);
+
         if (ret != 0)
         {
             throw new DecoderFallbackException("FFmpeg: Failed to create resampler.");
@@ -378,11 +387,9 @@ public unsafe class FFmpegWaveProvider : WaveStream, ISampleProvider
         // {
         //     ffmpeg.av_seek_frame(fmt_ctx, audio_idx, stream->duration, AVFrame)
         // }
-
-        ffmpeg.av_channel_layout_uninit(&in_ch_layout);
-        ffmpeg.av_channel_layout_uninit(&out_ch_layout);
     }
 
+    // 如果buf设为空则是跳过
     private int decode(IntPtr buf, int size)
     {
         var fmt_ctx = _formatContext;
@@ -394,16 +401,15 @@ public unsafe class FFmpegWaveProvider : WaveStream, ISampleProvider
 
         var stream = fmt_ctx->streams[_audioIndex];
 
-        if (_cachedBuffer == null)
-        {
-            _cachedBuffer = new LinkedList<byte>();
-        }
-
         // 准备声道信息
         AVChannelLayout out_ch_layout;
         fixed (AVChannelLayout* ch_layout_ptr = &_channelLayout)
         {
-            ffmpeg.av_channel_layout_copy(&out_ch_layout, ch_layout_ptr);
+            int ret = ffmpeg.av_channel_layout_copy(&out_ch_layout, ch_layout_ptr);
+            if (ret < 0)
+            {
+                error_on_channel_copy(-ret);
+            }
         }
 
         // 跳过上次重采样器的余量
@@ -433,7 +439,7 @@ public unsafe class FFmpegWaveProvider : WaveStream, ISampleProvider
             else if (ret != 0)
             {
                 // 忽略
-                Console.WriteLine("FFmpeg: Error getting next frame with code {0:x}, ignored.", -ret);
+                Console.WriteLine($"FFmpeg: Error getting next frame with code {-ret:x}, ignored.");
             }
 
             // 跳过其他流
@@ -449,7 +455,7 @@ public unsafe class FFmpegWaveProvider : WaveStream, ISampleProvider
             if (ret < 0)
             {
                 // 忽略
-                Console.WriteLine("FFmpeg: Error submitting a packet for decoding with code {0:x}, ignored.", -ret);
+                Console.WriteLine($"FFmpeg: Error submitting a packet for decoding with code {-ret:x}, ignored.");
             }
 
             while (ret >= 0)
@@ -467,7 +473,7 @@ public unsafe class FFmpegWaveProvider : WaveStream, ISampleProvider
                     ffmpeg.av_frame_unref(frame);
 
                     // 忽略
-                    Console.WriteLine("FFmpeg: Error decoding frame with code {0:x}, ignored.", -ret);
+                    Console.WriteLine($"FFmpeg: Error decoding frame with code {-ret:x}, ignored.");
                 }
 
                 // 记录当前时间
@@ -477,10 +483,14 @@ public unsafe class FFmpegWaveProvider : WaveStream, ISampleProvider
                 var resampled_frame = ffmpeg.av_frame_alloc();
                 resampled_frame->sample_rate = _arguments.SampleRate;
                 resampled_frame->format = (int)_arguments.SampleFormat;
-                ffmpeg.av_channel_layout_copy(&resampled_frame->ch_layout, &out_ch_layout);
+
+                ret = ffmpeg.av_channel_layout_copy(&resampled_frame->ch_layout, &out_ch_layout);
+                if (ret < 0)
+                {
+                    goto out_channel_copy;
+                }
 
                 ret = ffmpeg.swr_convert_frame(swr_ctx, resampled_frame, frame);
-
                 if (ret == 0)
                 {
                     int sz = ffmpeg.av_samples_get_buffer_size(null, resampled_frame->ch_layout.nb_channels,
@@ -508,15 +518,29 @@ public unsafe class FFmpegWaveProvider : WaveStream, ISampleProvider
                     // 忽略
                     if (ret == ffmpeg.AVERROR_INVALIDDATA)
                     {
-                        Console.WriteLine("FFmpeg: Error resampling frame with code {0:x}, ignored.", -ret);
+                        Console.WriteLine($"FFmpeg: Error resampling frame with code {-ret:x}, ignored.");
                     }
                     else
                     {
-                        throw new DecoderFallbackException(
-                            String.Format("FFmpeg: Error resampling frame with code {0:x}.", -ret));
+                        goto out_resample;
                     }
                 }
+                
+                goto out_normal;
 
+                out_channel_copy:
+                ffmpeg.av_frame_free(&resampled_frame);
+                ffmpeg.av_frame_unref(frame);
+                ffmpeg.av_channel_layout_uninit(&out_ch_layout);
+                error_on_channel_copy(-ret);
+                
+                out_resample:
+                ffmpeg.av_frame_free(&resampled_frame);
+                ffmpeg.av_frame_unref(frame);
+                ffmpeg.av_channel_layout_uninit(&out_ch_layout);
+                throw new DecoderFallbackException($"FFmpeg: Error resampling frame with code {-ret:x}.");
+
+                out_normal:
                 ffmpeg.av_frame_free(&resampled_frame);
                 ffmpeg.av_frame_unref(frame);
             }
@@ -577,7 +601,7 @@ public unsafe class FFmpegWaveProvider : WaveStream, ISampleProvider
         //         ret = ffmpeg.swr_convert(swr_ctx, dst_data, dst_nb_samples, null, 0);
         //         if (ret < 0)
         //         {
-        //             Console.WriteLine("FFmpeg: Fail to swr_convert with code {0:x}, ignored.", -ret);
+        //             Console.WriteLine($"FFmpeg: Fail to swr_convert with code {-ret:x}, ignored.");
         //         }
         //         else
         //         {
@@ -589,7 +613,7 @@ public unsafe class FFmpegWaveProvider : WaveStream, ISampleProvider
         //     }
         // }
 
-        if (_cachedBuffer != null && _cachedBuffer.First != null)
+        if (_cachedBuffer.First != null)
         {
             _cachedBuffer.Clear();
         }
@@ -663,5 +687,10 @@ public unsafe class FFmpegWaveProvider : WaveStream, ISampleProvider
     {
         return (long)(bytes / (float)_arguments.BytesPerSample / _arguments.SampleRate *
                       _waveFormat.SampleRate * OriginalBytesPerSample);
+    }
+
+    private void error_on_channel_copy(int code)
+    {
+        throw new DecoderFallbackException($"FFmpeg: Copy channel layout with code {code:x}");
     }
 }

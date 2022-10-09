@@ -51,8 +51,8 @@ namespace LabelVoice.Core.Managers
             {
                 case AudioDecoder.FFmpeg:
                     //ffmpeg.RootPath = @"D:\软件\实用\ffmpeg\dll"; // 改成你放FFmpeg动态库的目录
-                    inputStream = new FFmpegWaveProvider(audioFilePath,
-                        new FFmpegWaveProvider.WaveArguments(44100, AVSampleFormat.AV_SAMPLE_FMT_FLT, 2));
+                    inputStream = new FFmpegAudioDecoder(audioFilePath,
+                        new FFmpegAudioDecoder.WaveArguments(44100, AVSampleFormat.AV_SAMPLE_FMT_FLT, 2));
                     break;
 
                 case AudioDecoder.NAudio:

@@ -104,7 +104,7 @@
 				VerticalAlignment="Center"
                 SelectedIndex="0">
 				<ComboBoxItem Content="NAudio" />
-				<ComboBoxItem Content="FFmpeg" IsVisible="{x:Static audio:FFmpegWaveProvider.LibrariesExist}" />
+				<ComboBoxItem Content="FFmpeg" IsVisible="{x:Static audio:FFmpegAudioDecoder.LibrariesExist}" />
 			</ComboBox>
 			<TextBlock
 				Margin="4,0,0,0"
