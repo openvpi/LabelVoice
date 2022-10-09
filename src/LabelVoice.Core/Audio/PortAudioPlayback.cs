@@ -68,16 +68,20 @@ namespace LabelVoice.Core.Audio
                 {
                     Thread.Sleep(10);
                 }
+
                 pushThread = null;
             }
+
             if (pullThread != null)
             {
                 while (pullThread.IsAlive)
                 {
                     Thread.Sleep(10);
                 }
+
                 pullThread = null;
             }
+
             queue.Clear();
 
             GC.SuppressFinalize(this);
@@ -104,6 +108,7 @@ namespace LabelVoice.Core.Audio
                     });
                 }
             }
+
             return devices;
         }
 
@@ -121,6 +126,7 @@ namespace LabelVoice.Core.Audio
             {
                 sampleProvider = new WdlResamplingSampleProvider(sampleProvider, sampleRate);
             }
+
             this.sampleProvider = sampleProvider.ToStereo();
         }
 
@@ -152,6 +158,7 @@ namespace LabelVoice.Core.Audio
                         {
                             latency = 0.1;
                         }
+
                         audioEngine = new PaAudioEngine(
                             dev,
                             Channels,
@@ -180,11 +187,13 @@ namespace LabelVoice.Core.Audio
             {
                 return null;
             }
+
             var api = device.HostApi.ToLowerInvariant();
             if (api.Contains("wasapi") || api.Contains("wdm-ks"))
             {
                 return null;
             }
+
             var parameters = new PaBinding.PaStreamParameters
             {
                 channelCount = Channels,
@@ -200,6 +209,7 @@ namespace LabelVoice.Core.Audio
                     return null;
                 }
             }
+
             return device;
         }
 
@@ -229,6 +239,7 @@ namespace LabelVoice.Core.Audio
                         Thread.Sleep(10);
                         continue;
                     }
+
                     Thread.Sleep(10);
                     continue;
                 }
@@ -243,6 +254,7 @@ namespace LabelVoice.Core.Audio
                 {
                     PlaybackState = PlaybackState.Playing;
                 }
+
                 engine.Send(frame.Data);
                 currentTimeMs = frame.PresentationTime;
             }
@@ -258,12 +270,14 @@ namespace LabelVoice.Core.Audio
                     Thread.Sleep(10);
                     continue;
                 }
+
                 if (PlaybackState == PlaybackState.Paused ||
                     PlaybackState == PlaybackState.Stopped)
                 {
                     Thread.Sleep(10);
                     continue;
                 }
+
                 if (queue.Count >= 10)
                 {
                     Thread.Sleep(10);
@@ -277,6 +291,7 @@ namespace LabelVoice.Core.Audio
                     Thread.Sleep(10);
                     continue;
                 }
+
                 var data = new float[n];
                 Array.Copy(buffer, data, n);
                 var frame = new PaAudioFrame(bufferedTimeMs, data);
@@ -284,6 +299,16 @@ namespace LabelVoice.Core.Audio
                 var sampleRate = audioEngine?.sampleRate ?? 44100;
                 bufferedTimeMs += n * 1000.0 / sampleRate / Channels;
             }
+        }
+
+        public List<string> GetDrivers()
+        {
+            throw new NotImplementedException();
+        }
+        
+        public void SwitchDriver(string driver)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion Methods

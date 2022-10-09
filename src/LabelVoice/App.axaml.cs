@@ -40,14 +40,6 @@ public class App : Application
     {
         AvaloniaXamlLoader.Load(this);
         InitializeCulture();
-        if (IsWin())
-        {
-            PlaybackManager.Instance.SetAudioBackend(AudioBackend.NAudio);
-        }
-        else
-        {
-            PlaybackManager.Instance.SetAudioBackend(AudioBackend.SDL);
-        }
     }
 
     public override void OnFrameworkInitializationCompleted()

@@ -59,7 +59,8 @@ namespace LabelVoice.Core.Audio
         public void Pause()
         {
             EnsureDeviceCreated();
-            _playbackDevice?.Pause();
+            //_playbackDevice?.Pause();
+            Stop();
         }
 
         public void Stop()
@@ -76,8 +77,8 @@ namespace LabelVoice.Core.Audio
 
         public PlaybackState GetPlaybackState() =>
             _playbackDevice != null
-            ? _playbackDevice.PlaybackState
-            : PlaybackState.Stopped;
+                ? _playbackDevice.PlaybackState
+                : PlaybackState.Stopped;
 
         public void Init(ISampleProvider sampleProvider)
         {
@@ -107,7 +108,18 @@ namespace LabelVoice.Core.Audio
                 });
                 i++;
             }
+
             return devices;
+        }
+
+        public List<string> GetDrivers()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SwitchDriver(string driver)
+        {
+            throw new NotImplementedException();
         }
     }
 

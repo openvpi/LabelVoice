@@ -76,4 +76,10 @@ public class SDLHost
     {
         return SDL.SDL_GetNumAudioDevices(1);
     }
+    
+    // 获取输出设备
+    public int NumAudioDrivers()
+    {
+        return SDL.SDL_GetNumAudioDrivers();
+    }
 }

@@ -4,6 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="using:LabelVoice.ViewModels"
         xmlns:audio="clr-namespace:LabelVoice.Core.Audio;assembly=LabelVoice.Core"
+		xmlns:u="clr-namespace:LabelVoice.Core.Utils;assembly=LabelVoice.Core"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="176" Height="176"
         x:Class="LabelVoice.Views.AudioPlayerWindow"
         Title="AudioPlayerWindow">
@@ -104,7 +105,24 @@
 				VerticalAlignment="Center"
                 SelectedIndex="0">
 				<ComboBoxItem Content="NAudio" />
-				<ComboBoxItem Content="FFmpeg" IsVisible="{x:Static audio:FFmpegWaveProvider.LibrariesExist}" />
+				<ComboBoxItem Content="FFmpeg" IsVisible="{x:Static audio:FFmpegAudioDecoder.LibrariesExist}" />
+			</ComboBox>
+			<TextBlock
+				Margin="4,0,0,0"
+				Text="音频后端："
+				VerticalAlignment="Center"
+				Width="80"/>
+			<ComboBox
+                x:Name="ComboBoxAudioBackends"
+                MinWidth="128"
+				Margin="0,0,4,0"
+                HorizontalAlignment="Left"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+				VerticalAlignment="Center"
+                SelectedIndex="0">
+				<ComboBoxItem Content="NAudio" IsVisible="{Binding IsWin}" />
+				<ComboBoxItem Content="SDL" />
 			</ComboBox>
 			<TextBlock
 				Margin="4,0,0,0"

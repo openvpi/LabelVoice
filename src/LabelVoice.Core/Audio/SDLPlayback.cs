@@ -1,4 +1,5 @@
-﻿using NAudio.Wave;
+﻿using System.Runtime.InteropServices;
+using NAudio.Wave;
 using LabelVoice.Core.Audio.SDLPlaybackImpl;
 using SDL2;
 
@@ -38,6 +39,11 @@ namespace LabelVoice.Core.Audio
                 PlayStateChangedHandler?.Invoke(newVal, oldVal);
                 // Console.WriteLine($"SDLPLayback: Play state change to {newVal}.");
             };
+            
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                _d.setDriver("directsound");
+            }
         }
 
         // 初始化音频
@@ -66,6 +72,8 @@ namespace LabelVoice.Core.Audio
 
             _d.sampleProvider = null;
             _d.setDevId(0);
+            
+            _d.setDriver("");
         }
 
         // 音频播放状态
@@ -160,6 +168,27 @@ namespace LabelVoice.Core.Audio
             Console.WriteLine($"SDLPlayback: {SDL.SDL_GetAudioDeviceName(_d.devNum, 0)}");
 
             _d.setDevId(id);
+        }
+
+        public List<string> GetDrivers()
+        {
+            var res = new List<string>();
+            int cnt = SDL.SDL_GetNumAudioDrivers();
+            for (int i = 0; i < cnt; i++)
+            {
+                var dev = SDL.SDL_GetAudioDriver(i);
+                if (dev == "dummy" || dev == "disk")
+                {
+                    continue;
+                }
+                res.Add(dev);
+            }
+            return res;
+        }
+
+        public void SwitchDriver(string driver)
+        {
+            _d.setDriver(driver);
         }
 
         private SDLPlaybackData _d;

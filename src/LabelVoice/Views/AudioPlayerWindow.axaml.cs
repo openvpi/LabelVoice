@@ -6,6 +6,7 @@ using LabelVoice.ViewModels;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace LabelVoice.Views
@@ -24,14 +25,43 @@ namespace LabelVoice.Views
             ButtonSetProgressHalf.Click += SetProgressHalf;
             ButtonPlayTestSound.Click += ButtonPlayTestSound_Click;
             ComboBoxAudioDevices.SelectionChanged += ComboBoxAudioDevices_SelectionChanged;
+            ComboBoxAudioBackends.SelectionChanged += ComboBoxAudioBackends_SelectionChanged;
             ComboBoxAudioDecoders.SelectionChanged += ComboBoxAudioDecoders_SelectionChanged;
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                PlaybackManager.Instance.SwitchAudioBackend(Core.Audio.AudioBackend.NAudio);
+            }
+            else
+            {
+                PlaybackManager.Instance.SwitchAudioBackend(Core.Audio.AudioBackend.SDL);
+            }
+            UpdateComboBoxAudioDevices();
+        }
+
+        private void UpdateComboBoxAudioDevices()
+        {
             var deviceNames = PlaybackManager.Instance.GetDevices().Select(d => d.name);
             ComboBoxAudioDevices.Items = deviceNames;
-            if (!_isDeviceLoaded)
+            ComboBoxAudioDevices.SelectedIndex = 0;
+        }
+
+        private void ComboBoxAudioBackends_SelectionChanged(object? sender, SelectionChangedEventArgs e)
+        {
+            var item = ComboBoxAudioBackends.SelectedItem as ComboBoxItem;
+            switch (item?.Content)
             {
-                ComboBoxAudioDevices.SelectedIndex = 0;
-                _isDeviceLoaded = true;
+                case "NAudio":
+                    PlaybackManager.Instance.SwitchAudioBackend(Core.Audio.AudioBackend.NAudio);
+                    break;
+
+                case "SDL":
+                    PlaybackManager.Instance.SwitchAudioBackend(Core.Audio.AudioBackend.SDL);
+                    break;
+
+                default:
+                    break;
             }
+            UpdateComboBoxAudioDevices();
         }
 
         private void ComboBoxAudioDecoders_SelectionChanged(object? sender, SelectionChangedEventArgs e)
@@ -54,7 +84,11 @@ namespace LabelVoice.Views
 
         private void ComboBoxAudioDevices_SelectionChanged(object? sender, SelectionChangedEventArgs e)
         {
-            PlaybackManager.Instance.SwitchDevice(ComboBoxAudioDevices.SelectedIndex);
+            int index = ComboBoxAudioDevices.SelectedIndex;
+            if (index >= 0)
+                PlaybackManager.Instance.SwitchDevice(index);
+            else
+                PlaybackManager.Instance.SwitchDevice(0);
         }
 
         private void ButtonPlayTestSound_Click(object? sender, RoutedEventArgs e)

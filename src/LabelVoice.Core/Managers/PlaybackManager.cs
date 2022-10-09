@@ -12,18 +12,21 @@ namespace LabelVoice.Core.Managers
     /// </summary>
     public class PlaybackManager : SingletonBase<PlaybackManager>, IDisposable
     {
-        #region Properties
+        #region Fields
 
-        public AudioDecoder AudioDecoder { get; private set; } = AudioDecoder.NAudio;
-
-        #endregion Properties
-
-        #region Private Fields
-
+        /// <summary>
+        /// Playback backend instance.
+        /// </summary>
         private IAudioPlayback? _audioPlayback;
 
+        /// <summary>
+        /// The wave stream decoded by audio decoder.
+        /// </summary>
         private WaveStream? _fileStream;
 
+        /// <summary>
+        /// The audio file path.
+        /// </summary>
         private string? _audioFilePath;
 
         private long _lastPosition = 0;
@@ -32,12 +35,18 @@ namespace LabelVoice.Core.Managers
 
         private AudioBackend _audioBackend;
 
-        #endregion Private Fields
+        #endregion Fields
+
+        #region Properties
+
+        public AudioDecoder AudioDecoder { get; private set; } = AudioDecoder.NAudio;
+
+        #endregion Properties
 
         #region Methods
 
         /// <summary>
-        /// Load an audio file. (Wave PCM, Wave IEE Float, MP3 and AIFF)
+        /// Load an audio file.
         /// </summary>
         /// <param name="audioFilePath"></param>
         public void Load(string audioFilePath)
@@ -46,20 +55,15 @@ namespace LabelVoice.Core.Managers
             Stop();
             _fileStream?.Dispose();
             _fileStream = null;
-            ISampleProvider inputStream;
-            switch (AudioDecoder)
+            ISampleProvider inputStream = AudioDecoder switch
             {
-                case AudioDecoder.FFmpeg:
-                    //ffmpeg.RootPath = @"D:\软件\实用\ffmpeg\dll"; // 改成你放FFmpeg动态库的目录
-                    inputStream = new FFmpegWaveProvider(audioFilePath,
-                        new FFmpegWaveProvider.WaveArguments(44100, AVSampleFormat.AV_SAMPLE_FMT_FLT, 2));
-                    break;
-
-                case AudioDecoder.NAudio:
-                default:
-                    inputStream = new LvAudioFileReader(audioFilePath);
-                    break;
-            }
+                AudioDecoder.FFmpeg => new FFmpegAudioDecoder(audioFilePath,
+                                        new FFmpegAudioDecoder.WaveArguments(
+                                            44100,
+                                            AVSampleFormat.AV_SAMPLE_FMT_FLT,
+                                            2)),
+                _ => new NAudioDecoder(audioFilePath),
+            };
             _fileStream = (WaveStream?)inputStream;
             SampleAggregator? aggregator = new(inputStream);
             Init(aggregator);
@@ -68,9 +72,7 @@ namespace LabelVoice.Core.Managers
         private void Reload()
         {
             if (_audioFilePath == null)
-            {
                 return;
-            }
             Pause();
             Load(_audioFilePath);
         }
@@ -84,6 +86,10 @@ namespace LabelVoice.Core.Managers
             _audioPlayback?.Init(sampleProvider);
         }
 
+        /// <summary>
+        /// Switch audio file decoder.
+        /// </summary>
+        /// <param name="decoder"></param>
         public void SwitchAudioDecoder(AudioDecoder decoder)
         {
             SavePlaybackStatus();
@@ -97,8 +103,11 @@ namespace LabelVoice.Core.Managers
         /// Set audio backend.
         /// </summary>
         /// <param name="backend"></param>
-        public void SetAudioBackend(AudioBackend backend)
+        public void SwitchAudioBackend(AudioBackend backend)
         {
+            Stop();
+            _audioPlayback?.Dispose();
+            _audioPlayback = null;
             _audioPlayback = backend switch
             {
                 AudioBackend.NAudio => new NAudioPlayback(),
@@ -107,8 +116,12 @@ namespace LabelVoice.Core.Managers
                 _ => null,
             };
             _audioBackend = backend;
+            Reload();
         }
 
+        /// <summary>
+        /// play a sine wave test sound.
+        /// </summary>
         public void PlayTestSound()
         {
             SavePlaybackStatus();
@@ -120,10 +133,19 @@ namespace LabelVoice.Core.Managers
             RestorePlaybackStatus();
         }
 
+        /// <summary>
+        /// Play.
+        /// </summary>
         public void Play() => _audioPlayback?.Play();
 
+        /// <summary>
+        /// Pause.
+        /// </summary>
         public void Pause() => _audioPlayback?.Pause();
 
+        /// <summary>
+        /// Stop.
+        /// </summary>
         public void Stop()
         {
             _audioPlayback?.Stop();
@@ -133,22 +155,38 @@ namespace LabelVoice.Core.Managers
             }
         }
 
+        /// <summary>
+        /// Get current playback state.
+        /// </summary>
+        /// <returns></returns>
         public PlaybackState GetPlaybackState() =>
             _audioPlayback != null
                 ? _audioPlayback.GetPlaybackState()
                 : PlaybackState.Stopped;
 
+        /// <summary>
+        /// Get current playback progress in time.
+        /// </summary>
+        /// <returns></returns>
         public TimeSpan GetCurrentTime() =>
             _fileStream != null
                 ? _fileStream.CurrentTime
                 : TimeSpan.Zero;
 
+        /// <summary>
+        /// Set current playback progress using TimeSpan.
+        /// </summary>
+        /// <param name="time"></param>
         public void SetCurrentTime(TimeSpan time)
         {
             if (_fileStream != null)
                 _fileStream.CurrentTime = time;
         }
 
+        /// <summary>
+        /// Get the total time of current audio file stream.
+        /// </summary>
+        /// <returns></returns>
         public TimeSpan GetTotalTime() =>
             _fileStream != null
                 ? _fileStream.TotalTime
