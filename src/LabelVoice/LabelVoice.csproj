@@ -39,4 +39,9 @@
     <PackageReference Include="ScottPlot.Avalonia" Version="4.1.58" />
     <PackageReference Include="XamlNameReferenceGenerator" Version="1.3.4" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Views\ItemsPanel.axaml.cs">
+      <DependentUpon>ItemsPanel.axaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
 </Project>

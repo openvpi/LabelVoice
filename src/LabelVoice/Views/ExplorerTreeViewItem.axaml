@@ -14,7 +14,7 @@
 		ColumnDefinitions="48, *, Auto"
 		HorizontalAlignment="Stretch"
 		VerticalAlignment="Center"
-		Height="20">
+		Height="34">
 		<TextBlock
 			Grid.Column="0"
 			Text="○"

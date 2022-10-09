@@ -14,8 +14,27 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-	<Grid Name="mainLayout" ColumnDefinitions="200,*">
-        <StackPanel Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center">
+	<Grid Name="mainLayout" ColumnDefinitions="350,4,*">
+		<Grid
+			RowDefinitions="Auto,*,5,*"
+		    Margin="8,8,0,8">
+			<Button Grid.Row="0" Name="btnGetProjectRoot"
+					Content="打开工程..." />
+			<v:ItemsPanel
+				Grid.Row="1"
+				HorizontalAlignment="Stretch"/>
+			<GridSplitter
+				Grid.Row="2"
+				HorizontalAlignment="Stretch" />
+			<v:SectionsPanel
+				Grid.Row="3"
+				HorizontalAlignment="Stretch" />
+		</Grid>
+		<GridSplitter
+			Grid.Column="1"
+			Width="4"
+			VerticalAlignment="Stretch" />
+		<StackPanel Grid.Column="2" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center">
             <TextBlock Text="{DynamicResource mainwindow.greeting}" HorizontalAlignment="Center"/>
             <ComboBox
                 x:Name="LanguageBox"
@@ -39,24 +58,5 @@
                 TextAlignment="Center"
                 TextWrapping="Wrap"/>
         </StackPanel>
-
-		<DockPanel Grid.Column="0" VerticalAlignment="Stretch">
-            <Grid RowDefinitions="Auto,*">
-                <Button Grid.Row="0" Name="btnGetProjectRoot"
-                        Content="打开工程..." />
-			    <TreeView Grid.Row="1"
-	                HorizontalAlignment="Left"
-                    Padding="10"
-                    Width="300"
-	                Items="{Binding Items}">
-				    <TreeView.ItemTemplate>
-					    <TreeDataTemplate ItemsSource="{Binding Subfolders}">
-							<v:ExplorerTreeViewItem />
-					    </TreeDataTemplate>
-				    </TreeView.ItemTemplate>
-			    </TreeView>
-            </Grid>
-		</DockPanel>
     </Grid>
-		
 </Window>
