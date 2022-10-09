@@ -16,6 +16,12 @@ public class MainWindowViewModel : ViewModelBase
 {
     public string Greeting => Application.Current!.FindResource("mainwindow.greeting")?.ToString() ?? string.Empty;
     private ObservableCollection<ExplorerTreeViewItemViewModel>? _Items;
+    private List<SectionsItemContentViewModel> _sections = new()
+    {
+        new SectionsItemContentViewModel("GanShouTingZaiWoFaDuanDeZhiJian", "CN"),
+        new SectionsItemContentViewModel("RuHeShunJianDongJieShiJian", "CN"),
+        new SectionsItemContentViewModel("Untitled-3", "Unspecified"),
+    };
     public ObservableCollection<ExplorerTreeViewItemViewModel>? SelectedItems { set; get; }
     private string? _strFolder;
 
@@ -29,6 +35,12 @@ public class MainWindowViewModel : ViewModelBase
     {
         get => _Items;
         set => this.RaiseAndSetIfChanged(ref _Items, value);
+    }
+
+    public List<SectionsItemContentViewModel> Sections
+    {
+        get => _sections;
+        set => this.RaiseAndSetIfChanged(ref _sections, value);
     }
 
     public void OpenProjectRoot(string strFolder)

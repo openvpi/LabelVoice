@@ -17,7 +17,7 @@
 		<TextBox
 			x:Name="textBoxSearch"
 			Grid.Row="1"
-			Text="Search..."
+			Watermark="Search..."
 			VerticalAlignment="Center"
 			VerticalContentAlignment="Center"
 			Margin="17,9" />
