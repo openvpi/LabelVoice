@@ -121,7 +121,7 @@
                 VerticalContentAlignment="Center"
 				VerticalAlignment="Center"
                 SelectedIndex="0">
-				<ComboBoxItem Content="SDL" IsVisible="False" />
+				<ComboBoxItem Content="SDL" />
 				<ComboBoxItem Content="NAudio" IsVisible="{x:Static app:App.IsWin}" />
 			</ComboBox>
 			<TextBlock
