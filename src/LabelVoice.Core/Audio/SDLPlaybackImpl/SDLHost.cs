@@ -48,6 +48,11 @@ public class SDLHost
         {
             throw new Exception($"SDLHost: Failed to initialize SDL: {SDL.SDL_GetError()}.");
         }
+
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            SDL.SDL_AudioInit("directsound");
+        }
     }
 
     // 析构函数
