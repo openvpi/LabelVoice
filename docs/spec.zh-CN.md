@@ -100,11 +100,11 @@
         <Speaker Id="08cd" Name="ZhiBin"/>
     </Speakers>
     <ItemResources>
-        <Item Id="a54c548a" Name="GuangNianZhiWai" Speaker="32e9" Language="fe67" VisualPath=""/>
-        <Item Id="50deb91b" Name="WoHuaiNianDe" Speaker="32e9" Language="fe67" VisualPath="foo/bar"/>
-        <Item Id="61cfc89a" Name="BuWeiXia" Speaker="08cd" Language="fe67" VisualPath="foo"/>
-        <Item Id="38db2292" Name="ZheGanJue" Speaker="08cd" Language="fe67" VisualPath="foo/bar"/>
-        <Placeholder Speaker="08cd" VisualPath="empty"/>
+        <Item Id="a54c548a" Name="GuangNianZhiWai" Speaker="32e9" Language="fe67" VirtualPath=""/>
+        <Item Id="50deb91b" Name="WoHuaiNianDe" Speaker="32e9" Language="fe67" VirtualPath="foo/bar"/>
+        <Item Id="61cfc89a" Name="BuWeiXia" Speaker="08cd" Language="fe67" VirtualPath="foo"/>
+        <Item Id="38db2292" Name="ZheGanJue" Speaker="08cd" Language="fe67" VirtualPath="foo/bar"/>
+        <Placeholder Speaker="08cd" VirtualPath="empty"/>
     </ItemResources>
 </LVProject>
 ```
@@ -172,12 +172,12 @@
 - Name：项目的名称，由用户设置并可修改
 - Speaker：该项目所属的说话人的编号
 - Language: 该项目所包含语言的编号
-- VisualPath：该项目在资源浏览器中所处的虚拟路径
+- VirtualPath：该项目在资源浏览器中所处的虚拟路径
 
 `<Placeholder>` 标签代表的是一个占位符，用于代表一个不包含任何真实项目或其他占位符的空虚拟路径，具有以下属性：
 
 - Speaker：该占位符所属的说话人的编号
-- VisualPath：该占位符所代表的虚拟路径
+- VirtualPath：该占位符所代表的虚拟路径
 
 ## 3 项目描述文件（.lvitem)
 
