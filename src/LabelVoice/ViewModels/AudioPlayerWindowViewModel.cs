@@ -3,6 +3,7 @@ using NAudio.Wave;
 using ReactiveUI;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -73,6 +74,8 @@ namespace LabelVoice.ViewModels
             get => _audioDevicesNameList;
             set => this.RaiseAndSetIfChanged(ref _audioDevicesNameList, value);
         }
+
+        public bool IsWin() => RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
 
         #endregion Properties
 

@@ -13,7 +13,7 @@ namespace LabelVoice.Core.Audio
     /// ISampleProvider, making it possibly the only stage in your audio
     /// pipeline necessary for simple playback scenarios
     /// </summary>
-    public class LvAudioFileReader : WaveStream, ISampleProvider
+    public class NAudioDecoder : WaveStream, ISampleProvider
     {
         private WaveStream readerStream; // the waveStream which we will use for all positioning
         private readonly SampleChannel sampleChannel; // sample provider that gives us most stuff we need
@@ -26,12 +26,12 @@ namespace LabelVoice.Core.Audio
         /// Initializes a new instance of AudioFileReader
         /// </summary>
         /// <param name="fileName">The file to open</param>
-        public LvAudioFileReader(string fileName)
+        public NAudioDecoder(string fileName)
         {
             lockObject = new object();
             FileName = fileName;
             CreateReaderStream(fileName);
-            sourceBytesPerSample = (readerStream.WaveFormat.BitsPerSample / 8) * readerStream.WaveFormat.Channels;
+            sourceBytesPerSample = readerStream.WaveFormat.BitsPerSample / 8 * readerStream.WaveFormat.Channels;
             sampleChannel = new SampleChannel(readerStream, false);
             destBytesPerSample = 4 * sampleChannel.WaveFormat.Channels;
             length = SourceToDest(readerStream.Length);

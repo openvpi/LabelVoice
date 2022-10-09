@@ -525,22 +525,22 @@ public unsafe class FFmpegAudioDecoder : WaveStream, ISampleProvider
                         goto out_resample;
                     }
                 }
-                
+
                 goto out_normal;
 
-                out_channel_copy:
+            out_channel_copy:
                 ffmpeg.av_frame_free(&resampled_frame);
                 ffmpeg.av_frame_unref(frame);
                 ffmpeg.av_channel_layout_uninit(&out_ch_layout);
                 error_on_channel_copy(-ret);
-                
-                out_resample:
+
+            out_resample:
                 ffmpeg.av_frame_free(&resampled_frame);
                 ffmpeg.av_frame_unref(frame);
                 ffmpeg.av_channel_layout_uninit(&out_ch_layout);
                 throw new DecoderFallbackException($"FFmpeg: Error resampling frame with code {-ret:x}.");
 
-                out_normal:
+            out_normal:
                 ffmpeg.av_frame_free(&resampled_frame);
                 ffmpeg.av_frame_unref(frame);
             }
@@ -679,8 +679,8 @@ public unsafe class FFmpegAudioDecoder : WaveStream, ISampleProvider
 
     private long src2dest_bytes(long bytes)
     {
-        return (long)(bytes / OriginalBytesPerSample / _waveFormat.SampleRate *
-                      _arguments.SampleRate * _arguments.BytesPerSample);
+        return bytes / OriginalBytesPerSample / _waveFormat.SampleRate *
+                      _arguments.SampleRate * _arguments.BytesPerSample;
     }
 
     private long dest2src_bytes(long bytes)

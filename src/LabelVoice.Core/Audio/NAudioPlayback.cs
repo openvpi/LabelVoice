@@ -59,7 +59,8 @@ namespace LabelVoice.Core.Audio
         public void Pause()
         {
             EnsureDeviceCreated();
-            _playbackDevice?.Pause();
+            //_playbackDevice?.Pause();
+            Stop();
         }
 
         public void Stop()
