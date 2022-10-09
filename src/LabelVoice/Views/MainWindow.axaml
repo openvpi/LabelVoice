@@ -8,7 +8,9 @@
         x:Class="LabelVoice.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
         Title="LabelVoice"
-        DragDrop.AllowDrop="True">
+        DragDrop.AllowDrop="True"
+        xmlns:f="using:FluentAvalonia.UI.Controls"
+        >
 
     <Design.DataContext>
         <vm:MainWindowViewModel/>
@@ -57,6 +59,7 @@
                 Text="{DynamicResource mainwindow.testculture}"
                 TextAlignment="Center"
                 TextWrapping="Wrap"/>
+            <f:HyperlinkButton Content="1244"></f:HyperlinkButton>
         </StackPanel>
     </Grid>
 </Window>
