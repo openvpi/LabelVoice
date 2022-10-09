@@ -1,5 +1,11 @@
 # LabelVoice Dev Note
 
+
+## Specifications & Designs
+
+Specifications are at the `docs/` folder (only Chinese version for now).
+
+
 ## 2022/10/2 added wav plot:
 - Note: As for now, the wav plot needs some extra setup on Linux and Mac, see: https://scottplot.net/faq/dependencies/.
 In `App.axaml.cs`:
