@@ -31,6 +31,10 @@ namespace LabelVoice.Core.Audio
 
         List<AudioDevice> GetDevices();
 
+        List<string> GetDrivers();
+
+        void SwitchDriver(string driver);
+
         #endregion Methods
     }
 }

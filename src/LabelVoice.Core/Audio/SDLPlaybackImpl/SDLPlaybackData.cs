@@ -12,6 +12,8 @@ public class SDLPlaybackData
     public SDLGlobal.ValueChangeEvent<PlaybackState> stateChanged;
 
     // 播放信息
+    public string driver = "";
+
     public int devNum = -1;
 
     public Guid devGuid = Guid.Empty;
@@ -73,6 +75,21 @@ public class SDLPlaybackData
         // 等待结束
         producer.Join();
         producer = null;
+    }
+
+    public void setDriver(string drv)
+    {
+        if (driver != "")
+        {
+            SDL.SDL_AudioQuit();
+        }
+
+        if (drv != "")
+        {
+            SDL.SDL_AudioInit(drv);
+        }
+
+        driver = drv;
     }
 
     public void setDevId(uint newId)

@@ -48,11 +48,6 @@ public class SDLHost
         {
             throw new Exception($"SDLHost: Failed to initialize SDL: {SDL.SDL_GetError()}.");
         }
-
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-        {
-            SDL.SDL_AudioInit("directsound");
-        }
     }
 
     // 析构函数
@@ -80,5 +75,11 @@ public class SDLHost
     public int NumInputDevices()
     {
         return SDL.SDL_GetNumAudioDevices(1);
+    }
+    
+    // 获取输出设备
+    public int NumAudioDrivers()
+    {
+        return SDL.SDL_GetNumAudioDrivers();
     }
 }
