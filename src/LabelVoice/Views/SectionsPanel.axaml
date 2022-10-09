@@ -47,8 +47,12 @@
 		<ListBox
 			Grid.Row="2"
 			HorizontalAlignment="Stretch">
-			<v:ExplorerTreeViewItem />
-			<v:ExplorerTreeViewItem />
+			<ListBoxItem>
+				<v:ExplorerTreeViewItem />
+			</ListBoxItem>
+			<ListBoxItem>
+				<v:ExplorerTreeViewItem />
+			</ListBoxItem>
 		</ListBox>
 	</Grid>
 </UserControl>
