@@ -15,7 +15,52 @@ namespace LabelVoice.ViewModels;
 public class MainWindowViewModel : ViewModelBase
 {
     public string Greeting => Application.Current!.FindResource("mainwindow.greeting")?.ToString() ?? string.Empty;
-    private ObservableCollection<ExplorerTreeViewItemViewModel>? _Items;
+    private ObservableCollection<ExplorerTreeViewItemViewModel> _items = new()
+    {
+        new ExplorerTreeViewItemViewModel
+        {
+            Title = "GuangNianZhiWai",
+            Language = "CN"
+        },
+        new ExplorerTreeViewItemViewModel
+        {
+            Title = "WoHuaiNianDe",
+            Subfolders = new ObservableCollection<ExplorerTreeViewItemViewModel>
+            {
+                new ExplorerTreeViewItemViewModel
+                {
+                    Title = "New Folder",
+                    Subfolders = new ObservableCollection<ExplorerTreeViewItemViewModel>
+                    {
+                        new ExplorerTreeViewItemViewModel
+                        {
+                            Title = "Untitled",
+                            Language = "Unspecified"
+                        }
+                    }
+                }
+            }
+        },
+        new ExplorerTreeViewItemViewModel
+        {
+            Title = "PaoMo"
+        },
+        new ExplorerTreeViewItemViewModel
+        {
+            Title = "BuWeiXia"
+        }
+    };
+    private ExplorerTreeViewItemViewModel _selectedItem = new()
+    {
+        Title = "GuangNianZhiWai",
+        Language = "CN"
+    };
+    private List<SectionsItemContentViewModel> _sections = new()
+    {
+        new SectionsItemContentViewModel("GanShouTingZaiWoFaDuanDeZhiJian", "CN"),
+        new SectionsItemContentViewModel("RuHeShunJianDongJieShiJian", "CN"),
+        new SectionsItemContentViewModel("Untitled-3", "Unspecified"),
+    };
     public ObservableCollection<ExplorerTreeViewItemViewModel>? SelectedItems { set; get; }
     private string? _strFolder;
 
@@ -27,8 +72,25 @@ public class MainWindowViewModel : ViewModelBase
 
     public ObservableCollection<ExplorerTreeViewItemViewModel>? Items
     {
-        get => _Items;
-        set => this.RaiseAndSetIfChanged(ref _Items, value);
+        get => _items;
+        set => this.RaiseAndSetIfChanged(ref _items, value);
+    }
+
+    public List<SectionsItemContentViewModel> Sections
+    {
+        get => _sections;
+        set => this.RaiseAndSetIfChanged(ref _sections, value);
+    }
+
+    public ExplorerTreeViewItemViewModel SelectedItem
+    {
+        get => _selectedItem;
+        set => this.RaiseAndSetIfChanged(ref _selectedItem, value);
+    }
+
+    public string SelectedItemTitle
+    {
+        get => $"({_selectedItem.Title})";
     }
 
     public void OpenProjectRoot(string strFolder)

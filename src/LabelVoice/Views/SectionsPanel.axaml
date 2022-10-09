@@ -19,7 +19,7 @@
 				VerticalAlignment="Bottom" />
 			<TextBlock
 				x:Name="textBlockSelectedItem"
-				Text="(WoShiWaiXiaoQiu)"
+				Text="{Binding SelectedItemTitle}"
 				Margin="4,0,0,0"
 				FontSize="12"
 				FontWeight="SemiBold"
@@ -46,13 +46,13 @@
 		</StackPanel>
 		<ListBox
 			Grid.Row="2"
-			HorizontalAlignment="Stretch">
-			<ListBoxItem>
-				<v:ExplorerTreeViewItem />
-			</ListBoxItem>
-			<ListBoxItem>
-				<v:ExplorerTreeViewItem />
-			</ListBoxItem>
+			HorizontalAlignment="Stretch"
+			Items="{Binding Sections}">
+			<ListBox.ItemTemplate>
+				<DataTemplate>
+					<v:SectionsItemContent />
+				</DataTemplate>
+			</ListBox.ItemTemplate>
 		</ListBox>
 	</Grid>
 </UserControl>

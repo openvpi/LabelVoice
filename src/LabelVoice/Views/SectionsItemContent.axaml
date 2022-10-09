@@ -4,12 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:vm="using:LabelVoice.ViewModels"
              mc:Ignorable="d" d:DesignWidth="452" d:DesignHeight="40"
-             x:Class="LabelVoice.Views.ExplorerTreeViewItem">
-
+             x:Class="LabelVoice.Views.SectionsItemContent">
 	<Design.DataContext>
-		<vm:ExplorerTreeViewItemViewModel/>
+		<vm:SectionsItemContentViewModel/>
 	</Design.DataContext>
-	
+
 	<Grid
 		ColumnDefinitions="48, *, Auto"
 		HorizontalAlignment="Stretch"
