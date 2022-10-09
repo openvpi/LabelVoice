@@ -4,8 +4,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="using:LabelVoice.ViewModels"
         xmlns:audio="clr-namespace:LabelVoice.Core.Audio;assembly=LabelVoice.Core"
-		xmlns:u="clr-namespace:LabelVoice.Core.Utils;assembly=LabelVoice.Core"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="176" Height="176"
+		xmlns:app="clr-namespace:LabelVoice"
+		mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="176" Height="176"
         x:Class="LabelVoice.Views.AudioPlayerWindow"
         Title="AudioPlayerWindow">
 
@@ -121,8 +121,8 @@
                 VerticalContentAlignment="Center"
 				VerticalAlignment="Center"
                 SelectedIndex="0">
-				<ComboBoxItem Content="NAudio" IsVisible="{Binding IsWin}" />
-				<ComboBoxItem Content="SDL" />
+				<ComboBoxItem Content="SDL" IsVisible="False" />
+				<ComboBoxItem Content="NAudio" IsVisible="{x:Static app:App.IsWin}" />
 			</ComboBox>
 			<TextBlock
 				Margin="4,0,0,0"

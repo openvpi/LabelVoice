@@ -25,15 +25,15 @@ public class App : Application
     private static Dictionary<string, ResourceInclude[]> _appLocaleResources;
 #pragma warning restore CS8618
     private static ResourceInclude _defaultLocaleResource => _appLocaleResources[""][0];
-    public static bool IsWin() => RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
-    public static bool IsMac() => RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
-    public static bool IsLinux() => RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
+    public static bool IsWin => RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+    public static bool IsMac => RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
+    public static bool IsLinux => RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
 
     public static string GetPlatformName()
     {
-        if (IsWin()) return "Win";
-        if (IsMac()) return "Mac";
-        if (IsLinux()) return "Linux";
+        if (IsWin) return "Win";
+        if (IsMac) return "Mac";
+        if (IsLinux) return "Linux";
         return "";
     }
     public override void Initialize()
@@ -46,7 +46,7 @@ public class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            string mainWindow = "main";
+            string mainWindow = "player";
             //string mainWindow = "wav";
             //string mainWindow = "player";
             switch (mainWindow)
