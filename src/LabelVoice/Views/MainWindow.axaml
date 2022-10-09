@@ -3,6 +3,7 @@
         xmlns:vm="using:LabelVoice.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:v="using:LabelVoice.Views"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="LabelVoice.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
@@ -50,7 +51,7 @@
 	                Items="{Binding Items}">
 				    <TreeView.ItemTemplate>
 					    <TreeDataTemplate ItemsSource="{Binding Subfolders}">
-						    <TextBlock Text="{Binding strNodeText}" HorizontalAlignment="Left"/>
+							<v:ExplorerTreeViewItem />
 					    </TreeDataTemplate>
 				    </TreeView.ItemTemplate>
 			    </TreeView>

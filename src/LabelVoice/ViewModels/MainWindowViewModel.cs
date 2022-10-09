@@ -15,8 +15,8 @@ namespace LabelVoice.ViewModels;
 public class MainWindowViewModel : ViewModelBase
 {
     public string Greeting => Application.Current!.FindResource("mainwindow.greeting")?.ToString() ?? string.Empty;
-    private ObservableCollection<Node>? _Items;
-    public ObservableCollection<Node>? SelectedItems { set; get; }
+    private ObservableCollection<ExplorerTreeViewItemViewModel>? _Items;
+    public ObservableCollection<ExplorerTreeViewItemViewModel>? SelectedItems { set; get; }
     private string? _strFolder;
 
     public string? strFolder
@@ -25,7 +25,7 @@ public class MainWindowViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _strFolder, value);
     }
 
-    public ObservableCollection<Node>? Items
+    public ObservableCollection<ExplorerTreeViewItemViewModel>? Items
     {
         get => _Items;
         set => this.RaiseAndSetIfChanged(ref _Items, value);
@@ -35,28 +35,28 @@ public class MainWindowViewModel : ViewModelBase
     {
         this.strFolder = strFolder;
 
-        Items = new ObservableCollection<Node>
+        Items = new ObservableCollection<ExplorerTreeViewItemViewModel>
         {
-            new Node(strFolder)
+            new ExplorerTreeViewItemViewModel(strFolder)
             {
                 Subfolders = GetSubfolders(strFolder)
             }
         };
     }
 
-    public ObservableCollection<Node> GetSubfolders(string strPath)
+    public ObservableCollection<ExplorerTreeViewItemViewModel> GetSubfolders(string strPath)
     {
-        ObservableCollection<Node> subfolders = new ObservableCollection<Node>();
+        ObservableCollection<ExplorerTreeViewItemViewModel> subfolders = new();
         string[] subdirs = Directory.GetDirectories(strPath, "*", SearchOption.TopDirectoryOnly);
         Array.Sort(subdirs, new Comparer(CultureInfo.InstalledUICulture));
 
         foreach (string dir in subdirs)
         {
-            Node thisnode = new Node(dir);
+            ExplorerTreeViewItemViewModel thisnode = new(dir);
 
             if (Directory.GetDirectories(dir, "*", SearchOption.TopDirectoryOnly).Length > 0)
             {
-                thisnode.Subfolders = new ObservableCollection<Node>();
+                thisnode.Subfolders = new ObservableCollection<ExplorerTreeViewItemViewModel>();
 
                 thisnode.Subfolders = GetSubfolders(dir);
             }
@@ -67,17 +67,17 @@ public class MainWindowViewModel : ViewModelBase
         return subfolders;
     }
 
-    public class Node
-    {
-        public ObservableCollection<Node>? Subfolders { get; set; }
+    //public class Node
+    //{
+    //    public ObservableCollection<Node>? Subfolders { get; set; }
 
-        public string strNodeText { get; }
-        public string strFullPath { get; }
+    //    public string strNodeText { get; }
+    //    public string strFullPath { get; }
 
-        public Node(string _strFullPath)
-        {
-            strFullPath = _strFullPath;
-            strNodeText = Path.GetFileName(_strFullPath);
-        }
-    }
+    //    public Node(string _strFullPath)
+    //    {
+    //        strFullPath = _strFullPath;
+    //        strNodeText = Path.GetFileName(_strFullPath);
+    //    }
+    //}
 }
