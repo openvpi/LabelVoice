@@ -5,6 +5,7 @@
 			 xmlns:v="using:LabelVoice.Views"
              mc:Ignorable="d" d:DesignWidth="452" d:DesignHeight="256"
              x:Class="LabelVoice.Views.ItemsPanel">
+
 	<Grid
 		RowDefinitions="34, 48, *"
 		VerticalAlignment="Stretch">
@@ -23,10 +24,11 @@
 			Margin="17,9" />
 		<TreeView 
 			Grid.Row="2"
-	        Items="{Binding Items}">
+	        Items="{Binding Items}"
+			SelectionMode="Multiple">
 			<TreeView.ItemTemplate>
 				<TreeDataTemplate ItemsSource="{Binding Subfolders}">
-					<v:ExplorerTreeViewItem />
+					<v:ExplorerTreeViewItem DoubleTapped="Item_DoubleTapped"/>
 				</TreeDataTemplate>
 			</TreeView.ItemTemplate>
 		</TreeView>

@@ -47,7 +47,13 @@
 		<ListBox
 			Grid.Row="2"
 			HorizontalAlignment="Stretch"
-			Items="{Binding Sections}">
+			Items="{Binding Sections}"
+			SelectionMode="Multiple">
+			<ListBox.ContextFlyout>
+				<MenuFlyout>
+					<MenuItem Header="Hello"></MenuItem>
+				</MenuFlyout>
+			</ListBox.ContextFlyout>
 			<ListBox.ItemTemplate>
 				<DataTemplate>
 					<v:SectionsItemContent />

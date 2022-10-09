@@ -1,20 +1,23 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+<TreeViewItem xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:vm="using:LabelVoice.ViewModels"
-             mc:Ignorable="d" d:DesignWidth="452" d:DesignHeight="40"
-             x:Class="LabelVoice.Views.ExplorerTreeViewItem">
+             mc:Ignorable="d" d:DesignWidth="452" d:DesignHeight="40" Height="40"
+             x:Class="LabelVoice.Views.ExplorerTreeViewItem"
+			 >
 
 	<Design.DataContext>
 		<vm:ExplorerTreeViewItemViewModel/>
 	</Design.DataContext>
-	
+
 	<Grid
 		ColumnDefinitions="48, *, Auto"
 		HorizontalAlignment="Stretch"
 		VerticalAlignment="Center"
-		Height="34">
+		Height="34"
+		Background="#00000000">
+		<!--DO NOT remove the background property of the grid.-->
 		<TextBlock
 			Grid.Column="0"
 			Text="○"
@@ -43,4 +46,4 @@
 			   VerticalAlignment="Center"/>
 		</Border>
 	</Grid>
-</UserControl>
+</TreeViewItem>
