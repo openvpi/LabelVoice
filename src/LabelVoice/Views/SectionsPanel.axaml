@@ -19,7 +19,7 @@
 				VerticalAlignment="Bottom" />
 			<TextBlock
 				x:Name="textBlockSelectedItem"
-				Text="(WoShiWaiXiaoQiu)"
+				Text="{Binding SelectedItemTitle}"
 				Margin="4,0,0,0"
 				FontSize="12"
 				FontWeight="SemiBold"

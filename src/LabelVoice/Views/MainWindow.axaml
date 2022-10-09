@@ -18,7 +18,7 @@
 		<Grid
 			RowDefinitions="Auto,*,5,*"
 		    Margin="8,8,0,8">
-			<Button Grid.Row="0" Name="btnGetProjectRoot"
+			<Button Grid.Row="0" Name="btnGetProjectRoot" IsVisible="False"
 					Content="打开工程..." />
 			<v:ItemsPanel
 				Grid.Row="1"

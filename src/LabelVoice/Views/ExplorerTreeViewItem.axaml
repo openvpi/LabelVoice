@@ -9,7 +9,7 @@
 	<Design.DataContext>
 		<vm:ExplorerTreeViewItemViewModel/>
 	</Design.DataContext>
-
+	
 	<Grid
 		ColumnDefinitions="48, *, Auto"
 		HorizontalAlignment="Stretch"
@@ -39,6 +39,7 @@
 			<TextBlock
 			   Text="{Binding Language}"
 			   FontSize="12"
+			   Foreground="White"
 			   VerticalAlignment="Center"/>
 		</Border>
 	</Grid>
