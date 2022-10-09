@@ -54,9 +54,9 @@ public class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            //String mainWindow = "main";
-            //String mainWindow = "wav";
-            string mainWindow = "player";
+            string mainWindow = "main";
+            //string mainWindow = "wav";
+            //string mainWindow = "player";
             switch (mainWindow)
             {
                 case "main":
