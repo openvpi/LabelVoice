@@ -51,7 +51,7 @@
 			SelectionMode="Multiple">
 			<ListBox.ContextFlyout>
 				<MenuFlyout>
-					<MenuItem Header="Hello"></MenuItem>
+					<MenuItem Header="²âÊÔ"></MenuItem>
 				</MenuFlyout>
 			</ListBox.ContextFlyout>
 			<ListBox.ItemTemplate>

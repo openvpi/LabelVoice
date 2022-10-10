@@ -9,12 +9,11 @@
         Icon="/Assets/avalonia-logo.ico"
         Title="LabelVoice"
         DragDrop.AllowDrop="True"
-        xmlns:f="using:FluentAvalonia.UI.Controls"
-        >
+        xmlns:f="using:FluentAvalonia.UI.Controls">
 
-    <Design.DataContext>
-        <vm:MainWindowViewModel/>
-    </Design.DataContext>
+	<Design.DataContext>
+		<vm:MainWindowViewModel />
+	</Design.DataContext>
 
 	<Grid Name="mainLayout" ColumnDefinitions="350,4,*">
 		<Grid
@@ -24,7 +23,7 @@
 					Content="打开工程..." />
 			<v:ItemsPanel
 				Grid.Row="1"
-				HorizontalAlignment="Stretch"/>
+				HorizontalAlignment="Stretch" />
 			<GridSplitter
 				Grid.Row="2"
 				HorizontalAlignment="Stretch" />
@@ -37,8 +36,8 @@
 			Width="4"
 			VerticalAlignment="Stretch" />
 		<StackPanel Grid.Column="2" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <TextBlock Text="{DynamicResource mainwindow.greeting}" HorizontalAlignment="Center"/>
-            <ComboBox
+			<TextBlock Text="{DynamicResource mainwindow.greeting}" HorizontalAlignment="Center" />
+			<ComboBox
                 x:Name="LanguageBox"
                 MinWidth="140"
                 Margin="10"
@@ -47,19 +46,19 @@
                 VerticalContentAlignment="Center"
                 SelectedIndex="0"
                 SelectionChanged="SelectingItemsControl_OnSelectionChanged">
-                <ComboBoxItem Content="zh-CN"/>
-                <ComboBoxItem Content="en-US"/>
-                <ComboBoxItem Content="ja-JP"/>
-                <ComboBoxItem Content="zh-TW"/>
-            </ComboBox>
-            <TextBlock
+				<ComboBoxItem Content="zh-CN" />
+				<ComboBoxItem Content="en-US" />
+				<ComboBoxItem Content="ja-JP" />
+				<ComboBoxItem Content="zh-TW" />
+			</ComboBox>
+			<TextBlock
                 Margin="10"
                 MaxWidth="400"
                 LineHeight="20"
                 Text="{DynamicResource mainwindow.testculture}"
                 TextAlignment="Center"
-                TextWrapping="Wrap"/>
-            <f:HyperlinkButton Content="1244"></f:HyperlinkButton>
-        </StackPanel>
-    </Grid>
+                TextWrapping="Wrap" />
+			<f:HyperlinkButton Content="1244"></f:HyperlinkButton>
+		</StackPanel>
+	</Grid>
 </Window>

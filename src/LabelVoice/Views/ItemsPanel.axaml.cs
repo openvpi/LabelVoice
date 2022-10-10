@@ -1,5 +1,6 @@
 using Avalonia.Controls;
-using FluentAvalonia.Core;
+using Avalonia.Interactivity;
+using Avalonia.Styling;
 
 namespace LabelVoice.Views
 {
@@ -10,9 +11,9 @@ namespace LabelVoice.Views
             InitializeComponent();
         }
 
-        private void Item_DoubleTapped(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        private void Item_DoubleTapped(object? sender, RoutedEventArgs e)
         {
-            if (sender is not ExplorerTreeViewItem item)
+            if (sender is not ItemsTreeItem item)
                 return;
             if (item.Parent is not TreeViewItem parent)
                 return;
@@ -22,6 +23,13 @@ namespace LabelVoice.Views
                 parent.IsExpanded = false;
             else
                 parent.IsExpanded = true;
+        }
+
+        private void SearchBoxCopy(object? sender, RoutedEventArgs e)
+        {
+            if (sender is not MenuItem)
+                return;
+            textBoxSearch.Copy();
         }
     }
 }

@@ -3,6 +3,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:v="using:LabelVoice.Views"
+			 xmlns:ui="using:FluentAvalonia.UI.Controls"
+			 xmlns:uip="using:FluentAvalonia.UI.Controls.Primitives"
              mc:Ignorable="d" d:DesignWidth="452" d:DesignHeight="256"
              x:Class="LabelVoice.Views.ItemsPanel">
 
@@ -21,14 +23,26 @@
 			Watermark="Search..."
 			VerticalAlignment="Center"
 			VerticalContentAlignment="Center"
-			Margin="17,9" />
-		<TreeView 
+			Margin="17,9">
+			<!--<TextBox.ContextFlyout>
+				<MenuFlyout>
+					<MenuItem
+						x:Name="menuCopy"
+						Click="SearchBoxCopy">
+						<MenuItem.Header>
+							<v:ContextMenuItem/>
+						</MenuItem.Header>
+					</MenuItem>
+				</MenuFlyout>
+			</TextBox.ContextFlyout>-->
+		</TextBox>
+		<TreeView
 			Grid.Row="2"
 	        Items="{Binding Items}"
 			SelectionMode="Multiple">
 			<TreeView.ItemTemplate>
 				<TreeDataTemplate ItemsSource="{Binding Subfolders}">
-					<v:ExplorerTreeViewItem DoubleTapped="Item_DoubleTapped"/>
+					<v:ItemsTreeItem DoubleTapped="Item_DoubleTapped" />
 				</TreeDataTemplate>
 			</TreeView.ItemTemplate>
 		</TreeView>

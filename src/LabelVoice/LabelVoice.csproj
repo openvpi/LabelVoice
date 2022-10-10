@@ -40,6 +40,9 @@
     <PackageReference Include="XamlNameReferenceGenerator" Version="1.3.4" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="Views\ItemsTreeItem.axaml.cs">
+      <DependentUpon>ItemsTreeItem.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\SectionsItemContent.axaml.cs">
       <DependentUpon>SectionsItemContent.axaml</DependentUpon>
     </Compile>

@@ -4,7 +4,7 @@ using System.IO;
 
 namespace LabelVoice.ViewModels
 {
-    public class ExplorerTreeViewItemViewModel : ViewModelBase
+    public class ItemsTreeItemViewModel : ViewModelBase
     {
         #region Fields
 
@@ -16,21 +16,21 @@ namespace LabelVoice.ViewModels
 
         private string? _language;
 
-        private ObservableCollection<ExplorerTreeViewItemViewModel>? _items;
+        private ObservableCollection<ItemsTreeItemViewModel>? _items;
 
         #endregion Fields
 
         #region Constructors
 
-        public ExplorerTreeViewItemViewModel(string _strFullPath)
+        public ItemsTreeItemViewModel(string _strFullPath)
         {
             strFullPath = _strFullPath;
             _title = Path.GetFileName(_strFullPath);
         }
 
-        public ExplorerTreeViewItemViewModel()
+        public ItemsTreeItemViewModel()
         {
-            _items = new ObservableCollection<ExplorerTreeViewItemViewModel>();
+            _items = new ObservableCollection<ItemsTreeItemViewModel>();
         }
 
         #endregion Constructors
@@ -57,7 +57,7 @@ namespace LabelVoice.ViewModels
 
         public bool? HasLanguageTag => !string.IsNullOrEmpty(_language);
 
-        public ObservableCollection<ExplorerTreeViewItemViewModel>? Subfolders
+        public ObservableCollection<ItemsTreeItemViewModel>? Subfolders
         {
             get => _items;
             set => this.RaiseAndSetIfChanged(ref _items, value);

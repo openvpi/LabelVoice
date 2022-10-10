@@ -4,11 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:vm="using:LabelVoice.ViewModels"
              mc:Ignorable="d" d:DesignWidth="452" d:DesignHeight="34" Height="34"
-             x:Class="LabelVoice.Views.ExplorerTreeViewItem"
-			 >
+             x:Class="LabelVoice.Views.ItemsTreeItem">
 
 	<Design.DataContext>
-		<vm:ExplorerTreeViewItemViewModel/>
+		<vm:ItemsTreeItemViewModel />
 	</Design.DataContext>
 
 	<Grid
@@ -25,7 +24,7 @@
 			VerticalAlignment="Center"
 			Margin="16,0,16,0"
 			Width="16"
-			Height="16"/>
+			Height="16" />
 		<TextBlock
 			Grid.Column="1"
 			Text="{Binding Title}"
@@ -43,7 +42,7 @@
 			   Text="{Binding Language}"
 			   FontSize="12"
 			   Foreground="White"
-			   VerticalAlignment="Center"/>
+			   VerticalAlignment="Center" />
 		</Border>
 	</Grid>
 </TreeViewItem>

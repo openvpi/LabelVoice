@@ -15,24 +15,24 @@ namespace LabelVoice.ViewModels;
 public class MainWindowViewModel : ViewModelBase
 {
     public string Greeting => Application.Current!.FindResource("mainwindow.greeting")?.ToString() ?? string.Empty;
-    private ObservableCollection<ExplorerTreeViewItemViewModel> _items = new()
+    private ObservableCollection<ItemsTreeItemViewModel> _items = new()
     {
-        new ExplorerTreeViewItemViewModel
+        new ItemsTreeItemViewModel
         {
             Title = "GuangNianZhiWai",
             Language = "CN"
         },
-        new ExplorerTreeViewItemViewModel
+        new ItemsTreeItemViewModel
         {
             Title = "WoHuaiNianDe",
-            Subfolders = new ObservableCollection<ExplorerTreeViewItemViewModel>
+            Subfolders = new ObservableCollection<ItemsTreeItemViewModel>
             {
-                new ExplorerTreeViewItemViewModel
+                new ItemsTreeItemViewModel
                 {
                     Title = "New Folder",
-                    Subfolders = new ObservableCollection<ExplorerTreeViewItemViewModel>
+                    Subfolders = new ObservableCollection<ItemsTreeItemViewModel>
                     {
-                        new ExplorerTreeViewItemViewModel
+                        new ItemsTreeItemViewModel
                         {
                             Title = "Untitled",
                             Language = "Unspecified"
@@ -41,16 +41,16 @@ public class MainWindowViewModel : ViewModelBase
                 }
             }
         },
-        new ExplorerTreeViewItemViewModel
+        new ItemsTreeItemViewModel
         {
             Title = "PaoMo"
         },
-        new ExplorerTreeViewItemViewModel
+        new ItemsTreeItemViewModel
         {
             Title = "BuWeiXia"
         }
     };
-    private ExplorerTreeViewItemViewModel _selectedItem = new()
+    private ItemsTreeItemViewModel _selectedItem = new()
     {
         Title = "GuangNianZhiWai",
         Language = "CN"
@@ -61,7 +61,7 @@ public class MainWindowViewModel : ViewModelBase
         new SectionsItemContentViewModel("RuHeShunJianDongJieShiJian", "CN"),
         new SectionsItemContentViewModel("Untitled-3", "Unspecified"),
     };
-    public ObservableCollection<ExplorerTreeViewItemViewModel>? SelectedItems { set; get; }
+    public ObservableCollection<ItemsTreeItemViewModel>? SelectedItems { set; get; }
     private string? _strFolder;
 
     public string? strFolder
@@ -70,7 +70,7 @@ public class MainWindowViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _strFolder, value);
     }
 
-    public ObservableCollection<ExplorerTreeViewItemViewModel>? Items
+    public ObservableCollection<ItemsTreeItemViewModel>? Items
     {
         get => _items;
         set => this.RaiseAndSetIfChanged(ref _items, value);
@@ -82,7 +82,7 @@ public class MainWindowViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _sections, value);
     }
 
-    public ExplorerTreeViewItemViewModel SelectedItem
+    public ItemsTreeItemViewModel SelectedItem
     {
         get => _selectedItem;
         set => this.RaiseAndSetIfChanged(ref _selectedItem, value);
@@ -97,28 +97,28 @@ public class MainWindowViewModel : ViewModelBase
     {
         this.strFolder = strFolder;
 
-        Items = new ObservableCollection<ExplorerTreeViewItemViewModel>
+        Items = new ObservableCollection<ItemsTreeItemViewModel>
         {
-            new ExplorerTreeViewItemViewModel(strFolder)
+            new ItemsTreeItemViewModel(strFolder)
             {
                 Subfolders = GetSubfolders(strFolder)
             }
         };
     }
 
-    public ObservableCollection<ExplorerTreeViewItemViewModel> GetSubfolders(string strPath)
+    public ObservableCollection<ItemsTreeItemViewModel> GetSubfolders(string strPath)
     {
-        ObservableCollection<ExplorerTreeViewItemViewModel> subfolders = new();
+        ObservableCollection<ItemsTreeItemViewModel> subfolders = new();
         string[] subdirs = Directory.GetDirectories(strPath, "*", SearchOption.TopDirectoryOnly);
         Array.Sort(subdirs, new Comparer(CultureInfo.InstalledUICulture));
 
         foreach (string dir in subdirs)
         {
-            ExplorerTreeViewItemViewModel thisnode = new(dir);
+            ItemsTreeItemViewModel thisnode = new(dir);
 
             if (Directory.GetDirectories(dir, "*", SearchOption.TopDirectoryOnly).Length > 0)
             {
-                thisnode.Subfolders = new ObservableCollection<ExplorerTreeViewItemViewModel>();
+                thisnode.Subfolders = new ObservableCollection<ItemsTreeItemViewModel>();
 
                 thisnode.Subfolders = GetSubfolders(dir);
             }
