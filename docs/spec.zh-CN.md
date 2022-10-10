@@ -104,7 +104,7 @@
         <Item Id="50deb91b" Name="WoHuaiNianDe" Speaker="32e9" Language="fe67" VirtualPath="foo/bar"/>
         <Item Id="61cfc89a" Name="BuWeiXia" Speaker="08cd" Language="fe67" VirtualPath="foo"/>
         <Item Id="38db2292" Name="ZheGanJue" Speaker="08cd" Language="fe67" VirtualPath="foo/bar"/>
-        <Placeholder Speaker="08cd" VirtualPath="empty"/>
+        <Placeholder Id="b293e1b2" Speaker="08cd" VirtualPath="empty"/>
     </ItemResources>
 </LVProject>
 ```
@@ -141,9 +141,9 @@
 可用的数据类型如下：
 
 - Text：文本类型，接受任意字符串输入
-- Number：数值类型，接受整数或浮点数输入
+- Integer：整数类型，接受整数输入
+- Float：浮点数类型，接受实数输入
 - Pitch：音高类型，接受国际谱音名或 MIDI 编号输入
-- Category(n)：类别类型，接受 0 ~ n-1 的数字输入
 
 ### 2.4 Languages
 
