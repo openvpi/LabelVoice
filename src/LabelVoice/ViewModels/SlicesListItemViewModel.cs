@@ -2,7 +2,7 @@
 
 namespace LabelVoice.ViewModels
 {
-    public class SectionsItemContentViewModel : ViewModelBase
+    public class SlicesListItemViewModel : ViewModelBase
     {
         #region Fields
 
@@ -18,13 +18,13 @@ namespace LabelVoice.ViewModels
 
         #region Constructors
 
-        public SectionsItemContentViewModel()
+        public SlicesListItemViewModel()
         {
             Title = "Title";
             Language = "CN";
         }
 
-        public SectionsItemContentViewModel(string title, string language)
+        public SlicesListItemViewModel(string title, string language)
         {
             Title = title;
             Language = language;
@@ -52,8 +52,9 @@ namespace LabelVoice.ViewModels
             set => this.RaiseAndSetIfChanged(ref _language, value);
         }
 
-        public bool? HasLanguageTag => !string.IsNullOrEmpty(_language);
+        //public bool? HasLanguageTag => !string.IsNullOrEmpty(_language);
 
         #endregion Properties
+
     }
 }

@@ -1,68 +1,89 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Globalization;
-using System.IO;
-using System.Text;
-using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls;
 using ReactiveUI;
+using System;
+using System.Collections;
+using System.Collections.ObjectModel;
+using System.Globalization;
+using System.IO;
 
 namespace LabelVoice.ViewModels;
 
 public class MainWindowViewModel : ViewModelBase
 {
-    public string Greeting => Application.Current!.FindResource("mainwindow.greeting")?.ToString() ?? string.Empty;
-    private ObservableCollection<ItemsTreeItemViewModel> _items = new()
+    #region Fields
+
+    private ObservableCollection<ItemsTreeItemViewModel>? _items;
+
+    private ItemsTreeItemViewModel _activeItem;
+
+    private IList? _selectedItems;
+
+    private IList? _selectedSections;
+
+    private ObservableCollection<SlicesListItemViewModel>? _sections;
+
+    private string? _strFolder;
+
+    #endregion Fields
+
+    #region Constructors
+
+    public MainWindowViewModel()
     {
-        new ItemsTreeItemViewModel
+        _items = new()
         {
-            Title = "GuangNianZhiWai",
-            Language = "CN"
-        },
-        new ItemsTreeItemViewModel
-        {
-            Title = "WoHuaiNianDe",
-            Subfolders = new ObservableCollection<ItemsTreeItemViewModel>
+            new ItemsTreeItemViewModel
             {
-                new ItemsTreeItemViewModel
+                Title = "GuangNianZhiWai",
+                Language = "CN"
+            },
+            new ItemsTreeItemViewModel
+            {
+                Title = "WoHuaiNianDe",
+                Subfolders = new ObservableCollection<ItemsTreeItemViewModel>
                 {
-                    Title = "New Folder",
-                    Subfolders = new ObservableCollection<ItemsTreeItemViewModel>
+                    new ItemsTreeItemViewModel
                     {
-                        new ItemsTreeItemViewModel
+                        Title = "New Folder",
+                        Subfolders = new ObservableCollection<ItemsTreeItemViewModel>
                         {
-                            Title = "Untitled",
-                            Language = "Unspecified"
+                            new ItemsTreeItemViewModel
+                            {
+                                Title = "Untitled",
+                                Language = "Unspecified"
+                            }
                         }
                     }
                 }
+            },
+            new ItemsTreeItemViewModel
+            {
+                Title = "PaoMo"
+            },
+            new ItemsTreeItemViewModel
+            {
+                Title = "BuWeiXia"
             }
-        },
-        new ItemsTreeItemViewModel
+        };
+        _activeItem = new()
         {
-            Title = "PaoMo"
-        },
-        new ItemsTreeItemViewModel
+            Title = "GuangNianZhiWai",
+            Language = "CN"
+        };
+        _sections = new()
         {
-            Title = "BuWeiXia"
-        }
-    };
-    private ItemsTreeItemViewModel _selectedItem = new()
-    {
-        Title = "GuangNianZhiWai",
-        Language = "CN"
-    };
-    private List<SectionsItemContentViewModel> _sections = new()
-    {
-        new SectionsItemContentViewModel("GanShouTingZaiWoFaDuanDeZhiJian", "CN"),
-        new SectionsItemContentViewModel("RuHeShunJianDongJieShiJian", "CN"),
-        new SectionsItemContentViewModel("Untitled-3", "Unspecified"),
-    };
-    public ObservableCollection<ItemsTreeItemViewModel>? SelectedItems { set; get; }
-    private string? _strFolder;
+            new SlicesListItemViewModel("GanShouTingZaiWoFaDuanDeZhiJian", "CN"),
+            new SlicesListItemViewModel("RuHeShunJianDongJieShiJian", "CN"),
+            new SlicesListItemViewModel("Untitled-3", "Unspecified"),
+        };
+    }
+
+    #endregion Constructors
+
+    #region Properties
+
+    public string Greeting => Application.Current!.FindResource("mainwindow.greeting")?.ToString() ?? string.Empty;
 
     public string? strFolder
     {
@@ -76,22 +97,38 @@ public class MainWindowViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _items, value);
     }
 
-    public List<SectionsItemContentViewModel> Sections
+    public ObservableCollection<SlicesListItemViewModel>? Slices
     {
         get => _sections;
         set => this.RaiseAndSetIfChanged(ref _sections, value);
     }
 
-    public ItemsTreeItemViewModel SelectedItem
+    public ItemsTreeItemViewModel ActiveItem
     {
-        get => _selectedItem;
-        set => this.RaiseAndSetIfChanged(ref _selectedItem, value);
+        get => _activeItem;
+        set => this.RaiseAndSetIfChanged(ref _activeItem, value);
     }
 
-    public string SelectedItemTitle
+    public string ActiveItemTitle
     {
-        get => $"({_selectedItem.Title})";
+        get => $"({_activeItem.Title})";
     }
+
+    public IList? SelectedItems
+    {
+        get => _selectedItems;
+        set => this.RaiseAndSetIfChanged(ref _selectedItems, value);
+    }
+
+    public IList? SelectedSlices
+    {
+        get => _selectedSections;
+        set => this.RaiseAndSetIfChanged(ref _selectedSections, value);
+    }
+
+    #endregion Properties
+
+    #region Methods
 
     public void OpenProjectRoot(string strFolder)
     {
@@ -142,4 +179,6 @@ public class MainWindowViewModel : ViewModelBase
     //        strNodeText = Path.GetFileName(_strFullPath);
     //    }
     //}
+
+    #endregion Methods
 }

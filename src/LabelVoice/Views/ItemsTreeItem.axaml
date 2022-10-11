@@ -1,4 +1,4 @@
-<TreeViewItem xmlns="https://github.com/avaloniaui"
+<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -30,7 +30,7 @@
 			Text="{Binding Title}"
 			VerticalAlignment="Center"
 			FontSize="14" />
-		<Border
+		<!--<Border
 			Grid.Column="2"
 			Background="#0F7B0F"
 			IsVisible="{Binding HasLanguageTag}"
@@ -43,6 +43,6 @@
 			   FontSize="12"
 			   Foreground="White"
 			   VerticalAlignment="Center" />
-		</Border>
+		</Border>-->
 	</Grid>
-</TreeViewItem>
+</UserControl>

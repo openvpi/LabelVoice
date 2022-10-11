@@ -21,15 +21,103 @@
 		    Margin="8,8,0,8">
 			<Button Grid.Row="0" Name="btnGetProjectRoot" IsVisible="False"
 					Content="打开工程..." />
-			<v:ItemsPanel
+			<!--Start Items Panel-->
+			<Grid
 				Grid.Row="1"
-				HorizontalAlignment="Stretch" />
+				RowDefinitions="34, 48, *"
+				VerticalAlignment="Stretch"
+				Background="#00000000">
+				<TextBlock
+					Text="Items"
+					Margin="16,0,0,0"
+					FontSize="16"
+					FontWeight="SemiBold"
+					VerticalAlignment="Center" />
+				<TextBox
+					x:Name="textBoxSearch"
+					Grid.Row="1"
+					Watermark="Search..."
+					VerticalAlignment="Center"
+					VerticalContentAlignment="Center"
+					Margin="17,9">
+				</TextBox>
+				<TreeView
+					x:Name="itemsTreeView"
+					Grid.Row="2"
+					Items="{Binding Items}"
+					SelectionMode="Multiple"
+					SelectedItems="{Binding SelectedItems, Mode=OneWayToSource}">
+					<TreeView.Styles>
+						<Style Selector="TreeViewItem">
+							<Setter Property="ContextFlyout">
+								<Setter.Value>
+									<MenuFlyout>
+										<MenuItem Header="Rename..." Click="OnRenameItem" />
+										<MenuItem Header="Remove" Click="OnRemoveItem" />
+										<MenuItem Header="Move..." Click="OnMoveItem" />
+									</MenuFlyout>
+								</Setter.Value>
+							</Setter>
+						</Style>
+					</TreeView.Styles>
+					<TreeView.ItemTemplate>
+						<TreeDataTemplate ItemsSource="{Binding Subfolders}">
+							<v:ItemsTreeItem DoubleTapped="Item_DoubleTapped" />
+						</TreeDataTemplate>
+					</TreeView.ItemTemplate>
+				</TreeView>
+			</Grid>
+			<!--End Items Panel-->
 			<GridSplitter
 				Grid.Row="2"
 				HorizontalAlignment="Stretch" />
-			<v:SectionsPanel
+			<!--Start Slices Panel-->
+			<Grid
+				x:Name="slicesPanel"
 				Grid.Row="3"
-				HorizontalAlignment="Stretch" />
+				HorizontalAlignment="Stretch"
+				RowDefinitions="34, *"
+				VerticalAlignment="Stretch">
+				<StackPanel
+					Orientation="Horizontal"
+					VerticalAlignment="Center">
+					<TextBlock
+						Text="Slices"
+						Margin="16,0,0,0"
+						FontSize="16"
+						FontWeight="SemiBold"
+						VerticalAlignment="Bottom" />
+					<TextBlock
+						x:Name="textBlockSelectedItem"
+						Text="{Binding SelectedItemTitle}"
+						Margin="4,0,0,0"
+						FontSize="12"
+						FontWeight="SemiBold"
+						Opacity="0.6"
+						VerticalAlignment="Bottom" />
+				</StackPanel>
+				<ListBox
+					x:Name="slicesListBox"
+					Grid.Row="1"
+					HorizontalAlignment="Stretch"
+					Items="{Binding Slices}"
+					SelectionMode="Multiple"
+					SelectedItems="{Binding SelectedSlices, Mode=OneWayToSource}">
+					<ListBox.ContextFlyout>
+						<MenuFlyout>
+							<MenuItem Header="Rename..." Click="OnRenameSlice" />
+							<MenuItem Header="Remove" Click="OnRemoveSlice" />
+							<MenuItem Header="Move..." Click="OnMoveSlice" />
+						</MenuFlyout>
+					</ListBox.ContextFlyout>
+					<ListBox.ItemTemplate>
+						<DataTemplate>
+							<v:SlicesListItem />
+						</DataTemplate>
+					</ListBox.ItemTemplate>
+				</ListBox>
+			</Grid>
+			<!--End Sections Panel-->
 		</Grid>
 		<GridSplitter
 			Grid.Column="1"

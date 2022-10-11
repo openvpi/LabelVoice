@@ -2,9 +2,9 @@ using Avalonia.Controls;
 
 namespace LabelVoice.Views
 {
-    public partial class SectionsPanel : UserControl
+    public partial class SlicesListItem : UserControl
     {
-        public SectionsPanel()
+        public SlicesListItem()
         {
             InitializeComponent();
         }

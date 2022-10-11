@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <!--Avalonia doesen't support TrimMode=link currently,but we are working on that https://github.com/AvaloniaUI/Avalonia/issues/6892 -->
@@ -43,11 +43,8 @@
     <Compile Update="Views\ItemsTreeItem.axaml.cs">
       <DependentUpon>ItemsTreeItem.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\SectionsItemContent.axaml.cs">
-      <DependentUpon>SectionsItemContent.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\ItemsPanel.axaml.cs">
-      <DependentUpon>ItemsPanel.axaml</DependentUpon>
+    <Compile Update="Views\SlicesListItem.axaml.cs">
+      <DependentUpon>SlicesListItem.axaml</DependentUpon>
     </Compile>
   </ItemGroup>
 </Project>

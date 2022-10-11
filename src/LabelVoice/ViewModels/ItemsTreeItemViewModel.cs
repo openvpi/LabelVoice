@@ -10,7 +10,7 @@ namespace LabelVoice.ViewModels
 
         private string? _icon;
 
-        private string? _title;
+        private string? _title = "Title";
 
         public string? strFullPath;
 
@@ -64,6 +64,5 @@ namespace LabelVoice.ViewModels
         }
 
         #endregion Properties
-
     }
 }
