@@ -4,20 +4,25 @@ namespace LabelVoice.Core.Utils;
 
 public static class VirtualPathValidator
 {
-    private static readonly Regex _containsBadCharacters = new("[" + Regex.Escape(new string(Path.GetInvalidFileNameChars())) + "]");
+    private static readonly Regex _startsOrEndsWithSpace = new(@"^(?!\s).*(?!\s)$");
 
+    private static readonly Regex _containsBadCharacters = new("^(?!\\s)[" + Regex.Escape(new string(Path.GetInvalidFileNameChars())) + "]");
+
+    /// <summary>
+    /// Tell if the given <paramref name="name"/> is valid for items and slices.<br/>
+    /// A valid name is not null, does not start or end with whitespaces, and does not contain any characters in <see cref="Path.GetInvalidFileNameChars()"/>.
+    /// </summary>
     public static bool IsValidName(string? name)
     {
-        return !string.IsNullOrWhiteSpace(name) && !_containsBadCharacters.IsMatch(name);
+        return name != null && !_startsOrEndsWithSpace.IsMatch(name) && !_containsBadCharacters.IsMatch(name);
     }
 
+    /// <summary>
+    /// Tell if the given <paramref name="path"/> is valid for items and placeholders.<br/>
+    /// A valid path is not null, and is either an empty string or a string joined with valid name(s) with the '/' separator.
+    /// </summary>
     public static bool IsValidPath(string? path)
     {
-        if (path == null)
-        {
-            return false;
-        }
-
-        return path.Length == 0 || path.Split('/').All(IsValidName);
+        return path != null && (path.Length == 0 || path.Split('/').All(IsValidName));
     }
 }
