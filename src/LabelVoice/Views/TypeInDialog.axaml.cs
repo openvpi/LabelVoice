@@ -25,6 +25,19 @@ namespace LabelVoice.Views
 #endif
         }
 
+        public TypeInDialog(string? text)
+        {
+            InitializeComponent();
+            button = this.FindControl<Button>("OkButton");
+            button.Click += OkButtonClick;
+            textBox = this.FindControl<TextBox>("TextBox");
+            textBox.Text = text;
+            textBox.SelectAll();
+#if DEBUG
+            this.AttachDevTools();
+#endif
+        }
+
         private void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);

@@ -52,6 +52,7 @@
 							<Setter Property="ContextFlyout">
 								<Setter.Value>
 									<MenuFlyout>
+										<MenuItem Header="New Folder..." Click="OnCreateNewFolder" />
 										<MenuItem Header="Rename..." Click="OnRenameItem" />
 										<MenuItem Header="Remove" Click="OnRemoveItem" />
 										<MenuItem Header="Move..." Click="OnMoveItem" />
