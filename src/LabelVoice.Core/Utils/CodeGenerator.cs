@@ -1,16 +1,40 @@
-﻿namespace LabelVoice.Core.Utils;
+﻿using System.Text.RegularExpressions;
+
+namespace LabelVoice.Core.Utils;
 
 public static class CodeGenerator
 {
     private static readonly HashSet<string> _registered = new();
 
     /// <summary>
-    /// Register a new code.
+    /// Validate the given <paramref name="code"/> with expected <paramref name="length"/>.
+    /// </summary>
+    /// <returns><see lanword="true"/> if <paramref name="code"/> is not null, has the given <paramref name="length"/> and is of the proper hex format, or <see langword="false"/> otherwise.</returns>
+    public static bool Validate(string? code, int length)
+    {
+        if (code == null || code.Length != length)
+        {
+            return false;
+        }
+
+        return Regex.IsMatch(code, @"^[0-9a-f].*$");
+    }
+
+    /// <summary>
+    /// Register a new <paramref name="code"/>.
     /// </summary>
     /// <returns><see langword="true"/> if the given <paramref name="code"/> is successfully registered, or <see langword="false"/> if the code already exists.</returns>
     public static bool Register(string code)
     {
         return _registered.Add(code);
+    }
+
+    /// <summary>
+    /// Unregister a specific <paramref name="code"/>.
+    /// </summary>
+    public static void Unregister(string code)
+    {
+        _registered.Remove(code);
     }
 
     /// <summary>

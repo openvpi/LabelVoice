@@ -9,14 +9,14 @@ namespace LabelVoice.Core.Managers
 
         private ProjectManager()
         {
-            Project = new LabelVoiceProject();
+            Project = new ProjectModel();
         }
 
         #endregion Constructor
 
         #region Properties
 
-        public LabelVoiceProject Project { get; private set; }
+        public ProjectModel Project { get; private set; }
 
         #endregion Properties
 
