@@ -84,12 +84,12 @@
     <Version>0.0.1</Version>
     <Name>LabelVoice Example Dataset</Name>
     <LabelSchema>
-        <Layer Class="Sentence" Name="lyrics"/>
-        <Layer Class="Grapheme" Name="pinyin" SubdivisionOf="0"/>
-        <Layer Class="Pitch" Name="midi" SubdivisionOf="1"/>
-        <Layer Class="Phoneme" Name="phone" SubdivisionOf="1"/>   
-        <Layer Class="Duration" Name="dur" AlignedWith="3"/>
-        <Layer Class="Custom" Name="slur" AlignedWith="3" ValueType="Category(2)"/>
+        <Layer Category="Sentence" Name="lyrics"/>
+        <Layer Category="Grapheme" Name="pinyin" SubdivisionOf="0"/>
+        <Layer Category="Pitch" Name="midi" SubdivisionOf="1"/>
+        <Layer Category="Phoneme" Name="phone" SubdivisionOf="1"/>   
+        <Layer Category="Duration" Name="dur" AlignedWith="3"/>
+        <Layer Category="Custom" Name="slur" AlignedWith="3" ValueType="Integer"/>
     </LabelSchema>
     <Languages>
         <Language Id="fe67" Name="CHN" Dictionary="dict.txt" PhonemeSet="phoneset.txt" Aligner="aligner"/>
@@ -121,7 +121,7 @@
 
 `<LabelSchema>` 子标签存储标注文件的层信息和绑定规则。层的下标从 0 开始，每一层（`<Layer>` 标签）具有以下属性：
 
-- Class：层的类别，用于提供一些默认属性值预设，或作为一些自动流程的输入或输出
+- Category：层的类别，用于提供一些默认属性值预设，或作为一些自动流程的输入或输出
 - Name：层的名称，由用户自定义
 - SubdivisionOf：设置此属性代表本层是某一层中标记的细分，例如音素层是音节层的细分，一个音节标注能覆盖并恰好覆盖若干个音素标注
 - AlignedWith：设置此属性代表本层与某一层完全对齐，即本层的所有标记与目标层的所有标记一对一头尾对齐
