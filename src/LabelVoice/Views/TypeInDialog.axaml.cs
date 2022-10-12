@@ -32,7 +32,6 @@ namespace LabelVoice.Views
             button.Click += OkButtonClick;
             textBox = this.FindControl<TextBox>("TextBox");
             textBox.Text = text;
-            textBox.SelectAll();
 #if DEBUG
             this.AttachDevTools();
 #endif

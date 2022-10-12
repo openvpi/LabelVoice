@@ -9,7 +9,7 @@
 	<StackPanel
 		VerticalAlignment="Center"
 		Margin="{Binding $parent.WindowDecorationMargin}">
-		<TextBox Name="TextBox" Margin="4"/>
+		<TextBox Name="TextBox" Margin="4" Classes.clearButton="True"/>
 		<Button Name="OkButton" Content="OK" Margin="4" HorizontalAlignment="Stretch"/>
 	</StackPanel>
 </Window>
