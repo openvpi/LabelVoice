@@ -1,8 +1,10 @@
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
 using LabelVoice.ViewModels;
+using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,6 +21,19 @@ namespace LabelVoice.Views
             InitializeComponent();
             btnGetProjectRoot.Click += async (sender, e) => await GetProjectRoot();
             slicesListBox.AddHandler(DragDrop.DropEvent, OnDrop);
+            itemsTreeView.SelectionChanged += ItemsTreeView_SelectionChanged;
+        }
+
+        private void ItemsTreeView_SelectionChanged(object? sender, SelectionChangedEventArgs e)
+        {
+            if (((MainWindowViewModel)DataContext!).SelectedItems == null)
+                return;
+            if (((MainWindowViewModel)DataContext!).SelectedItems?.Count == 0)
+                return;
+            var item = ((MainWindowViewModel)DataContext!).SelectedItems?[0] as ItemsTreeItemViewModel;
+            if (item?.Subfolders?.Count > 0)
+                return;
+            ((MainWindowViewModel)DataContext!).ActiveItem = item;
         }
 
         #endregion Constructors

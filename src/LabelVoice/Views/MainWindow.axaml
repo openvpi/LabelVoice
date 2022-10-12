@@ -91,9 +91,9 @@
 						FontWeight="SemiBold"
 						VerticalAlignment="Bottom" />
 					<TextBlock
-						x:Name="textBlockSelectedItem"
-						Text="{Binding SelectedItemTitle}"
-						Margin="4,0,0,0"
+						x:Name="textBlockActiveItemTitle"
+						Text="{Binding ActiveItem.Title, StringFormat=({0})}"
+						Margin="4,0,0,1"
 						FontSize="12"
 						FontWeight="SemiBold"
 						Opacity="0.6"

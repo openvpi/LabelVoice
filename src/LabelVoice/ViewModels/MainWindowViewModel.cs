@@ -109,11 +109,6 @@ public class MainWindowViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _activeItem, value);
     }
 
-    public string ActiveItemTitle
-    {
-        get => $"({_activeItem.Title})";
-    }
-
     public IList? SelectedItems
     {
         get => _selectedItems;
