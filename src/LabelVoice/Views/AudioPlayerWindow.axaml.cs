@@ -1,8 +1,10 @@
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
 using LabelVoice.Core.Managers;
 using LabelVoice.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -27,15 +29,21 @@ namespace LabelVoice.Views
             ComboBoxAudioDevices.SelectionChanged += ComboBoxAudioDevices_SelectionChanged;
             ComboBoxAudioBackends.SelectionChanged += ComboBoxAudioBackends_SelectionChanged;
             ComboBoxAudioDecoders.SelectionChanged += ComboBoxAudioDecoders_SelectionChanged;
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                PlaybackManager.Instance.SwitchAudioBackend(Core.Audio.AudioBackend.NAudio);
-            }
-            else
-            {
-                PlaybackManager.Instance.SwitchAudioBackend(Core.Audio.AudioBackend.SDL);
-            }
+            slider.AddHandler(Thumb.DragStartedEvent, Thumb_DragStarted);
+            slider.AddHandler(Thumb.DragCompletedEvent, Thumb_DragCompleted);
+            PlaybackManager.Instance.SwitchAudioBackend(Core.Audio.AudioBackend.SDL);
             UpdateComboBoxAudioDevices();
+        }
+
+        private void Thumb_DragCompleted(object? sender, Avalonia.Input.VectorEventArgs e)
+        {
+            PlaybackManager.Instance.SetCurrentTime(TimeSpan.FromMilliseconds(((AudioPlayerWindowViewModel)DataContext!).Progress));
+            ((AudioPlayerWindowViewModel)DataContext!).StartUpdateProgress();
+        }
+
+        private void Thumb_DragStarted(object? sender, Avalonia.Input.VectorEventArgs e)
+        {
+            ((AudioPlayerWindowViewModel)DataContext!).StopUpdateProgress();
         }
 
         private void UpdateComboBoxAudioDevices()
@@ -150,7 +158,8 @@ namespace LabelVoice.Views
             {
                 string strFolder = result.First();
                 ((AudioPlayerWindowViewModel)DataContext!).OpenAudioFile(strFolder);
-                progressBar.Maximum = (int)PlaybackManager.Instance.GetTotalTime().TotalMilliseconds;
+                //progressBar.Maximum = (int)PlaybackManager.Instance.GetTotalTime().TotalMilliseconds;
+                slider.Maximum = (int)PlaybackManager.Instance.GetTotalTime().TotalMilliseconds;
             }
         }
 

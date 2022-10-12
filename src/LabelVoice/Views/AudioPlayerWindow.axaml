@@ -38,10 +38,15 @@
                 Text="{Binding CurrentTimeString}"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center" />
-			<ProgressBar
+			<!--<ProgressBar
                 x:Name="progressBar"
                 Grid.Column="1"
                 Value="{Binding Progress}"
+                VerticalAlignment="Center" />-->
+			<Slider
+				x:Name="slider"
+                Grid.Column="1"
+				Value="{Binding Progress}"
                 VerticalAlignment="Center" />
 			<TextBlock
                 x:Name="TextBlockTotalTime"
