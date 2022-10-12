@@ -1,12 +1,12 @@
-using Avalonia.Collections;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
 using LabelVoice.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
+using static System.Net.WebRequestMethods;
 
 namespace LabelVoice.Views
 {
@@ -18,11 +18,33 @@ namespace LabelVoice.Views
         {
             InitializeComponent();
             btnGetProjectRoot.Click += async (sender, e) => await GetProjectRoot();
+            slicesListBox.AddHandler(DragDrop.DropEvent, OnDrop);
         }
 
         #endregion Constructors
 
         #region Methods
+
+        private void OnDrop(object? sender, DragEventArgs args)
+        {
+            if (!args.Data.Contains(DataFormats.FileNames))
+            {
+                return;
+            }
+            var filePaths = args.Data.GetFileNames();
+            if (filePaths == null)
+                return;
+            foreach (var file in filePaths)
+            {
+                if (string.IsNullOrEmpty(file))
+                    continue;
+                ((MainWindowViewModel)DataContext!).Slices.Add(
+                new SlicesListItemViewModel
+                {
+                    Title = Path.GetFileNameWithoutExtension(file)
+                });
+            }
+        }
 
         private void SelectingItemsControl_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
         {
@@ -151,7 +173,6 @@ namespace LabelVoice.Views
                 Title = name
             });
         }
-
 
         #endregion Methods
     }
