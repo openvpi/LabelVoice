@@ -29,13 +29,13 @@ namespace LabelVoice.Views
 
         private async Task GetProjectRoot()
         {
-            ProjectModel model;
-            using (var stream = new FileStream(@"E:\OpenVPI\LabelVoice\docs\lvproj.in.xml", FileMode.Open, FileAccess.Read))
+            ItemModel model;
+            using (var stream = new FileStream(@"E:\OpenVPI\LabelVoice\docs\lvitem.in.xml", FileMode.Open, FileAccess.Read))
             using (var reader = new StreamReader(stream))
             {
-                model = ProjectModel.LoadFrom(reader);
+                model = ItemModel.LoadFrom(reader);
             }
-            using (var stream = new FileStream(@"E:\OpenVPI\LabelVoice\docs\lvproj.out.xml", FileMode.Create, FileAccess.Write))
+            using (var stream = new FileStream(@"E:\OpenVPI\LabelVoice\docs\lvitem.out.xml", FileMode.Create, FileAccess.Write))
             using (var writer = new StreamWriter(stream))
             {
                 model.SaveTo(writer);
