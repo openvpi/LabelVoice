@@ -3,7 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:vm="using:LabelVoice.ViewModels"
-             mc:Ignorable="d" d:DesignWidth="452" d:DesignHeight="34" Height="34"
+             mc:Ignorable="d" d:DesignWidth="452" d:DesignHeight="24" Height="24"
              x:Class="LabelVoice.Views.ItemsTreeItem">
 
 	<Design.DataContext>
@@ -11,10 +11,10 @@
 	</Design.DataContext>
 
 	<Grid
-		ColumnDefinitions="48, *, Auto"
+		ColumnDefinitions="26, *, Auto"
 		HorizontalAlignment="Stretch"
 		VerticalAlignment="Center"
-		Height="34"
+		Height="24"
 		Background="#00000000">
 		<!--DO NOT remove the background property of the grid.-->
 		<TextBlock
@@ -22,9 +22,7 @@
 			Text="○"
 			HorizontalAlignment="Left"
 			VerticalAlignment="Center"
-			Margin="16,0,16,0"
-			Width="16"
-			Height="16" />
+			Margin="6,0,0,0" />
 		<TextBlock
 			Grid.Column="1"
 			Text="{Binding Title}"

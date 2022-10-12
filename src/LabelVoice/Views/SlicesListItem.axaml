@@ -5,25 +5,23 @@
 			 xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
 			 xmlns:iac="clr-namespace:Avalonia.Xaml.Interactions.Custom;assembly=Avalonia.Xaml.Interactions"
 			 xmlns:vm="using:LabelVoice.ViewModels"
-             mc:Ignorable="d" d:DesignWidth="452" d:DesignHeight="40"
+             mc:Ignorable="d" d:DesignWidth="452" d:DesignHeight="24" Height="24"
              x:Class="LabelVoice.Views.SlicesListItem">
 	<Design.DataContext>
 		<vm:SlicesListItemViewModel/>
 	</Design.DataContext>
 
 	<Grid
-		ColumnDefinitions="48, *, Auto"
+		ColumnDefinitions="26, *, Auto"
 		HorizontalAlignment="Stretch"
 		VerticalAlignment="Center"
-		Height="34">
+		Height="24">
 		<TextBlock
 			Grid.Column="0"
 			Text="○"
 			HorizontalAlignment="Left"
 			VerticalAlignment="Center"
-			Margin="16,0,16,0"
-			Width="16"
-			Height="16"/>
+			Margin="6,0,0,0"/>
 		<!--<TextBox
 			x:Name="textBoxTitle"
 			Grid.Column="1"

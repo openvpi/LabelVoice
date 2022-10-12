@@ -17,8 +17,13 @@
 
 	<Grid Name="mainLayout" ColumnDefinitions="350,4,*">
 		<Grid
-			RowDefinitions="Auto,*,5,*"
 		    Margin="8,8,0,8">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="*" MinHeight="82"/>
+				<RowDefinition Height="4" />
+				<RowDefinition Height="*" MinHeight="34"/>
+			</Grid.RowDefinitions>
 			<Button Grid.Row="0" Name="btnGetProjectRoot" IsVisible="False"
 					Content="打开工程..." />
 			<!--Start Items Panel-->
@@ -65,7 +70,7 @@
 					</TreeView.Styles>
 					<TreeView.ItemTemplate>
 						<TreeDataTemplate ItemsSource="{Binding Subfolders}">
-							<v:ItemsTreeItem DoubleTapped="Item_DoubleTapped" />
+							<v:ItemsTreeItem DoubleTapped="Item_DoubleTapped"/>
 						</TreeDataTemplate>
 					</TreeView.ItemTemplate>
 				</TreeView>
@@ -106,6 +111,12 @@
 					Items="{Binding Slices}"
 					SelectionMode="Multiple"
 					SelectedItems="{Binding SelectedSlices, Mode=OneWayToSource}">
+					<ListBox.Styles>
+						<Style Selector="ListBoxItem">
+							<Setter Property="Height" Value="34"/>
+							<Setter Property="MinHeight" Value="34"/>
+						</Style>
+					</ListBox.Styles>
 					<ListBox.ContextFlyout>
 						<MenuFlyout>
 							<MenuItem Header="Rename..." Click="OnRenameSlice" />
