@@ -125,6 +125,7 @@ public class ProjectModel
     /// <summary>
     /// Validate language IDs in <see cref="Languages"/>.
     /// </summary>
+    /// <param name="register">Whether register all language IDs (for deserialization).</param>
     public void ValidateLanguages(bool register = false)
     {
         var i = 0;
@@ -145,6 +146,7 @@ public class ProjectModel
     /// <summary>
     /// Validate speaker IDs in <see cref="Speakers"/>.
     /// </summary>
+    /// <param name="register">Whether register all speaker IDs (for deserialization).</param>
     public void ValidateSpeakers(bool register = false)
     {
         var i = 0;
@@ -165,14 +167,18 @@ public class ProjectModel
     /// <summary>
     /// Validate IDs and names of <see cref="ItemResources"/>, remove duplicating items and redundant placeholders.
     /// </summary>
+    /// <param name="register">Whether register all resource IDs (for deserialization).</param>
     public void ValidateItemResources(bool register = false)
     {
-        // Validate keys and trim paths and names.
+        // Validate IDs, paths and names.
         foreach (var key in ItemResources.Keys)
         {
-            if (!CodeGenerator.Validate(key, 8)
-                || !VirtualPathValidator.IsValidPath(ItemResources[key].VirtualPath)
-                || (ItemResources[key] is ItemDefinition item && !VirtualPathValidator.IsValidName(item.Name)))
+            if (!CodeGenerator.Validate(key, 8)  /* invalid ID format */
+                || Speakers.All(spk => spk.Id != ItemResources[key].Speaker)  /* speaker not found */
+                || !VirtualPathValidator.IsValidPath(ItemResources[key].VirtualPath)  /* invalid path format */
+                || ItemResources[key] is ItemDefinition item  /* if this key represents an item */
+                && (!VirtualPathValidator.IsValidName(item.Name) /* invalid name format */
+                    || Languages.All(lang => lang.Id != item.Id)) /* language not found */ )
             {
                 ItemResources.Remove(key);
             }
