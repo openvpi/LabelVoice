@@ -40,6 +40,9 @@
     <PackageReference Include="XamlNameReferenceGenerator" Version="1.3.4" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\LabelVoice.Core\LabelVoice.Core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Update="Views\ItemsTreeItem.axaml.cs">
       <DependentUpon>ItemsTreeItem.axaml</DependentUpon>
     </Compile>

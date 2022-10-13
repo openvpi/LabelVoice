@@ -19,7 +19,7 @@ public class MainWindowViewModel : ViewModelBase
 
     private IList? _selectedItems;
 
-    private IList? _selectedSections;
+    private IList? _selectedSlices;
 
     private ObservableCollection<SlicesListItemViewModel>? _sections;
 
@@ -120,7 +120,7 @@ public class MainWindowViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _sections, value);
     }
 
-    public ItemsTreeItemViewModel ActiveItem
+    public ItemsTreeItemViewModel? ActiveItem
     {
         get => _activeItem;
         set => this.RaiseAndSetIfChanged(ref _activeItem, value);
@@ -134,8 +134,8 @@ public class MainWindowViewModel : ViewModelBase
 
     public IList? SelectedSlices
     {
-        get => _selectedSections;
-        set => this.RaiseAndSetIfChanged(ref _selectedSections, value);
+        get => _selectedSlices;
+        set => this.RaiseAndSetIfChanged(ref _selectedSlices, value);
     }
 
     #endregion Properties

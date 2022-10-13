@@ -1,0 +1,56 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:vm="using:LabelVoice.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="200"
+			 xmlns:v="using:LabelVoice.Views"
+             x:Class="LabelVoice.Views.ItemsPanel">
+	<Grid
+		RowDefinitions="34, 48, *"
+		VerticalAlignment="Stretch"
+		HorizontalAlignment="Stretch"
+		Background="#00000000">
+		<TextBlock
+			Text="Items"
+			Margin="16,0,0,0"
+			FontSize="16"
+			FontWeight="SemiBold"
+			VerticalAlignment="Center" />
+		<TextBox
+			x:Name="textBoxSearch"
+			Grid.Row="1"
+			Watermark="Search..."
+			VerticalAlignment="Center"
+			VerticalContentAlignment="Center"
+			Classes.clearButton="True"
+			Margin="17,9">
+		</TextBox>
+		<TreeView
+			x:Name="itemsTreeView"
+			Grid.Row="2"
+			Items="{Binding Items}"
+			SelectionMode="Multiple"
+			SelectedItems="{Binding SelectedItems, Mode=OneWayToSource}">
+			<TreeView.Styles>
+				<Style Selector="TreeViewItem">
+					<Setter Property="ContextFlyout">
+						<Setter.Value>
+							<MenuFlyout>
+								<MenuItem Header="New Folder..." Click="OnCreateNewFolder" />
+								<MenuItem Header="Rename..." Click="OnRenameItem" />
+								<MenuItem Header="Remove" />
+								<MenuItem Header="Move..." />
+							</MenuFlyout>
+						</Setter.Value>
+					</Setter>
+				</Style>
+			</TreeView.Styles>
+			<TreeView.ItemTemplate>
+				<TreeDataTemplate ItemsSource="{Binding Subfolders}">
+					<v:ItemsTreeItem DoubleTapped="Item_DoubleTapped" />
+				</TreeDataTemplate>
+			</TreeView.ItemTemplate>
+		</TreeView>
+	</Grid>
+</UserControl>

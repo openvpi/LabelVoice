@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:v="using:LabelVoice.Views"
+		xmlns:c="using:LabelVoice.Utils"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="LabelVoice.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
@@ -17,123 +18,19 @@
 
 	<Grid Name="mainLayout" ColumnDefinitions="350,4,*">
 		<Grid
-		    Margin="8,8,0,8">
-			<Grid.RowDefinitions>
-				<RowDefinition Height="Auto"/>
-				<RowDefinition Height="*" MinHeight="82"/>
-				<RowDefinition Height="4" />
-				<RowDefinition Height="*" MinHeight="34"/>
-			</Grid.RowDefinitions>
+		    Margin="8,8,0,8"
+			RowDefinitions="Auto, *, 4, *">
 			<Button Grid.Row="0" Name="btnGetProjectRoot" IsVisible="False"
 					Content="打开工程..." />
-			<!--Start Items Panel-->
-			<Grid
-				Grid.Row="1"
-				RowDefinitions="34, 48, *"
-				VerticalAlignment="Stretch"
-				HorizontalAlignment="Stretch"
-				Background="#00000000">
-				<TextBlock
-					Text="Items"
-					Margin="16,0,0,0"
-					FontSize="16"
-					FontWeight="SemiBold"
-					VerticalAlignment="Center" />
-				<TextBox
-					x:Name="textBoxSearch"
-					Grid.Row="1"
-					Watermark="Search..."
-					VerticalAlignment="Center"
-					VerticalContentAlignment="Center"
-					Classes.clearButton="True"
-					Margin="17,9">
-				</TextBox>
-				<TreeView
-					x:Name="itemsTreeView"
-					Grid.Row="2"
-					Items="{Binding Items}"
-					SelectionMode="Multiple"
-					SelectedItems="{Binding SelectedItems, Mode=OneWayToSource}">
-					<TreeView.Styles>
-						<Style Selector="TreeViewItem">
-							<Setter Property="ContextFlyout">
-								<Setter.Value>
-									<MenuFlyout>
-										<MenuItem Header="New Folder..." Click="OnCreateNewFolder" />
-										<MenuItem Header="Rename..." Click="OnRenameItem" />
-										<MenuItem Header="Remove" Click="OnRemoveItem" />
-										<MenuItem Header="Move..." Click="OnMoveItem" />
-									</MenuFlyout>
-								</Setter.Value>
-							</Setter>
-						</Style>
-					</TreeView.Styles>
-					<TreeView.ItemTemplate>
-						<TreeDataTemplate ItemsSource="{Binding Subfolders}">
-							<v:ItemsTreeItem DoubleTapped="Item_DoubleTapped"/>
-						</TreeDataTemplate>
-					</TreeView.ItemTemplate>
-				</TreeView>
-			</Grid>
-			<!--End Items Panel-->
+			<v:ItemsPanel
+				x:Name="itemsPanel"
+				Grid.Row="1" />
 			<GridSplitter
 				Grid.Row="2"
 				HorizontalAlignment="Stretch" />
-			<!--Start Slices Panel-->
-			<Grid
+			<v:SlicesPanel
 				x:Name="slicesPanel"
-				Grid.Row="3"
-				HorizontalAlignment="Stretch"
-				RowDefinitions="34, *"
-				VerticalAlignment="Stretch">
-				<StackPanel
-					Orientation="Horizontal"
-					VerticalAlignment="Center">
-					<TextBlock
-						Text="Slices"
-						Margin="16,0,0,0"
-						FontSize="16"
-						FontWeight="SemiBold"
-						VerticalAlignment="Bottom" />
-					<TextBlock
-						x:Name="textBlockActiveItemTitle"
-						Text="{Binding ActiveItem.Title, StringFormat=({0})}"
-						Margin="4,0,0,1"
-						FontSize="12"
-						FontWeight="SemiBold"
-						Opacity="0.6"
-						VerticalAlignment="Bottom" />
-				</StackPanel>
-				<ListBox
-					x:Name="slicesListBox"
-					Grid.Row="1"
-					HorizontalAlignment="Stretch"
-					Items="{Binding Slices}"
-					SelectionMode="Multiple"
-					SelectedItems="{Binding SelectedSlices, Mode=OneWayToSource}">
-					<ListBox.Styles>
-						<Style Selector="ListBoxItem">
-							<Setter Property="Height" Value="34"/>
-							<Setter Property="MinHeight" Value="34"/>
-							<Setter Property="ContextFlyout">
-								<Setter.Value>
-									<MenuFlyout>
-										<MenuItem Header="Rename..." Click="OnRenameSlice" />
-										<MenuItem Header="Remove" Click="OnRemoveSlice" />
-										<MenuItem Header="Move..." Click="OnMoveSlice" />
-									</MenuFlyout>
-								</Setter.Value>
-							</Setter>
-						</Style>
-					</ListBox.Styles>
-					<ListBox.ItemTemplate>
-						<DataTemplate>
-							<v:SlicesListItem />
-						</DataTemplate>
-					</ListBox.ItemTemplate>
-				</ListBox>
-			</Grid>
-			<!--End Slices Panel-->
+				Grid.Row="3" />
 		</Grid>
 		<GridSplitter
 			Grid.Column="1"

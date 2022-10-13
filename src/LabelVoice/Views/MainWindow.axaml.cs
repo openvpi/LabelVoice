@@ -1,9 +1,6 @@
 using Avalonia.Controls;
-using Avalonia.Input;
-using Avalonia.Interactivity;
 using Avalonia.VisualTree;
 using LabelVoice.ViewModels;
-using System.IO;
 using System.Threading.Tasks;
 
 namespace LabelVoice.Views
@@ -22,47 +19,14 @@ namespace LabelVoice.Views
         {
             DataContext = _viewModel;
             InitializeComponent();
+            itemsPanel.SetWindow(this);
+            slicesPanel.SetWindow(this);
             btnGetProjectRoot.Click += async (sender, e) => await GetProjectRoot();
-            slicesListBox.AddHandler(DragDrop.DropEvent, OnDrop);
-            itemsTreeView.SelectionChanged += ItemsTreeView_SelectionChanged;
-        }
-
-        private void ItemsTreeView_SelectionChanged(object? sender, SelectionChangedEventArgs e)
-        {
-            if (_viewModel.SelectedItems == null)
-                return;
-            if (_viewModel.SelectedItems?.Count == 0)
-                return;
-            var item = _viewModel.SelectedItems?[0] as ItemsTreeItemViewModel;
-            if (item?.Subfolders?.Count > 0)
-                return;
-            _viewModel.ActiveItem = item;
         }
 
         #endregion Constructors
 
         #region Methods
-
-        private void OnDrop(object? sender, DragEventArgs args)
-        {
-            if (!args.Data.Contains(DataFormats.FileNames))
-            {
-                return;
-            }
-            var filePaths = args.Data.GetFileNames();
-            if (filePaths == null)
-                return;
-            foreach (var file in filePaths)
-            {
-                if (string.IsNullOrEmpty(file))
-                    continue;
-                _viewModel.Slices?.Add(
-                new SlicesListItemViewModel
-                {
-                    Title = Path.GetFileNameWithoutExtension(file)
-                });
-            }
-        }
 
         private void SelectingItemsControl_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
         {
@@ -90,55 +54,9 @@ namespace LabelVoice.Views
             }
         }
 
-        public void OnRenameSlice(object sender, RoutedEventArgs e)
+        public void OnRenameItem()
         {
-            if (_viewModel.SelectedSlices == null)
-                return;
-            if (_viewModel.SelectedSlices.Count == 0)
-                return;
-            if (_viewModel.SelectedSlices[0] is not SlicesListItemViewModel slice)
-                return;
-            var dialog = new TypeInDialog(slice.Title)
-            {
-                Title = $"Rename \"{slice.Title}\"",
-                onFinish = name => RenameSlice(name, slice),
-            };
-            dialog.ShowDialog(this);
-        }
-
-        private void RenameSlice(string newName, SlicesListItemViewModel slice)
-        {
-            if (slice == null)
-                return;
-            slice.Title = newName;
-        }
-
-        public void OnRemoveSlice(object sender, RoutedEventArgs e)
-        {
-            //TODO:Remove selected slices from slices.
-        }
-
-        public void OnMoveSlice(object sender, RoutedEventArgs e)
-        {
-        }
-
-        private void Item_DoubleTapped(object? sender, RoutedEventArgs e)
-        {
-            if (sender is not ItemsTreeItem item)
-                return;
-            if (item.Parent is not TreeViewItem parent)
-                return;
-            if (parent.ItemCount == 0)
-                return;
-            if (parent.IsExpanded)
-                parent.IsExpanded = false;
-            else
-                parent.IsExpanded = true;
-        }
-
-        public void OnRenameItem(object sender, RoutedEventArgs e)
-        {
-            if (_viewModel.SelectedItems == null)
+            if (_viewModel?.SelectedItems == null)
                 return;
             if (_viewModel.SelectedItems.Count == 0)
                 return;
@@ -152,11 +70,6 @@ namespace LabelVoice.Views
             dialog.ShowDialog(this);
         }
 
-        public void OnRemoveItem(object sender, RoutedEventArgs e)
-        {
-            //TODO: Remove selected items from items.
-        }
-
         private static void RenameItem(string newName, ItemsTreeItemViewModel item)
         {
             if (item == null)
@@ -164,13 +77,9 @@ namespace LabelVoice.Views
             item.Title = newName;
         }
 
-        public void OnMoveItem(object sender, RoutedEventArgs e)
+        public void OnCreateNewFolder()
         {
-        }
-
-        public void OnCreateNewFolder(object sender, RoutedEventArgs e)
-        {
-            if (_viewModel.SelectedItems == null)
+            if (_viewModel?.SelectedItems == null)
                 return;
             if (_viewModel.SelectedItems.Count == 0)
                 return;
@@ -190,6 +99,29 @@ namespace LabelVoice.Views
             {
                 Title = name
             });
+        }
+
+        public void OnRenameSlice()
+        {
+            if (_viewModel.SelectedSlices == null)
+                return;
+            if (_viewModel.SelectedSlices.Count == 0)
+                return;
+            if (_viewModel.SelectedSlices[0] is not SlicesListItemViewModel slice)
+                return;
+            var dialog = new TypeInDialog(slice.Title)
+            {
+                Title = $"Rename \"{slice.Title}\"",
+                onFinish = name => RenameSlice(name, slice),
+            };
+            dialog.ShowDialog(this);
+        }
+
+        private static void RenameSlice(string newName, SlicesListItemViewModel slice)
+        {
+            if (slice == null)
+                return;
+            slice.Title = newName;
         }
 
         #endregion Methods
