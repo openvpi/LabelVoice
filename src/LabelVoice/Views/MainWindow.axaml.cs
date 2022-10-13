@@ -1,23 +1,26 @@
 using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
 using LabelVoice.ViewModels;
-using System;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
-using static System.Net.WebRequestMethods;
 
 namespace LabelVoice.Views
 {
     public partial class MainWindow : Window
     {
+        #region Fields
+
+        private MainWindowViewModel _viewModel = new();
+
+        #endregion Fields
+
         #region Constructors
 
         public MainWindow()
         {
+            DataContext = _viewModel;
             InitializeComponent();
             btnGetProjectRoot.Click += async (sender, e) => await GetProjectRoot();
             slicesListBox.AddHandler(DragDrop.DropEvent, OnDrop);
@@ -26,14 +29,14 @@ namespace LabelVoice.Views
 
         private void ItemsTreeView_SelectionChanged(object? sender, SelectionChangedEventArgs e)
         {
-            if (((MainWindowViewModel)DataContext!).SelectedItems == null)
+            if (_viewModel.SelectedItems == null)
                 return;
-            if (((MainWindowViewModel)DataContext!).SelectedItems?.Count == 0)
+            if (_viewModel.SelectedItems?.Count == 0)
                 return;
-            var item = ((MainWindowViewModel)DataContext!).SelectedItems?[0] as ItemsTreeItemViewModel;
+            var item = _viewModel.SelectedItems?[0] as ItemsTreeItemViewModel;
             if (item?.Subfolders?.Count > 0)
                 return;
-            ((MainWindowViewModel)DataContext!).ActiveItem = item;
+            _viewModel.ActiveItem = item;
         }
 
         #endregion Constructors
@@ -53,7 +56,7 @@ namespace LabelVoice.Views
             {
                 if (string.IsNullOrEmpty(file))
                     continue;
-                ((MainWindowViewModel)DataContext!).Slices.Add(
+                _viewModel.Slices?.Add(
                 new SlicesListItemViewModel
                 {
                     Title = Path.GetFileNameWithoutExtension(file)
@@ -83,17 +86,17 @@ namespace LabelVoice.Views
             {
                 string strFolder = result;
 
-                ((MainWindowViewModel)DataContext!).OpenProjectRoot(strFolder);
+                _viewModel.OpenProjectRoot(strFolder);
             }
         }
 
         public void OnRenameSlice(object sender, RoutedEventArgs e)
         {
-            if (((MainWindowViewModel)DataContext!).SelectedSlices == null)
+            if (_viewModel.SelectedSlices == null)
                 return;
-            if (((MainWindowViewModel)DataContext!).SelectedSlices.Count == 0)
+            if (_viewModel.SelectedSlices.Count == 0)
                 return;
-            if (((MainWindowViewModel)DataContext!).SelectedSlices[0] is not SlicesListItemViewModel slice)
+            if (_viewModel.SelectedSlices[0] is not SlicesListItemViewModel slice)
                 return;
             var dialog = new TypeInDialog(slice.Title)
             {
@@ -135,11 +138,11 @@ namespace LabelVoice.Views
 
         public void OnRenameItem(object sender, RoutedEventArgs e)
         {
-            if (((MainWindowViewModel)DataContext!).SelectedItems == null)
+            if (_viewModel.SelectedItems == null)
                 return;
-            if (((MainWindowViewModel)DataContext!).SelectedItems.Count == 0)
+            if (_viewModel.SelectedItems.Count == 0)
                 return;
-            if (((MainWindowViewModel)DataContext!).SelectedItems[0] is not ItemsTreeItemViewModel item)
+            if (_viewModel.SelectedItems[0] is not ItemsTreeItemViewModel item)
                 return;
             var dialog = new TypeInDialog(item.Title)
             {
@@ -167,11 +170,11 @@ namespace LabelVoice.Views
 
         public void OnCreateNewFolder(object sender, RoutedEventArgs e)
         {
-            if (((MainWindowViewModel)DataContext!).SelectedItems == null)
+            if (_viewModel.SelectedItems == null)
                 return;
-            if (((MainWindowViewModel)DataContext!).SelectedItems.Count == 0)
+            if (_viewModel.SelectedItems.Count == 0)
                 return;
-            if (((MainWindowViewModel)DataContext!).SelectedItems[0] is not ItemsTreeItemViewModel item)
+            if (_viewModel.SelectedItems[0] is not ItemsTreeItemViewModel item)
                 return;
             var dialog = new TypeInDialog("新建文件夹")
             {

@@ -35,41 +35,58 @@ public class MainWindowViewModel : ViewModelBase
         {
             new ItemsTreeItemViewModel
             {
-                Title = "GuangNianZhiWai",
-                Language = "CN"
-            },
-            new ItemsTreeItemViewModel
-            {
-                Title = "WoHuaiNianDe",
+                Title = "Speaker 1",
                 Subfolders = new ObservableCollection<ItemsTreeItemViewModel>
                 {
                     new ItemsTreeItemViewModel
                     {
-                        Title = "New Folder",
+                        Title = "GuangNianZhiWai",
+                        Language = "CN"
+                    },
+                    new ItemsTreeItemViewModel
+                    {
+                        Title = "WoHuaiNianDe",
                         Subfolders = new ObservableCollection<ItemsTreeItemViewModel>
                         {
                             new ItemsTreeItemViewModel
                             {
-                                Title = "Untitled",
-                                Language = "Unspecified"
+                                Title = "New Folder",
+                                Subfolders = new ObservableCollection<ItemsTreeItemViewModel>
+                                {
+                                    new ItemsTreeItemViewModel
+                                    {
+                                        Title = "Untitled",
+                                        Language = "Unspecified"
+                                    }
+                                }
                             }
                         }
+                    },
+                    new ItemsTreeItemViewModel
+                    {
+                        Title = "PaoMo"
+                    },
+                    new ItemsTreeItemViewModel
+                    {
+                        Title = "BuWeiXia"
                     }
                 }
             },
             new ItemsTreeItemViewModel
             {
-                Title = "PaoMo"
-            },
-            new ItemsTreeItemViewModel
-            {
-                Title = "BuWeiXia"
+                Title = "说话人 2",
+                Subfolders = new ObservableCollection<ItemsTreeItemViewModel>
+                {
+                    new ItemsTreeItemViewModel
+                    {
+                        Title = "穷极一生到不了的天堂"
+                    },
+                    new ItemsTreeItemViewModel
+                    {
+                        Title = "飞鸟与蝉"
+                    }
+                }
             }
-        };
-        _activeItem = new()
-        {
-            Title = "GuangNianZhiWai",
-            Language = "CN"
         };
         _sections = new()
         {

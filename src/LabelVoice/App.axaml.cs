@@ -47,10 +47,7 @@ public class App : Application
             string mainWindow = "main";
             if (mainWindow == "main")
             {
-                desktop.MainWindow = new MainWindow
-                {
-                    DataContext = new MainWindowViewModel(),
-                };
+                desktop.MainWindow = new MainWindow();
             }
             else if (mainWindow == "wav")
             {
