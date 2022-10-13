@@ -4,6 +4,9 @@ namespace LabelVoice.Core.Utils;
 
 public static class CodeGenerator
 {
+    private static readonly char[] _chars =
+        { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
+
     private static readonly HashSet<string> _registered = new();
 
     /// <summary>
@@ -59,6 +62,12 @@ public static class CodeGenerator
 
     private static string GenerateOnce(int length)
     {
-        return ((uint)new Random().Next(int.MinValue, int.MaxValue)).ToString($"x{length}");
+        var codeArr = new char[length];
+        var rand = new Random();
+        for (var i = 0; i < length; ++i)
+        {
+            codeArr[i] = _chars[rand.Next(_chars.Length)];
+        }
+        return new string(codeArr);
     }
 }
