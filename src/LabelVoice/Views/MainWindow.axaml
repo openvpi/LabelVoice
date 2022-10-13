@@ -115,15 +115,17 @@
 						<Style Selector="ListBoxItem">
 							<Setter Property="Height" Value="34"/>
 							<Setter Property="MinHeight" Value="34"/>
+							<Setter Property="ContextFlyout">
+								<Setter.Value>
+									<MenuFlyout>
+										<MenuItem Header="Rename..." Click="OnRenameSlice" />
+										<MenuItem Header="Remove" Click="OnRemoveSlice" />
+										<MenuItem Header="Move..." Click="OnMoveSlice" />
+									</MenuFlyout>
+								</Setter.Value>
+							</Setter>
 						</Style>
 					</ListBox.Styles>
-					<ListBox.ContextFlyout>
-						<MenuFlyout>
-							<MenuItem Header="Rename..." Click="OnRenameSlice" />
-							<MenuItem Header="Remove" Click="OnRemoveSlice" />
-							<MenuItem Header="Move..." Click="OnMoveSlice" />
-						</MenuFlyout>
-					</ListBox.ContextFlyout>
 					<ListBox.ItemTemplate>
 						<DataTemplate>
 							<v:SlicesListItem />
@@ -131,7 +133,7 @@
 					</ListBox.ItemTemplate>
 				</ListBox>
 			</Grid>
-			<!--End Sections Panel-->
+			<!--End Slices Panel-->
 		</Grid>
 		<GridSplitter
 			Grid.Column="1"

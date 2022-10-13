@@ -15,7 +15,7 @@ public class MainWindowViewModel : ViewModelBase
 
     private ObservableCollection<ItemsTreeItemViewModel>? _items;
 
-    private ItemsTreeItemViewModel _activeItem;
+    private ItemsTreeItemViewModel? _activeItem;
 
     private IList? _selectedItems;
 
