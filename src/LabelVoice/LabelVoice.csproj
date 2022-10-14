@@ -42,9 +42,4 @@
   <ItemGroup>
     <ProjectReference Include="..\LabelVoice.Core\LabelVoice.Core.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Update="Views\AudioPlayerWindow.axaml.cs">
-      <DependentUpon>AudioPlayerWindow.axaml</DependentUpon>
-    </Compile>
-  </ItemGroup>
 </Project>

@@ -15,7 +15,7 @@ namespace LabelVoice.Views
         public MainWindow()
         {
             InitializeComponent();
-            
+
             btnGetProjectRoot.Click += async (sender, e) => await GetProjectRoot();
         }
 
