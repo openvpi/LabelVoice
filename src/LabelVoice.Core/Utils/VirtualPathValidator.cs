@@ -4,7 +4,7 @@ namespace LabelVoice.Core.Utils;
 
 public static class VirtualPathValidator
 {
-    private static readonly Regex _startsOrEndsWithSpace = new(@"^(?!\s).*(?!\s)$");
+    private static readonly Regex _noSurroundingWhitespaces = new(@"^(?!\s).*(?!\s)$");
 
     private static readonly Regex _containsBadCharacters = new("^(?!\\s)[" + Regex.Escape(new string(Path.GetInvalidFileNameChars())) + "]");
 
@@ -14,7 +14,7 @@ public static class VirtualPathValidator
     /// </summary>
     public static bool IsValidName(string? name)
     {
-        return name != null && !_startsOrEndsWithSpace.IsMatch(name) && !_containsBadCharacters.IsMatch(name);
+        return name != null && _noSurroundingWhitespaces.IsMatch(name) && !_containsBadCharacters.IsMatch(name);
     }
 
     /// <summary>

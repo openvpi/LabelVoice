@@ -178,7 +178,7 @@ public class ProjectModel
                 || !VirtualPathValidator.IsValidPath(ItemResources[key].VirtualPath)  /* invalid path format */
                 || ItemResources[key] is ItemDefinition item  /* if this key represents an item */
                 && (!VirtualPathValidator.IsValidName(item.Name) /* invalid name format */
-                    || Languages.All(lang => lang.Id != item.Id)) /* language not found */ )
+                    || Languages.All(lang => lang.Id != item.Language)) /* language not found */ )
             {
                 ItemResources.Remove(key);
             }
