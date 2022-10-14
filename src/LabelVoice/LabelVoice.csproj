@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <!--Avalonia doesen't support TrimMode=link currently,but we are working on that https://github.com/AvaloniaUI/Avalonia/issues/6892 -->
@@ -34,6 +34,7 @@
     <PackageReference Include="Avalonia.Xaml.Interactions.DragAndDrop" Version="0.10.3" />
     <PackageReference Include="Avalonia.Xaml.Interactivity" Version="0.10.18" />
     <PackageReference Include="FluentAvaloniaUI" Version="1.4.4" />
+    <PackageReference Include="Mvvm.CommonInteractions.Avalonia" Version="1.0.58" />
     <PackageReference Include="NAudio" Version="2.1.0" />
     <PackageReference Include="ppy.SDL2-CS" Version="1.0.596-alpha" />
     <PackageReference Include="ScottPlot.Avalonia" Version="4.1.58" />
@@ -41,5 +42,13 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LabelVoice.Core\LabelVoice.Core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Views\ItemsTreeItem.axaml.cs">
+      <DependentUpon>ItemsTreeItem.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\SlicesListItem.axaml.cs">
+      <DependentUpon>SlicesListItem.axaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 </Project>

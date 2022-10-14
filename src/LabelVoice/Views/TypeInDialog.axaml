@@ -1,0 +1,15 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        x:Class="LabelVoice.Views.TypeInDialog"
+        Title="TypeInDialog" Height="120" Width="640" WindowStartupLocation="CenterOwner"
+        ExtendClientAreaToDecorationsHint="False">
+	<StackPanel
+		VerticalAlignment="Center"
+		Margin="{Binding $parent.WindowDecorationMargin}">
+		<TextBox Name="TextBox" Margin="4" Classes.clearButton="True"/>
+		<Button Name="OkButton" Content="OK" Margin="4" HorizontalAlignment="Stretch"/>
+	</StackPanel>
+</Window>
