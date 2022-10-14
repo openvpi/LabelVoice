@@ -1,0 +1,19 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:LabelVoice.Widgets.Views">
+    <Design.PreviewWith>
+        <controls:DockBar />
+    </Design.PreviewWith>
+
+    <Style Selector="controls|DockBar">
+        <!-- Set Defaults -->
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Grid>
+                    <TextBlock Text="Templated Control" />
+                </Grid>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+    
+</Styles>
