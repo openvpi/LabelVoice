@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
-using LabelVoice.Models;
 using LabelVoice.ViewModels;
 using ReactiveUI;
 
@@ -16,7 +15,7 @@ namespace LabelVoice.Views
         public MainWindow()
         {
             InitializeComponent();
-            
+
             btnGetProjectRoot.Click += async (sender, e) => await GetProjectRoot();
         }
 
@@ -29,18 +28,6 @@ namespace LabelVoice.Views
 
         private async Task GetProjectRoot()
         {
-            TextLabelModel model;
-            using (var stream = new FileStream(@"E:\OpenVPI\LabelVoice\docs\lvtext.in.yaml", FileMode.Open, FileAccess.Read))
-            using (var reader = new StreamReader(stream))
-            {
-                model = TextLabelModel.LoadFrom(reader);
-            }
-            using (var stream = new FileStream(@"E:\OpenVPI\LabelVoice\docs\lvtext.out.yaml", FileMode.Create, FileAccess.Write))
-            using (var writer = new StreamWriter(stream))
-            {
-                model.SaveTo(writer);
-            }
-            /*
             var dlg = new OpenFolderDialog();
 
             var window = this.GetVisualRoot() as Window;
@@ -56,7 +43,6 @@ namespace LabelVoice.Views
 
                 ((MainWindowViewModel)DataContext!).OpenProjectRoot(strFolder);
             }
-        */
         }
     }
 }
