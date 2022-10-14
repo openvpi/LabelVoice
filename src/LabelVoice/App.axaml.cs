@@ -46,7 +46,7 @@ public class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            string mainWindow = "player";
+            string mainWindow = "wav";
             //string mainWindow = "wav";
             //string mainWindow = "player";
             switch (mainWindow)
@@ -54,7 +54,7 @@ public class App : Application
                 case "main":
                     desktop.MainWindow = new MainWindow
                     {
-                        DataContext = new MainWindowViewModel(),
+                        DataContext = new MainWindowViewModel()
                     };
                     break;
                 case "wav":
