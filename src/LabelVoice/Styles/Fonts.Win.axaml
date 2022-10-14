@@ -15,4 +15,7 @@
     <Style Selector="ComboBox">
         <Setter Property="FontFamily" Value="{DynamicResource ui.fontfamily.win}" />
     </Style>
+	<Style Selector="MenuItem">
+		<Setter Property="FontFamily" Value="{DynamicResource ui.fontfamily.win}" />
+	</Style>
 </Styles>

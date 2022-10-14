@@ -1,0 +1,61 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="200"
+			 xmlns:vm="using:LabelVoice.ViewModels"
+			 xmlns:v="using:LabelVoice.Views"
+             x:Class="LabelVoice.Views.SlicesPanel">
+	<Grid
+		x:Name="slicesPanel"
+		HorizontalAlignment="Stretch"
+		RowDefinitions="34, *"
+		VerticalAlignment="Stretch">
+		<StackPanel
+			Orientation="Horizontal"
+			VerticalAlignment="Center">
+			<TextBlock
+				Text="Slices"
+				Margin="16,0,0,0"
+				FontSize="16"
+				FontWeight="SemiBold"
+				VerticalAlignment="Bottom" />
+			<TextBlock
+				x:Name="textBlockActiveItemTitle"
+				Text="{Binding ActiveItem.Title, StringFormat=({0})}"
+				Margin="4,0,0,1"
+				FontSize="12"
+				FontWeight="SemiBold"
+				Opacity="0.6"
+				VerticalAlignment="Bottom" />
+		</StackPanel>
+		<ListBox
+			x:Name="slicesListBox"
+			Grid.Row="1"
+			HorizontalAlignment="Stretch"
+			Items="{Binding Slices}"
+			SelectionMode="Multiple"
+			SelectedItems="{Binding SelectedSlices, Mode=OneWayToSource}">
+			<ListBox.Styles>
+				<Style Selector="ListBoxItem">
+					<Setter Property="Height" Value="34"/>
+					<Setter Property="MinHeight" Value="34"/>
+					<Setter Property="ContextFlyout">
+						<Setter.Value>
+							<MenuFlyout>
+								<MenuItem Header="Rename..." Click="OnRenameSlice" />
+								<MenuItem Header="Remove" />
+								<MenuItem Header="Move..."/>
+							</MenuFlyout>
+						</Setter.Value>
+					</Setter>
+				</Style>
+			</ListBox.Styles>
+			<ListBox.ItemTemplate>
+				<DataTemplate>
+					<v:SlicesListItem />
+				</DataTemplate>
+			</ListBox.ItemTemplate>
+		</ListBox>
+	</Grid>
+</UserControl>

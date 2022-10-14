@@ -1,0 +1,21 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:LabelVoice.Widgets.Views">
+    <Design.PreviewWith>
+        <controls:DockWidget />
+    </Design.PreviewWith>
+
+    <Style Selector="controls|DockWidget">
+        <!-- Set Defaults -->
+        <Setter Property="Template">
+            <ControlTemplate>
+                <StackPanel>
+                    <TextBlock Text="Templated Control" />
+                    
+                    <controls:DockCard Text="22222"></controls:DockCard>
+                    
+                </StackPanel>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>

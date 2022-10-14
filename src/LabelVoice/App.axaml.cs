@@ -52,10 +52,14 @@ public class App : Application
             switch (mainWindow)
             {
                 case "main":
+<<<<<<< HEAD
                     desktop.MainWindow = new MainWindow
                     {
                         DataContext = new MainWindowViewModel()
                     };
+=======
+                    desktop.MainWindow = new MainWindow();
+>>>>>>> b0d68d41aeec23c8bf82790254ffbc30ec49609e
                     break;
                 case "wav":
                     desktop.MainWindow = new WavPlotWindow();
