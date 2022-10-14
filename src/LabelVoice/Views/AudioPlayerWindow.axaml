@@ -1,0 +1,153 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:LabelVoice.ViewModels"
+        xmlns:audio="clr-namespace:LabelVoice.Core.Audio;assembly=LabelVoice.Core"
+		xmlns:app="clr-namespace:LabelVoice"
+		mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="176" Height="176"
+        x:Class="LabelVoice.Views.AudioPlayerWindow"
+        Title="AudioPlayerWindow">
+
+	<Design.DataContext>
+		<vm:AudioPlayerWindowViewModel />
+	</Design.DataContext>
+
+	<Grid x:Name="audioPlayerLayout"
+		  Margin="8"
+		  RowDefinitions="40, 40, 40, 40, *">
+		<Grid Grid.Row="0"
+			  ColumnDefinitions="128, *">
+			<Button
+                x:Name="buttonOpenAudioFile"
+                Grid.Row="0"
+                HorizontalAlignment="Left"
+				VerticalContentAlignment="Stretch"
+                Content="选择音频文件" />
+			<TextBlock
+                x:Name="textBlockAudioPath"
+                Grid.Column="1"
+                VerticalAlignment="Center"
+				HorizontalAlignment="Left"
+                Text="{Binding AudioFilePath}" />
+		</Grid>
+		<Grid Grid.Row="1"
+			  Grid.ColumnDefinitions="48, *, 48">
+			<TextBlock Name="textBlockCurrentTime"
+                Grid.Column="0"
+                Text="{Binding CurrentTimeString}"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center" />
+			<!--<ProgressBar
+                x:Name="progressBar"
+                Grid.Column="1"
+                Value="{Binding Progress}"
+                VerticalAlignment="Center" />-->
+			<Slider
+				x:Name="slider"
+                Grid.Column="1"
+				Value="{Binding Progress}"
+                VerticalAlignment="Center" />
+			<TextBlock
+                x:Name="TextBlockTotalTime"
+                Grid.Column="2"
+                Text="{Binding TotalTimeString}"
+				HorizontalAlignment="Right"
+                VerticalAlignment="Center" />
+		</Grid>
+		<Grid
+            Grid.Row="2"
+			ColumnDefinitions="*, *, *, *, *">
+			<Button
+                x:Name="ButtonPlay"
+                IsEnabled="{Binding IsReady}"
+                Grid.Column="0"
+                Content="播放"
+				HorizontalAlignment="Stretch"
+                Margin="0,0,4,0" />
+			<Button
+                x:Name="ButtonPause"
+                IsEnabled="{Binding IsReady}"
+                Grid.Column="1"
+                Content="暂停"
+				HorizontalAlignment="Stretch"
+                Margin="4,0,4,0" />
+			<Button
+                x:Name="ButtonStop"
+                IsEnabled="{Binding IsReady}"
+                Grid.Column="2"
+                Content="停止"
+				HorizontalAlignment="Stretch"
+                Margin="4,0,4,0" />
+			<Button
+                x:Name="ButtonSetProgressHalf"
+                IsEnabled="{Binding IsReady}"
+                Grid.Column="3"
+                Content="设置进度50%"
+				HorizontalAlignment="Stretch"
+                Margin="4,0,4,0" />
+			<Button
+                x:Name="ButtonPlayTestSound"
+                Grid.Column="4"
+                Content="播放测试音频"
+				HorizontalAlignment="Stretch"
+                Margin="4,0,0,0" />
+		</Grid>
+		<StackPanel
+			Grid.Row="3"
+			Orientation="Horizontal">
+			<TextBlock
+				Text="解码器："
+				VerticalAlignment="Center"
+				Width="64"/>
+			<ComboBox
+                x:Name="ComboBoxAudioDecoders"
+                MinWidth="128"
+				Margin="0,0,4,0"
+                HorizontalAlignment="Left"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+				VerticalAlignment="Center"
+                SelectedIndex="0">
+				<ComboBoxItem Content="NAudio" />
+				<ComboBoxItem Content="FFmpeg" IsVisible="{x:Static audio:FFmpegAudioDecoder.LibrariesExist}" />
+			</ComboBox>
+			<TextBlock
+				Margin="4,0,0,0"
+				Text="音频后端："
+				VerticalAlignment="Center"
+				Width="80"/>
+			<ComboBox
+                x:Name="ComboBoxAudioBackends"
+                MinWidth="128"
+				Margin="0,0,4,0"
+                HorizontalAlignment="Left"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+				VerticalAlignment="Center"
+                SelectedIndex="0">
+				<ComboBoxItem Content="SDL" />
+				<ComboBoxItem Content="NAudio" IsVisible="{x:Static app:App.IsWin}" />
+			</ComboBox>
+			<TextBlock
+				Margin="4,0,0,0"
+				Text="回放设备："
+				VerticalAlignment="Center"
+				Width="80"/>
+			<ComboBox
+                x:Name="ComboBoxAudioDevices"
+                MinWidth="140"
+                HorizontalAlignment="Left"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+				VerticalAlignment="Center"
+                SelectedIndex="0">
+				<ComboBox.ItemTemplate>
+					<DataTemplate>
+						<TextBlock Text="{Binding}" />
+					</DataTemplate>
+				</ComboBox.ItemTemplate>
+			</ComboBox>
+		</StackPanel>
+	</Grid>
+</Window>

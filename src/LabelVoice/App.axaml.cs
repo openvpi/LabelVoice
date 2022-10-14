@@ -14,6 +14,8 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using Avalonia.Markup.Xaml.Styling;
 using DynamicData;
+using LabelVoice.Core.Managers;
+using LabelVoice.Core.Audio;
 
 namespace LabelVoice;
 
@@ -23,15 +25,15 @@ public class App : Application
     private static Dictionary<string, ResourceInclude[]> _appLocaleResources;
 #pragma warning restore CS8618
     private static ResourceInclude _defaultLocaleResource => _appLocaleResources[""][0];
-    public static bool IsWin() => RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
-    public static bool IsMac() => RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
-    public static bool IsLinux() => RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
+    public static bool IsWin => RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+    public static bool IsMac => RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
+    public static bool IsLinux => RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
 
     public static string GetPlatformName()
     {
-        if (IsWin()) return "Win";
-        if (IsMac()) return "Mac";
-        if (IsLinux()) return "Linux";
+        if (IsWin) return "Win";
+        if (IsMac) return "Mac";
+        if (IsLinux) return "Linux";
         return "";
     }
     public override void Initialize()
@@ -44,18 +46,26 @@ public class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            String mainWindow = "main";
-            //String mainWindow = "wav";
-            if (mainWindow == "main")
+            string mainWindow = "player";
+            //string mainWindow = "wav";
+            //string mainWindow = "player";
+            switch (mainWindow)
             {
-                desktop.MainWindow = new MainWindow
-                {
-                    DataContext = new MainWindowViewModel(),
-                };
-            }
-            else if (mainWindow == "wav")
-            {
-                desktop.MainWindow = new WavPlotWindow();
+                case "main":
+                    desktop.MainWindow = new MainWindow
+                    {
+                        DataContext = new MainWindowViewModel(),
+                    };
+                    break;
+                case "wav":
+                    desktop.MainWindow = new WavPlotWindow();
+                    break;
+                case "player":
+                    desktop.MainWindow = new AudioPlayerWindow
+                    {
+                        DataContext = new AudioPlayerWindowViewModel()
+                    };
+                    break;
             }
         }
 
@@ -78,6 +88,9 @@ public class App : Application
                 .ToLowerInvariant())
             .ToDictionary(group => group.Key, group => group.ToArray());
         
+        // This line may be useless afterwards, since culture will be bound to some preference settings.
+        SetCulture(CultureInfo.InstalledUICulture.Name);
+
         //Only keep the font style of the current operating system.
         for (var i = 0;i<Current.Styles.Count;i++)
         {
