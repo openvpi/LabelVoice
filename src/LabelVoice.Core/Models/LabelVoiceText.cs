@@ -1,11 +1,8 @@
 ﻿using System.Collections;
-using System.Globalization;
-using System.Numerics;
 using Wintellect.PowerCollections;
 using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
-using YamlDotNet.Serialization.Converters;
 using YamlDotNet.Serialization.ObjectGraphVisitors;
 
 namespace LabelVoice.Models;
@@ -14,7 +11,7 @@ public class TextLabelModel
 {
     #region Fields
 
-    private readonly HashSet<int> _ids = new();
+    [YamlIgnore] private readonly HashSet<int> _ids = new();
 
     #endregion
 
@@ -128,7 +125,7 @@ public class TextLayer
 
 public class Boundary : IComparable<Boundary>
 {
-    private string _text = "";
+    [YamlIgnore] private string _text = "";
 
     [YamlMember(Alias = "id")] public int Id { get; set; }
 

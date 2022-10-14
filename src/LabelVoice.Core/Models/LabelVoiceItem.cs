@@ -9,6 +9,11 @@ public class ItemModel
 {
     #region Properties
 
+    /// <summary>
+    /// The local registry to hold all slice IDs belonging to this item.
+    /// </summary>
+    [XmlIgnore] public HexCodeGenerator LocalRegistry = new();
+
     [XmlIgnore] public Version Version { get; set; } = new();
 
     [XmlElement("Version")]
@@ -63,7 +68,7 @@ public class ItemModel
     public void Validate(bool register = false)
     {
         foreach (var key in Slices.Keys.Where(key => 
-                     !CodeGenerator.Validate(key, 8)
+                     !HexCodeGenerator.IsValidFormat(key, 8)
                      || Slices[key].Out <= Slices[key].In))
         {
             Slices.Remove(key);
@@ -82,7 +87,7 @@ public class ItemModel
 
         foreach (var key in Slices.Keys)
         {
-            CodeGenerator.Register(key);
+            LocalRegistry.Register(key);
         }
     }
 

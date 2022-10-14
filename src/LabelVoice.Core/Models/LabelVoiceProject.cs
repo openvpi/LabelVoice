@@ -132,7 +132,7 @@ public class ProjectModel
         while (i < Languages.Count)
         {
             var language = Languages[i];
-            if (!CodeGenerator.Validate(language.Id, 4) || register && !CodeGenerator.Register(language.Id))
+            if (!HexCodeGenerator.IsValidFormat(language.Id, 4) || register && !HexCodeGenerator.GlobalRegistry.Register(language.Id))
             {
                 Languages.RemoveAt(i);
             }
@@ -153,7 +153,7 @@ public class ProjectModel
         while (i < Speakers.Count)
         {
             var speaker = Speakers[i];
-            if (!CodeGenerator.Validate(speaker.Id, 4) || register && !CodeGenerator.Register(speaker.Id))
+            if (!HexCodeGenerator.IsValidFormat(speaker.Id, 4) || register && !HexCodeGenerator.GlobalRegistry.Register(speaker.Id))
             {
                 Speakers.RemoveAt(i);
             }
@@ -173,7 +173,7 @@ public class ProjectModel
         // Validate IDs, paths and names.
         foreach (var key in ItemResources.Keys)
         {
-            if (!CodeGenerator.Validate(key, 8)  /* invalid ID format */
+            if (!HexCodeGenerator.IsValidFormat(key, 8)  /* invalid ID format */
                 || Speakers.All(spk => spk.Id != ItemResources[key].Speaker)  /* speaker not found */
                 || !VirtualPathValidator.IsValidPath(ItemResources[key].VirtualPath)  /* invalid path format */
                 || ItemResources[key] is ItemDefinition item  /* if this key represents an item */
@@ -214,7 +214,7 @@ public class ProjectModel
         // Register all remaining IDs.
         foreach (var key in ItemResources.Keys)
         {
-            CodeGenerator.Register(key);
+            HexCodeGenerator.GlobalRegistry.Register(key);
         }
     }
 
