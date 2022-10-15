@@ -103,7 +103,7 @@ public class SliceDefinition : IComparable<SliceDefinition>
 
     [XmlAttribute("Out")] public double Out;
 
-    [XmlAttribute("Language")] public string Language;
+    [XmlAttribute("Language")] public string? Language;
 
     public int CompareTo(SliceDefinition? other)
     {
