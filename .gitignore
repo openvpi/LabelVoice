@@ -444,6 +444,9 @@ $RECYCLE.BIN/
 .idea/
 *.sln.iml
 
+# JetBrains Fleet
+.fleet/
+
 ##
 ## Visual Studio Code
 ##
