@@ -7,12 +7,22 @@
 		x:Class="LabelVoice.Views.WavPlotWindow"
 		Title="WavPlot">
 
-	<Grid Name="layout" RowDefinitions="Auto,1*,1*" ColumnDefinitions="120,1*,120,120">
+	<Grid Name="layout" RowDefinitions="Auto,1*,1*" ColumnDefinitions="auto,1*,auto,auto,auto,auto">
 		<Button Name="btnGetWavHeader"
 					Content="Select WAV"
 					Grid.Column="0"/>
-		<ScottPlot:AvaPlot Name="wavPlot" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="4"/>
-		<ScottPlot:AvaPlot Name="specPlot" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4"/>
+		<Button Name="btnSwitchColor"
+					Content="Switch color"
+					Grid.Column="2"/>
+		<TextBlock Text="{Binding UserColor}"
+				    Grid.Column="3"/>
+		<Button Name="btnSwitchMaxFreq"
+					Content="Change freq range"
+					Grid.Column="4"/>
+		<TextBlock Text="{Binding NowMaxFreq}"
+					Grid.Column="5"/>
+		<ScottPlot:AvaPlot Name="wavPlot" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="100"/>
+		<ScottPlot:AvaPlot Name="specPlot" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="100"/>
 	</Grid>
 
 </Window>
