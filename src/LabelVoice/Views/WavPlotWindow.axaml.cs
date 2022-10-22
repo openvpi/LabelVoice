@@ -20,6 +20,10 @@ using FftSharp;
 using YamlDotNet.Core.Tokens;
 using FluentAvalonia.Core;
 using Avalonia.Input;
+using Avalonia.Rendering;
+using Avalonia.Threading;
+using Avalonia.Logging;
+using System.Threading;
 
 namespace LabelVoice.Views;
 
@@ -89,12 +93,14 @@ public partial class WavPlotWindow : Window
     #endregion
 
     private WavPlotWindowViewModel _viewModel;
+
+    private CancellationTokenSource? _cancellationTokenSource;
     public WavPlotWindow()
     {
         InitializeComponent();
         DataContext = _viewModel = new WavPlotWindowViewModel(wavPlot, specPlot);
 
-        btnGetWavHeader.Click += async (sender, e) => await GetWavHeader();
+        btnSelectAndPlotWav.Click += (sender, e) => OpenWav();
         btnSwitchColor.Click += async (sender, e) => await SwitchColor();
         btnSwitchMaxFreq.Click += async (sender, e) => await SwitchMaxFreq();
 
@@ -151,37 +157,67 @@ public partial class WavPlotWindow : Window
 
         // disable this briefly to avoid infinite loop
         ap.Configuration.AxesChangedEventEnabled = false;
-        ap.Plot.SetAxisLimits(newAxisLimits);
+        ap.Plot.SetAxisLimitsX(newAxisLimits.XMin, newAxisLimits.XMax);
         ap.Refresh();
         ap.Configuration.AxesChangedEventEnabled = true;
     }
 
-    private async Task GetWavHeader()
+    private async void OpenWav()
+    {
+        try
+        {
+            var selectedWav = await GetWavHeader();
+            if (selectedWav != null)
+            {
+                _cancellationTokenSource?.Cancel();
+                _cancellationTokenSource = new CancellationTokenSource();
+
+                var _renderTimer = new DispatcherTimer
+                {
+                    Interval = TimeSpan.FromMilliseconds(30)
+                };
+                _renderTimer.Tick += (object? sender, EventArgs e) => wavPlot.Refresh();
+                _renderTimer.Start();
+
+                await Task.Run(() => _viewModel.ReadWavWhileProcess(selectedWav, _cancellationTokenSource.Token));
+
+                _renderTimer?.Stop();
+                wavPlot.Refresh();
+
+                // _viewModel.PlotNewWav(); // wav plot is loaded while reading wav
+                if (!_cancellationTokenSource.IsCancellationRequested)
+                {
+                    _viewModel.PlotNewSpec();
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+    }
+
+    private async Task<string?> GetWavHeader()
     {
         var dlg = new OpenFileDialog();
         dlg.Filters!.Add(new FileDialogFilter() { Name = "WAV Files", Extensions = { "wav" } }); // disallow any other formats
         dlg.AllowMultiple = false; // TODO: support multiple files (or folder) importing
 
         var window = this.GetVisualRoot() as Window;
-        if (window is null) { return; }
+        if (window is null) { return null; }
 
-        var selectedWav = await dlg.ShowAsync(window);
-        if (selectedWav != null)
-        {
-            await Task.Run(() => _viewModel.ReadWavWhileProcess(selectedWav[0]));
-            _viewModel.PlotNewWav();
-            _viewModel.PlotNewSpec();
-        }
+        var selectedWavs = await dlg.ShowAsync(window);
+        return selectedWavs?[0];
     }
 
     private async Task SwitchColor()
     {
         if (_viewModel.WavImg != null)
         {
-            #region pretending: await user choose color
+#region pretending: await user choose color
             var colors = defaultIntensityColor;
             _viewModel.UserColor = colors[(colors.IndexOf(_viewModel.UserColor) + 1) % colors.Length];
-            #endregion
+#endregion
 
             _viewModel.WavImg.Color = _viewModel.UserColor;
             wavPlot?.Refresh();
@@ -192,11 +228,12 @@ public partial class WavPlotWindow : Window
     {
         if (_viewModel.SpecImg != null)
         {
-            #region pretending: await user choose max freq
+#region pretending: await user choose max freq
             _viewModel.NowMaxFreq = DefaultMaxFreq / ((DefaultMaxFreq / _viewModel.NowMaxFreq) % 7 + 1);
-            #endregion
+#endregion
             
             _viewModel.ChangeLockedYAxisLimit(specPlot, min: _viewModel.NowMinFreq, max: _viewModel.NowMaxFreq);
+            specPlot.Refresh();
         }
     }
 }

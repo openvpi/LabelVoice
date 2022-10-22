@@ -8,7 +8,7 @@
 		Title="WavPlot">
 
 	<Grid Name="layout" RowDefinitions="Auto,1*,1*" ColumnDefinitions="auto,1*,auto,auto,auto,auto">
-		<Button Name="btnGetWavHeader"
+		<Button Name="btnSelectAndPlotWav"
 					Content="Select WAV"
 					Grid.Column="0"/>
 		<Button Name="btnSwitchColor"
