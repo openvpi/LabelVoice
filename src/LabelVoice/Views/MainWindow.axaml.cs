@@ -29,7 +29,7 @@ namespace LabelVoice.Views
             itemsPanel.SetWindow(this);
             slicesPanel.SetWindow(this);
             btnGetProjectRoot.Click += async (sender, e) => await GetProjectRoot();
-            _viewModel.LoadProject(@"D:\≤‚ ‘\≤‚ ‘π§≥Ã.lvproj");
+            //_viewModel.LoadProject(@"D:\≤‚ ‘\≤‚ ‘π§≥Ã.lvproj");
         }
 
         #endregion Constructors
