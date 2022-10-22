@@ -21,8 +21,12 @@
 					Grid.Column="4"/>
 		<TextBlock Text="{Binding NowMaxFreq}"
 					Grid.Column="5"/>
-		<ScottPlot:AvaPlot Name="wavPlot" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="100"/>
-		<ScottPlot:AvaPlot Name="specPlot" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="100"/>
+		<ScottPlot:AvaPlot Name="wavPlot" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="100"
+						   PointerWheelChanged="MonitorZoomLimit"
+						   AxesChanged="AxesChanged"/>
+		<ScottPlot:AvaPlot Name="specPlot" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="100"
+						   PointerWheelChanged="MonitorZoomLimit"
+						   AxesChanged="AxesChanged"/>
 	</Grid>
 
 </Window>

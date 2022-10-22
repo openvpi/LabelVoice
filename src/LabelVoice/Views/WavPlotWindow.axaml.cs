@@ -19,6 +19,7 @@ using Window = Avalonia.Controls.Window;
 using FftSharp;
 using YamlDotNet.Core.Tokens;
 using FluentAvalonia.Core;
+using Avalonia.Input;
 
 namespace LabelVoice.Views;
 
@@ -95,7 +96,7 @@ public partial class WavPlotWindow : Window
 
         btnGetWavHeader.Click += async (sender, e) => await GetWavHeader();
         btnSwitchColor.Click += async (sender, e) => await SwitchColor();
-        btnSwitchMaxFreq.Click += (sender, e) => SwitchMaxFreq();
+        btnSwitchMaxFreq.Click += async (sender, e) => await SwitchMaxFreq();
 
         Setup(wavPlot, specPlot);
     }
@@ -130,6 +131,29 @@ public partial class WavPlotWindow : Window
      
         plt.XAxis.TickLabelFormat(timeSec => new TimeSpan(ticks: (long)(timeSec * 10000000)).ToString(@"mm\:ss\.ff"));
         // plt.XAxis.TickLabelFormat(timeSec => new TimeSpan(0, 0, (int)timeSec).ToString(@"mm\:ss"));
+    }
+
+    private void MonitorZoomLimit(object sender, PointerWheelEventArgs e) 
+    {
+        var changedPlot = (AvaPlot)sender;
+        if (changedPlot.Plot.GetAxisLimits().XSpan < 5)
+        {
+            changedPlot.Configuration.ScrollWheelZoom = !(e.Delta.Y > 0);
+        }
+    }
+
+    private void AxesChanged(object sender, EventArgs e)
+    {
+        AvaPlot changedPlot = (AvaPlot)sender;
+        var newAxisLimits = changedPlot.Plot.GetAxisLimits();
+
+        var ap = (changedPlot == wavPlot) ? specPlot : wavPlot;
+
+        // disable this briefly to avoid infinite loop
+        ap.Configuration.AxesChangedEventEnabled = false;
+        ap.Plot.SetAxisLimits(newAxisLimits);
+        ap.Refresh();
+        ap.Configuration.AxesChangedEventEnabled = true;
     }
 
     private async Task GetWavHeader()
