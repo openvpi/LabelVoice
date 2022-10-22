@@ -8,7 +8,7 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="LabelVoice.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
-        Title="LabelVoice"
+        Title="{Binding ProjectFileName, StringFormat={}{0} - LabelVoice}"
         DragDrop.AllowDrop="True"
         xmlns:f="using:FluentAvalonia.UI.Controls">
 
@@ -22,6 +22,22 @@
 			RowDefinitions="Auto, *, 4, *">
 			<Button Grid.Row="0" Name="btnGetProjectRoot" IsVisible="False"
 					Content="打开工程..." />
+			<StackPanel
+				Grid.Row="0"
+				Orientation="Horizontal">
+				<Button
+					Content="新建"
+					Margin="4,0,4,0"
+					Click="OnNewProject"/>
+				<Button
+					Content="打开..."
+					Margin="4,0,4,0"
+					Click="OnOpenProject"/>
+				<Button
+					Content="保存"
+					Margin="4,0,0,0"
+					Click="OnSaveProject"/>
+			</StackPanel>
 			<v:ItemsPanel
 				x:Name="itemsPanel"
 				Grid.Row="1" />

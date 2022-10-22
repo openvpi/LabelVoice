@@ -1,17 +1,25 @@
 using Avalonia;
 using Avalonia.Controls;
+using DynamicData;
+using LabelVoice.Core.Managers;
+using LabelVoice.Models;
+using LabelVoice.Utils;
 using ReactiveUI;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 
 namespace LabelVoice.ViewModels;
 
 public class MainWindowViewModel : ViewModelBase
 {
     #region Fields
+
+    private string _projectFileName = "新工程";
 
     private ObservableCollection<ItemsTreeItemViewModel>? _items;
 
@@ -25,12 +33,16 @@ public class MainWindowViewModel : ViewModelBase
 
     private string? _strFolder;
 
+    private string? _currentProjectFolder;
+
     #endregion Fields
 
     #region Constructors
 
-    public MainWindowViewModel()
+    public MainWindowViewModel(bool isLoadSampleData)
     {
+        if (!isLoadSampleData)
+            return;
         _items = new()
         {
             new ItemsTreeItemViewModel
@@ -96,11 +108,21 @@ public class MainWindowViewModel : ViewModelBase
         };
     }
 
+    public MainWindowViewModel()
+    {
+    }
+
     #endregion Constructors
 
     #region Properties
 
     public string Greeting => Application.Current!.FindResource("mainwindow.greeting")?.ToString() ?? string.Empty;
+
+    public string ProjectFileName
+    {
+        get => _projectFileName;
+        set => this.RaiseAndSetIfChanged(ref _projectFileName, value);
+    }
 
     public string? strFolder
     {
@@ -137,6 +159,24 @@ public class MainWindowViewModel : ViewModelBase
         get => _selectedSlices;
         set => this.RaiseAndSetIfChanged(ref _selectedSlices, value);
     }
+
+    public string? CurrentProjectFolder
+    {
+        get => _currentProjectFolder;
+        set => _currentProjectFolder = value;
+    }
+
+    //public bool CanNewFolder
+    //{
+    //    get
+    //    {
+    //        if (SelectedItems == null || SelectedItems.Count == 0 ||SelectedItems[0] is not ItemsTreeItemViewModel item)
+    //            return false;
+    //        if (item.ItemType == TreeItemType.Item)
+    //            return false;
+    //        return true;
+    //    }
+    //}
 
     #endregion Properties
 
@@ -177,6 +217,38 @@ public class MainWindowViewModel : ViewModelBase
 
         return subfolders;
     }
+
+    
+
+    public class GroupedItems
+    {
+        public string? SpeakerId { get; set; }
+        public List<ItemResource>? Items { get; set; }
+    }
+
+    public void NewProject()
+    {
+        ProjectManager.Instance.NewProject();
+        ProjectFileName = "新工程";
+        Items = new();
+    }
+
+    public void LoadProject(string path)
+    {
+        ProjectManager.Instance.LoadProject(path);
+        ProjectFileName = Path.GetFileNameWithoutExtension(path);
+        Items = ProjectUtils.LoadTreeItemsFrom(ProjectManager.Instance.Project);
+    }
+
+    public void SaveProject()
+    {
+        var path = ProjectManager.Instance.ProjectFilePath;
+        ProjectUtils.SaveTreeItemsTo(Items, ProjectManager.Instance.Project);
+        if (path != null)
+            ProjectManager.Instance.SaveProject(path);
+    }
+
+    public void SaveProject(string path) => ProjectManager.Instance.SaveProject(path);
 
     //public class Node
     //{

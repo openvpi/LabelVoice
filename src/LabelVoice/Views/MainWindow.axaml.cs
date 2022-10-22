@@ -1,6 +1,11 @@
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 using Avalonia.VisualTree;
+using LabelVoice.Core.Managers;
+using LabelVoice.Core.Utils;
 using LabelVoice.ViewModels;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace LabelVoice.Views
@@ -10,6 +15,8 @@ namespace LabelVoice.Views
         #region Fields
 
         private MainWindowViewModel _viewModel = new();
+
+        private HexCodeGenerator _hexCodeGenerator = new();
 
         #endregion Fields
 
@@ -22,11 +29,58 @@ namespace LabelVoice.Views
             itemsPanel.SetWindow(this);
             slicesPanel.SetWindow(this);
             btnGetProjectRoot.Click += async (sender, e) => await GetProjectRoot();
+            _viewModel.LoadProject(@"D:\测试\测试工程.lvproj");
         }
 
         #endregion Constructors
 
         #region Methods
+
+        public void OnNewProject(object? sender, RoutedEventArgs e) => _viewModel.NewProject();
+
+        public async void OnOpenProject(object? sender, RoutedEventArgs e) => await OpenFile();
+
+        private async Task OpenFile()
+        {
+            List<string> formats = new()
+            {
+                "lvproj"
+            };
+            FileDialogFilter filter = new()
+            {
+                Extensions = formats
+            };
+            List<FileDialogFilter> filters = new()
+            {
+                filter
+            };
+            OpenFileDialog dialog = new()
+            {
+                AllowMultiple = false,
+                Filters = filters
+            };
+            if (this.GetVisualRoot() is not Window window)
+            {
+                return;
+            }
+            var result = await dialog.ShowAsync(window);
+            if (result != null)
+            {
+                string strFolder = result.First();
+                _viewModel.LoadProject(strFolder);
+            }
+        }
+
+        public void OnSaveProject(object? sender, RoutedEventArgs e)
+        {
+            _viewModel.SaveProject();
+            //if (!string.IsNullOrEmpty(ProjectManager.Instance.ProjectFilePath))
+            //    _viewModel.SaveProject();
+            //else
+            //{
+            //    //TODO: Select a path to save.
+            //}
+        }
 
         private void SelectingItemsControl_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
         {
@@ -85,6 +139,8 @@ namespace LabelVoice.Views
                 return;
             if (_viewModel.SelectedItems[0] is not ItemsTreeItemViewModel item)
                 return;
+            if (item.ItemType == TreeItemType.Item)
+                return;
             var dialog = new TypeInDialog("新建文件夹")
             {
                 Title = $"为新文件夹命名",
@@ -93,11 +149,13 @@ namespace LabelVoice.Views
             dialog.ShowDialog(this);
         }
 
-        private static void CreateNewFolder(string name, ItemsTreeItemViewModel item)
+        private void CreateNewFolder(string name, ItemsTreeItemViewModel item)
         {
             item.Subfolders?.Add(new ItemsTreeItemViewModel
             {
-                Title = name
+                ItemType = TreeItemType.Folder,
+                Title = name,
+                Speaker = item.Speaker//文件夹的说话人继承自上一级
             });
         }
 

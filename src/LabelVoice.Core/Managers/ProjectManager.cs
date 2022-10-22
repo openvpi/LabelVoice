@@ -5,31 +5,35 @@ namespace LabelVoice.Core.Managers
 {
     public class ProjectManager : SingletonBase<ProjectManager>
     {
-        #region Constructor
-
-        private ProjectManager()
-        {
-            Project = new ProjectModel();
-        }
-
-        #endregion Constructor
 
         #region Properties
 
-        public ProjectModel Project { get; private set; }
+        public ProjectModel Project { get; private set; } = new ProjectModel();
+
+        public string? ProjectFilePath { get; set; }
 
         #endregion Properties
 
         #region Methods
 
-        public void Load(string filePath)
+        public void NewProject()
         {
-            // Deserialize the XML document.
+            Project = new ProjectModel();
         }
 
-        public void Save(string filePath)
+        public void LoadProject(string filePath)
         {
-            // Serialize this project and save it to filePath.
+            HexCodeGenerator.GlobalRegistry.Reset();
+            using TextReader reader = File.OpenText(filePath);
+            var project = ProjectModel.LoadFrom(reader);
+            Project = project;
+            ProjectFilePath = filePath;
+        }
+
+        public void SaveProject(string filePath)
+        {
+            using TextWriter writer = File.CreateText(filePath);
+            Project.SaveTo(writer);
         }
 
         #endregion Methods
