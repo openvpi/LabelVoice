@@ -67,9 +67,9 @@ public class HexCodeGenerator
     /// <returns>A new code which has never been registered before.</returns>
     public string Generate(int length)
     {
-        var maxAttempts = 1 << (length * 4 - (length > 2 ? 1 : 0));
+        var maxAttempts = Math.Min(uint.MaxValue, (uint) (1 << (length * 4 - (length > 2 ? 1 : 0))));
 
-        for (var attempt = 0; attempt < maxAttempts; ++attempt)
+        for (uint attempt = 0; attempt < maxAttempts; ++attempt)
         {
             var code = GenerateOnce(length);
             if (_registered.Add(code))
