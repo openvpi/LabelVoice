@@ -70,8 +70,8 @@ namespace LabelVoice.Utils
 
         private static void FindAndCreateFolder(ItemResource itemResource, ItemsTreeItemViewModel parentNode)
         {
-            var visualPath = itemResource.VirtualPath;
-            var subfolders = visualPath.Split('/');//先对路径进行分割成层
+            var virtualPath = itemResource.VirtualPath;
+            var subfolders = virtualPath.Split('/');//先对路径进行分割成层
             var currentFolder = subfolders.First();//当前层级
             var currentNode = parentNode;//当前节点。从父结点开始。
                                          //不断往深层查找
@@ -89,7 +89,7 @@ namespace LabelVoice.Utils
                     treeItem.Title = definition.Name;
                     treeItem.Language = definition.Language;
                     //对于 ItemDefinition，如果 VirtualPath 为空，说明它在根节点，直接添加
-                    if (string.IsNullOrEmpty(visualPath))
+                    if (string.IsNullOrEmpty(virtualPath))
                         parentNode.Subfolders?.Add(treeItem);
                     else//如果不是空的，说明装在文件夹内，往深层查找
                     {
@@ -124,7 +124,7 @@ namespace LabelVoice.Utils
                     }
                     break;
                 case Placeholder placeholder:
-                    if (string.IsNullOrEmpty(visualPath))
+                    if (string.IsNullOrEmpty(virtualPath))
                         break;//如果 VirtualPath 为空，直接忽略
                     treeItem.ItemType = TreeItemType.Folder;//占位符作为文件夹显示
                     treeItem.Title = subfolders.Last();
