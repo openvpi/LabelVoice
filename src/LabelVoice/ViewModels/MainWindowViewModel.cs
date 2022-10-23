@@ -27,7 +27,11 @@ public class MainWindowViewModel : ViewModelBase
 
     private IList? _selectedSlices;
 
-    private ObservableCollection<SlicesListItemViewModel>? _sections;
+    private IList? _selectedSpeakers;
+
+    private ObservableCollection<SlicesListItemViewModel>? _slices;
+
+    private ObservableCollection<SpeakersListItemViewModel>? _speakers;
 
     private string? _strFolder;
 
@@ -98,11 +102,16 @@ public class MainWindowViewModel : ViewModelBase
                 }
             }
         };
-        _sections = new()
+        _slices = new()
         {
             new SlicesListItemViewModel("GanShouTingZaiWoFaDuanDeZhiJian", "CN"),
             new SlicesListItemViewModel("RuHeShunJianDongJieShiJian", "CN"),
             new SlicesListItemViewModel("Untitled-3", "Unspecified"),
+        };
+        _speakers = new()
+        {
+            new SpeakersListItemViewModel("Speaker 01"),
+            new SpeakersListItemViewModel("Àµª∞»À 02")
         };
     }
 
@@ -136,8 +145,14 @@ public class MainWindowViewModel : ViewModelBase
 
     public ObservableCollection<SlicesListItemViewModel>? Slices
     {
-        get => _sections;
-        set => this.RaiseAndSetIfChanged(ref _sections, value);
+        get => _slices;
+        set => this.RaiseAndSetIfChanged(ref _slices, value);
+    }
+
+    public ObservableCollection<SpeakersListItemViewModel>? Speakers
+    {
+        get => _speakers;
+        set => this.RaiseAndSetIfChanged(ref _speakers, value);
     }
 
     public ItemsTreeItemViewModel? ActiveItem
@@ -156,6 +171,11 @@ public class MainWindowViewModel : ViewModelBase
     {
         get => _selectedSlices;
         set => this.RaiseAndSetIfChanged(ref _selectedSlices, value);
+    }
+    public IList? SelectedSpeakers
+    {
+        get => _selectedSpeakers;
+        set => this.RaiseAndSetIfChanged(ref _selectedSpeakers, value);
     }
 
     public string? CurrentProjectFolder

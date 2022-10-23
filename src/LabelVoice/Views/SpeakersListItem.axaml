@@ -1,0 +1,29 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:vm="using:LabelVoice.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="452" d:DesignHeight="24" Height="24"
+             x:Class="LabelVoice.Views.SpeakersListItem">
+	<Design.DataContext>
+		<vm:SpeakersListItemViewModel/>
+	</Design.DataContext>
+
+	<Grid
+		ColumnDefinitions="26, *, Auto"
+		HorizontalAlignment="Stretch"
+		VerticalAlignment="Center"
+		Height="24">
+		<TextBlock
+			Grid.Column="0"
+			Text="○"
+			HorizontalAlignment="Left"
+			VerticalAlignment="Center"
+			Margin="6,0,0,0"/>
+		<TextBlock
+			Grid.Column="1"
+			Text="{Binding Name}"
+			VerticalAlignment="Center"
+			FontSize="14" />
+	</Grid>
+</UserControl>

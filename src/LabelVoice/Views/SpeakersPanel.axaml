@@ -1,0 +1,58 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="200"
+			 xmlns:vm="using:LabelVoice.ViewModels"
+			 xmlns:v="using:LabelVoice.Views"
+             x:Class="LabelVoice.Views.SpeakersPanel">
+	<Grid
+		Name="speakersPanel"
+		HorizontalAlignment="Stretch"
+		RowDefinitions="34, *"
+		VerticalAlignment="Stretch">
+		<Grid
+			VerticalAlignment="Stretch"
+			HorizontalAlignment="Stretch"
+			ColumnDefinitions="*,*">
+			<TextBlock
+				Text="Speakers"
+				Margin="16,0,0,0"
+				FontSize="16"
+				FontWeight="SemiBold"
+				VerticalAlignment="Center" />
+			<Button
+				Grid.Column="1"
+				Content="New..."
+				HorizontalAlignment="Right"
+				Margin="0,0,16,0"/>
+		</Grid>
+		<ListBox
+			Name="speakersListBox"
+			Grid.Row="1"
+			HorizontalAlignment="Stretch"
+			Items="{Binding Speakers}"
+			SelectionMode="Multiple"
+			SelectedItems="{Binding SelectedSpeakers, Mode=OneWayToSource}">
+			<ListBox.Styles>
+				<Style Selector="ListBoxItem">
+					<Setter Property="Height" Value="34"/>
+					<Setter Property="MinHeight" Value="34"/>
+					<Setter Property="ContextFlyout">
+						<Setter.Value>
+							<MenuFlyout>
+								<MenuItem Header="Rename..." />
+								<MenuItem Header="Remove" />
+							</MenuFlyout>
+						</Setter.Value>
+					</Setter>
+				</Style>
+			</ListBox.Styles>
+			<ListBox.ItemTemplate>
+				<DataTemplate>
+					<v:SpeakersListItem />
+				</DataTemplate>
+			</ListBox.ItemTemplate>
+		</ListBox>
+	</Grid>
+</UserControl>
