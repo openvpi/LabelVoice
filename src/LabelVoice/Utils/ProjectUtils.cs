@@ -1,7 +1,5 @@
 ﻿using AvaloniaEdit.Utils;
 using DynamicData;
-using FluentAvalonia.Core;
-using LabelVoice.Core.Managers;
 using LabelVoice.Core.Utils;
 using LabelVoice.Models;
 using LabelVoice.ViewModels;
@@ -15,6 +13,7 @@ namespace LabelVoice.Utils
     public static class ProjectUtils
     {
         private static HexCodeGenerator _hexCodeGenerator = new();
+
         /// <summary>
         /// 从 ProjectModel 中读取 Items，将它们按说话人分组，并转换成树形结构。
         /// </summary>
@@ -69,7 +68,7 @@ namespace LabelVoice.Utils
         /// </summary>
         /// <param name="resources"></param>
         /// <param name="speakerNode"></param>
-        private static void ListToTreeViewModel(List<ItemResource> resources,ItemsTreeItemViewModel speakerNode)
+        private static void ListToTreeViewModel(List<ItemResource> resources, ItemsTreeItemViewModel speakerNode)
         {
             //ObservableCollection<ItemsTreeItemViewModel> subfolders = new();
             foreach (var itemResource in resources)
@@ -136,6 +135,7 @@ namespace LabelVoice.Utils
                         currentNode.Subfolders?.Add(treeItem);
                     }
                     break;
+
                 case Placeholder placeholder:
                     if (string.IsNullOrEmpty(virtualPath))
                         break;//如果 VirtualPath 为空，直接忽略
@@ -236,6 +236,7 @@ namespace LabelVoice.Utils
                             virtualPathLayer.Remove(virtualPathLayer.Last());
                         }
                         break;
+
                     case TreeItemType.Item://对于普通项目直接添加
                         resultList.Add(item.Id, new ItemDefinition
                         {

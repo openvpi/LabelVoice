@@ -1,6 +1,5 @@
 using Avalonia;
 using Avalonia.Controls;
-using DynamicData;
 using LabelVoice.Core.Managers;
 using LabelVoice.Models;
 using LabelVoice.Utils;
@@ -11,7 +10,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 
 namespace LabelVoice.ViewModels;
 
@@ -218,8 +216,6 @@ public class MainWindowViewModel : ViewModelBase
         return subfolders;
     }
 
-    
-
     public class GroupedItems
     {
         public string? SpeakerId { get; set; }
@@ -240,15 +236,15 @@ public class MainWindowViewModel : ViewModelBase
         Items = ProjectUtils.LoadTreeItemsFrom(ProjectManager.Instance.Project);
     }
 
-    public void SaveProject()
+    public void SaveProject(string? path = null)
     {
-        var path = ProjectManager.Instance.ProjectFilePath;
         ProjectUtils.SaveTreeItemsTo(Items, ProjectManager.Instance.Project);
         if (path != null)
             ProjectManager.Instance.SaveProject(path);
+        else
+            ProjectManager.Instance.SaveProject(ProjectManager.Instance.ProjectFilePath);
+        ProjectFileName = Path.GetFileNameWithoutExtension(ProjectManager.Instance.ProjectFilePath);
     }
-
-    public void SaveProject(string path) => ProjectManager.Instance.SaveProject(path);
 
     //public class Node
     //{
