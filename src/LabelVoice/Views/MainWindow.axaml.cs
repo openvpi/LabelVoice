@@ -1,6 +1,7 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
+using LabelVoice.Core.Managers;
 using LabelVoice.Core.Utils;
 using LabelVoice.ViewModels;
 using System.Collections.Generic;
@@ -37,9 +38,9 @@ namespace LabelVoice.Views
 
         public void OnNewProject(object? sender, RoutedEventArgs e) => _viewModel.NewProject();
 
-        public void OnOpenProject(object? sender, RoutedEventArgs e) => OpenFile();
+        public void OnOpenProject(object? sender, RoutedEventArgs e) => OpenFileAsync();
 
-        private async void OpenFile()
+        private async void OpenFileAsync()
         {
             List<FileDialogFilter> filters = new()
             {
@@ -68,13 +69,40 @@ namespace LabelVoice.Views
 
         public void OnSaveProject(object? sender, RoutedEventArgs e)
         {
-            _viewModel.SaveProject();
-            //if (!string.IsNullOrEmpty(ProjectManager.Instance.ProjectFilePath))
-            //    _viewModel.SaveProject();
-            //else
-            //{
-            //    //TODO: Select a path to save.
-            //}
+            if (!string.IsNullOrEmpty(ProjectManager.Instance.ProjectFilePath))
+                _viewModel.SaveProject();
+            else
+            {
+                SaveAsAsync();
+            }
+        }
+
+        public void OnSaveProjectAs(object sender, RoutedEventArgs args) => SaveAsAsync();
+
+        private async void SaveAsAsync()
+        {
+            SaveFileDialog dialog = new()
+            {
+                DefaultExtension = "lvproj",
+                Filters = new List<FileDialogFilter>()
+                {
+                    new FileDialogFilter()
+                    {
+                        Name = "LabelVoice 工程文件",
+                        Extensions = new List<string>() { "lvproj" }
+                    }
+                },
+                InitialFileName = _viewModel.ProjectFileName ?? "新工程"
+            };
+            if (this.GetVisualRoot() is not Window window)
+            {
+                return;
+            }
+            var result = await dialog.ShowAsync(window);
+            if (result != null)
+            {
+                _viewModel.SaveProject(result);
+            }
         }
 
         private void SelectingItemsControl_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)

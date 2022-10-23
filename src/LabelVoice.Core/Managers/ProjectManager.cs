@@ -19,6 +19,7 @@ namespace LabelVoice.Core.Managers
         public void NewProject()
         {
             Project = new ProjectModel();
+            ProjectFilePath = null;
         }
 
         public void LoadProject(string filePath)
@@ -34,6 +35,7 @@ namespace LabelVoice.Core.Managers
         {
             using TextWriter writer = File.CreateText(filePath);
             Project.SaveTo(writer);
+            ProjectFilePath = filePath;
         }
 
         #endregion Methods
