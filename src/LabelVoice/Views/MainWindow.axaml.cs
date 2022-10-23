@@ -1,7 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
-using LabelVoice.Core.Managers;
 using LabelVoice.Core.Utils;
 using LabelVoice.ViewModels;
 using System.Collections.Generic;
@@ -38,21 +37,17 @@ namespace LabelVoice.Views
 
         public void OnNewProject(object? sender, RoutedEventArgs e) => _viewModel.NewProject();
 
-        public async void OnOpenProject(object? sender, RoutedEventArgs e) => await OpenFile();
+        public void OnOpenProject(object? sender, RoutedEventArgs e) => OpenFile();
 
-        private async Task OpenFile()
+        private async void OpenFile()
         {
-            List<string> formats = new()
-            {
-                "lvproj"
-            };
-            FileDialogFilter filter = new()
-            {
-                Extensions = formats
-            };
             List<FileDialogFilter> filters = new()
             {
-                filter
+                new FileDialogFilter()
+                {
+                    Name = "LabelVoice 工程文件",
+                    Extensions = new List<string>() { "lvproj" }
+                }
             };
             OpenFileDialog dialog = new()
             {
