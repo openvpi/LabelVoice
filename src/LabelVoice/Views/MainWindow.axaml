@@ -37,10 +37,10 @@
 					Content="保存"
 					Margin="4,0,0,0"
 					Click="OnSaveProject"/>
-				<Button
+				<!--<Button
 					Content="另存为..."
 					Margin="4,0,0,0"
-					Click="OnSaveProjectAs"/>
+					Click="OnSaveProjectAs"/>-->
 			</StackPanel>
 			<v:ItemsPanel
 				x:Name="itemsPanel"
