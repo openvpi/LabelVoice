@@ -29,6 +29,7 @@ namespace LabelVoice.Views
             itemsPanel.SetWindow(this);
             slicesPanel.SetWindow(this);
             btnGetProjectRoot.Click += async (sender, e) => await GetProjectRoot();
+            _viewModel.NewProject(true);
             //_viewModel.LoadProject(@"D:\测试\测试工程.lvproj");
         }
 
@@ -36,7 +37,7 @@ namespace LabelVoice.Views
 
         #region Methods
 
-        public void OnNewProject(object? sender, RoutedEventArgs e) => _viewModel.NewProject();
+        public void OnNewProject(object? sender, RoutedEventArgs e) => _viewModel.NewProject(true);
 
         public void OnOpenProject(object? sender, RoutedEventArgs e) => OpenFileAsync();
 
@@ -152,6 +153,35 @@ namespace LabelVoice.Views
             if (item == null)
                 return;
             item.Title = newName;
+        }
+
+        public void OnCreateNewSpeaker()
+        {
+            //if (_viewModel?.SelectedItems == null)
+            //    return;
+            //if (_viewModel.SelectedItems.Count == 0)
+            //    return;
+            //if (_viewModel.SelectedItems[0] is not ItemsTreeItemViewModel item)
+            //    return;
+            //if (item.ItemType == TreeItemType.Item)
+            //    return;
+            //var dialog = new TypeInDialog("新建文件夹")
+            //{
+            //    Title = $"为新文件夹命名",
+            //    onFinish = name => CreateNewSpeaker(name, item),
+            //};
+            //dialog.ShowDialog(this);
+        }
+
+        private void CreateNewSpeaker(string name, ItemsTreeItemViewModel item)
+        {
+            var speakerId = _hexCodeGenerator.Generate(4);
+            item.Subfolders?.Add(new ItemsTreeItemViewModel
+            {
+                ItemType = TreeItemType.Folder,
+                Title = name,
+                Speaker = speakerId
+            });
         }
 
         public void OnCreateNewFolder()

@@ -226,11 +226,11 @@ public class MainWindowViewModel : ViewModelBase
         public List<ItemResource>? Items { get; set; }
     }
 
-    public void NewProject()
+    public void NewProject(bool initWithData = false)
     {
-        ProjectManager.Instance.NewProject();
+        ProjectManager.Instance.NewProject(initWithData);
         ProjectFileName = "ÐÂ¹¤³Ì";
-        Items = new();
+        Items = ProjectUtils.LoadTreeItemsFrom(ProjectManager.Instance.Project);
     }
 
     public void LoadProject(string path)

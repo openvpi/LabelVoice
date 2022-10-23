@@ -1,5 +1,6 @@
 ﻿using AvaloniaEdit.Utils;
 using DynamicData;
+using FluentAvalonia.Core;
 using LabelVoice.Core.Managers;
 using LabelVoice.Core.Utils;
 using LabelVoice.Models;
@@ -47,6 +48,18 @@ namespace LabelVoice.Utils
                 };
                 ListToTreeViewModel(groupedItemResources.Items, speakerNode);
                 resultItems.Add(speakerNode);
+            }
+            //对于可能没有项目的说话人，也要添加到树状图
+            foreach (var speaker in speakers)
+            {
+                var containsSpeaker = resultItems.Where(m => m.Speaker == speaker.Id).Any();
+                if (!containsSpeaker)
+                    resultItems.Add(new()
+                    {
+                        Speaker = speaker.Id,
+                        ItemType = TreeItemType.Folder,
+                        Title = speaker.Name,
+                    });
             }
             return resultItems;
         }

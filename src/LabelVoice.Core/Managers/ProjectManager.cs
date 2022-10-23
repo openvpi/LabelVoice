@@ -8,7 +8,9 @@ namespace LabelVoice.Core.Managers
 
         #region Properties
 
-        public ProjectModel Project { get; private set; } = new ProjectModel();
+        public ProjectModel Project { get; private set; } = new ();
+
+        public HexCodeGenerator HexCodeGenerator { get; } = new();
 
         public string? ProjectFilePath { get; set; }
 
@@ -18,8 +20,33 @@ namespace LabelVoice.Core.Managers
 
         public void NewProject()
         {
-            Project = new ProjectModel();
+            Project = new();
             ProjectFilePath = null;
+        }
+
+        public void NewProject(bool initWithData)
+        {
+            NewProject();
+            if (initWithData)
+                Project = new ProjectModel
+                {
+                    Languages = new()
+                    { 
+                        new()
+                        {
+                            Id = HexCodeGenerator.Generate(4),
+                            Name = "Lang 1"
+                        }
+                    },
+                    Speakers = new()
+                    {
+                        new()
+                        {
+                            Id = HexCodeGenerator.Generate(4),
+                            Name = "Speaker 1"
+                        }
+                    }
+                };
         }
 
         public void LoadProject(string filePath)
