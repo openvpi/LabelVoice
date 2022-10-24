@@ -26,14 +26,7 @@ namespace LabelVoice.Views
 
         private void ItemsTreeView_SelectionChanged(object? sender, SelectionChangedEventArgs e)
         {
-            if (((MainWindowViewModel)DataContext!).SelectedItems == null)
-                return;
-            if (((MainWindowViewModel)DataContext!).SelectedItems?.Count == 0)
-                return;
-            var item = ((MainWindowViewModel)DataContext!).SelectedItems?[0] as ItemsTreeItemViewModel;
-            if (item?.Subfolders?.Count > 0)
-                return;
-            ((MainWindowViewModel)DataContext!).ActiveItem = item;
+            ((MainWindowViewModel)DataContext!).UpdateActiveItem();
         }
 
         public void SetWindow(MainWindow window)

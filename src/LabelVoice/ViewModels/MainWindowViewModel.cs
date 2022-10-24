@@ -266,6 +266,16 @@ public class MainWindowViewModel : ViewModelBase
         ProjectFileName = Path.GetFileNameWithoutExtension(ProjectManager.Instance.ProjectFilePath);
     }
 
+    public void UpdateActiveItem()
+    {
+        if (SelectedItems == null || SelectedItems?.Count == 0)
+            return;
+        var item = SelectedItems?[0] as ItemsTreeItemViewModel;
+        if (item?.ItemType == TreeItemType.Folder)
+            return;
+        ActiveItem = item;
+    }
+
     //public class Node
     //{
     //    public ObservableCollection<Node>? Subfolders { get; set; }
