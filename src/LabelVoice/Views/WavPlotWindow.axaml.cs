@@ -136,12 +136,8 @@ public partial class WavPlotWindow : Window
 #else
         avaPlot.Configuration.DoubleClickBenchmark = false;
 #endif
-
         avaPlot.Configuration.Quality = QualityMode.Low;
-        avaPlot.Configuration.DpiStretch = false;
-        plt.XAxis.TickLabelStyle(fontSize: 11 * GDI.GetScaleRatio());
-        plt.YAxis.TickLabelStyle(fontSize: 11 * GDI.GetScaleRatio());
-
+        
         avaPlot.Configuration.LockVerticalAxis = true;
         plt.SetAxisLimitsX(xMin: 0, xMax: 10);
      
@@ -194,12 +190,29 @@ public partial class WavPlotWindow : Window
                 await Task.Run(() => _viewModel.ReadWavWhileProcess(selectedWav, _cancellationTokenSource.Token));
 
                 _renderTimer?.Stop();
+                
+                var fontSize = 11 * GDI.GetScaleRatio();
+                wavPlot.Configuration.DpiStretch = false;
+                wavPlot.Plot.XAxis.TickLabelStyle(fontSize: fontSize);
+                wavPlot.Plot.YAxis.TickLabelStyle(fontSize: fontSize);
                 wavPlot.Refresh();
+                ClientSizeProperty.Changed.Subscribe(size =>
+                {
+                    wavPlot.Configuration.DpiStretch = true; // temporarily disable DpiStretch when resizing window
+                });
 
                 // _viewModel.PlotNewWav(); // wav plot is loaded while reading wav
                 if (!_cancellationTokenSource.IsCancellationRequested)
                 {
-                    _viewModel.PlotNewSpec();
+                    _viewModel.PlotNewSpec(refresh: false);
+                    specPlot.Configuration.DpiStretch = false;
+                    specPlot.Plot.XAxis.TickLabelStyle(fontSize: fontSize);
+                    specPlot.Plot.YAxis.TickLabelStyle(fontSize: fontSize);
+                    specPlot.Refresh();
+                    ClientSizeProperty.Changed.Subscribe(size =>
+                    {
+                        specPlot.Configuration.DpiStretch = true; // temporarily disable DpiStretch when resizing window
+                    });
                 }
             }
         }
