@@ -24,6 +24,7 @@ using Avalonia.Rendering;
 using Avalonia.Threading;
 using Avalonia.Logging;
 using System.Threading;
+using ScottPlot.Drawing;
 
 namespace LabelVoice.Views;
 
@@ -110,8 +111,9 @@ public partial class WavPlotWindow : Window
     {
         //wavPlot.Plot.Title("Waveform");
         //wavPlot.Plot.YLabel("dB");
-        wavPlot.Plot.YAxis.TickLabelFormat(amp => amp == 0 ? "-∞" : String.Format("{0:0.##}dB", 20 * Math.Log10(Math.Abs(amp))));
-        wavPlot.Plot.SetAxisLimitsY(yMin: -1, yMax: 1);
+        double dBOffset = 20 * Math.Log10(WavPlotWindowViewModel.audioMax);
+        wavPlot.Plot.YAxis.TickLabelFormat(amp => amp == 0 ? "-∞" : string.Format("{0:0.##}dB", 20 * Math.Log10(Math.Abs(amp)) - dBOffset));
+        wavPlot.Plot.SetAxisLimitsY(yMin: -WavPlotWindowViewModel.audioMax, yMax: WavPlotWindowViewModel.audioMax);
 
         //specPlot.Plot.Title("Spectrogram");
         //specPlot.Plot.YLabel("freq");
@@ -128,9 +130,17 @@ public partial class WavPlotWindow : Window
         plt.Style(Style.Gray1);
         // plt.XLabel("sec");
         // plt.SetCulture(...); // TODO: support different culture decimals
-        // plt.Grid(false);
-        plt.Benchmark(enable: false);
+        plt.Grid(false);
+#if DEBUG
+        plt.Benchmark(enable: true);
+#else
         avaPlot.Configuration.DoubleClickBenchmark = false;
+#endif
+
+        avaPlot.Configuration.Quality = QualityMode.Low;
+        avaPlot.Configuration.DpiStretch = false;
+        plt.XAxis.TickLabelStyle(fontSize: 11 * GDI.GetScaleRatio());
+        plt.YAxis.TickLabelStyle(fontSize: 11 * GDI.GetScaleRatio());
 
         avaPlot.Configuration.LockVerticalAxis = true;
         plt.SetAxisLimitsX(xMin: 0, xMax: 10);
@@ -154,6 +164,8 @@ public partial class WavPlotWindow : Window
         var newAxisLimits = changedPlot.Plot.GetAxisLimits();
 
         var ap = (changedPlot == wavPlot) ? specPlot : wavPlot;
+        if (ap == specPlot && _viewModel.SpecImg is null)
+            return;
 
         // disable this briefly to avoid infinite loop
         ap.Configuration.AxesChangedEventEnabled = false;
