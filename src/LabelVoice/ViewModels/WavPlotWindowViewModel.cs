@@ -21,7 +21,8 @@ namespace LabelVoice.ViewModels;
 
 public class WavPlotWindowViewModel : ViewModelBase
 {
-    double[] audio = new double[0];
+    short[] audio = Array.Empty<short>();
+    public const short audioMax = 30000;
     
     int sampleRate;
 
@@ -29,9 +30,9 @@ public class WavPlotWindowViewModel : ViewModelBase
 
     AvaPlot wavPlot;
 
-    SignalPlot? wavImg;
+    SignalPlotConst<short>? wavImg;
 
-    public SignalPlot? WavImg { get => wavImg; }
+    public SignalPlotConst<short>? WavImg { get => wavImg; }
 
     private double? nowTotalSec;
 
@@ -143,7 +144,7 @@ public class WavPlotWindowViewModel : ViewModelBase
     /// </summary>
     public void PlotNewWav(bool refresh = true)
     {
-        double totalSec = audio.Length / sampleRate;
+        double totalSec = (double)audio.Length / sampleRate;
         if (totalSec <= 0) { return; }
         nowTotalSec = totalSec;
 
@@ -153,18 +154,18 @@ public class WavPlotWindowViewModel : ViewModelBase
         plt.Clear();
 
         // Signal plots require a data array and a sample rate (points per unit)
-        wavImg = plt.AddSignal(audio, sampleRate);
+        wavImg = plt.AddSignalConst(audio, sampleRate);
         // wavImg.DensityColors = defaultIntensityColor;
         // wavImg.Color = defaultIntensityColor[0];
         wavImg.Color = userColor;
 
-        if (autoStretchYAxis)
+        if (false && autoStretchYAxis) // do not auto stretch at the beginning of stream rendering
         {
-            plt.SetOuterViewLimits(); // needed, otherwise AxisAuto won't work
+            plt.SetOuterViewLimits(xMin: 0, xMax: double.PositiveInfinity); // needed, otherwise AxisAuto won't work
             plt.AxisAutoY();
             ChangeLockedYAxisLimit(wavPlot, plt.GetAxisLimits().YMin, plt.GetAxisLimits().YMax);
         }
-        else { ChangeLockedYAxisLimit(wavPlot, -1, 1); }
+        else { ChangeLockedYAxisLimit(wavPlot, -audioMax, audioMax); }
         plt.SetAxisLimitsX(xMin: 0, xMax: clipSec);
 
         if (refresh) wavPlot.Refresh();
@@ -178,7 +179,6 @@ public class WavPlotWindowViewModel : ViewModelBase
     {
         try
         {
-
             Bitmap? specMap = mySpecBitmap;
             if (nowTotalSec == null || nowTotalSec <= 0 || specMap == null || specMap.Width == 0 || specMap.Height == 0) { return; }
 
@@ -192,7 +192,10 @@ public class WavPlotWindowViewModel : ViewModelBase
             specImg.HeightInAxisUnits = Setting.DefaultMaxFreq - Setting.DefaultMinFreq;
 
             ChangeLockedYAxisLimit(specPlot, min: nowMinFreq, max: nowMaxFreq);
-            plt.SetAxisLimitsX(xMin: 0, xMax: clipSec);
+            specPlot.Configuration.AxesChangedEventEnabled = false;
+            var wavAxisLimits = wavPlot.Plot.GetAxisLimits();
+            plt.SetAxisLimitsX(wavAxisLimits.XMin, wavAxisLimits.XMax);
+            specPlot.Configuration.AxesChangedEventEnabled = true;
 
             if (refresh) specPlot.Refresh();
         }
@@ -223,9 +226,13 @@ public class WavPlotWindowViewModel : ViewModelBase
 
             lock (audio)
             {
-                audio = new double[((sampleCount - 1) / Setting.DefaultSamplePeakRatio + 1) * 2]; // HACK: store peaks instead of samples, reducing memory
+                audio = new short[((sampleCount - 1) / Setting.DefaultSamplePeakRatio + 1) * 2]; // HACK: store peaks instead of samples, reducing memory
             }
             this.sampleRate = sampleRate * channelCount * 2 / Setting.DefaultSamplePeakRatio;
+#if DEBUG
+            Console.WriteLine("load wav of {0} samples, {1} sample rate, {2:0.##} total sec", sampleCount, sampleRate, (double)sampleCount / sampleRate / channelCount);
+            Console.WriteLine("wav peak has {0} samples, {1} sample rate, {2:0.##} total sec", audio.Length, this.sampleRate, (double)audio.Length / this.sampleRate);
+#endif
 
             PlotNewWav(refresh: false);
             
@@ -234,14 +241,15 @@ public class WavPlotWindowViewModel : ViewModelBase
             using (var afr = new NAudio.Wave.AudioFileReader(filePath))
                 while ((samplesRead = afr.Read(buffer, 0, buffer.Length)) > 0) // stream-read wav, every time read 1 sec
                 {
-                    var peaks = buffer.Take(samplesRead).Select((x, i) => new { x = (double)x, i })
+                    var peaks = buffer.Take(samplesRead).Select((x, i) => new { x = (short)(x * audioMax + 0.5f), i })
                                       .GroupBy(g => g.i / Setting.DefaultSamplePeakRatio, i => i.x) // assume sampleRate % defaultSamplePeakRatio == 0
-                                      .SelectMany(x => new double[] { x.Max(), x.Min() })
+                                      .SelectMany(x => new short[] { x.Max(), x.Min() })
                                       .ToArray();
-                    lock (audio)
-                    {
-                        Array.Copy(peaks, 0, audio, peaksRead, peaks.Length);
-                    }
+                    wavImg!.Update(peaksRead, peaks);
+                    //lock (audio)
+                    //{
+                    //    Array.Copy(peaks, 0, audio, peaksRead, peaks.Length); // use wavImg!.Update() to stream render the plot
+                    //}
                     peaksRead += peaks.Length;
                     if (cancellationToken.IsCancellationRequested)
                     {

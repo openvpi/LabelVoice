@@ -24,6 +24,7 @@ using Avalonia.Rendering;
 using Avalonia.Threading;
 using Avalonia.Logging;
 using System.Threading;
+using ScottPlot.Drawing;
 
 namespace LabelVoice.Views;
 
@@ -110,8 +111,9 @@ public partial class WavPlotWindow : Window
     {
         //wavPlot.Plot.Title("Waveform");
         //wavPlot.Plot.YLabel("dB");
-        wavPlot.Plot.YAxis.TickLabelFormat(amp => amp == 0 ? "-∞" : String.Format("{0:0.##}dB", 20 * Math.Log10(Math.Abs(amp))));
-        wavPlot.Plot.SetAxisLimitsY(yMin: -1, yMax: 1);
+        double dBOffset = 20 * Math.Log10(WavPlotWindowViewModel.audioMax);
+        wavPlot.Plot.YAxis.TickLabelFormat(amp => amp == 0 ? "-∞" : string.Format("{0:0.##}dB", 20 * Math.Log10(Math.Abs(amp)) - dBOffset));
+        wavPlot.Plot.SetAxisLimitsY(yMin: -WavPlotWindowViewModel.audioMax, yMax: WavPlotWindowViewModel.audioMax);
 
         //specPlot.Plot.Title("Spectrogram");
         //specPlot.Plot.YLabel("freq");
@@ -128,24 +130,35 @@ public partial class WavPlotWindow : Window
         plt.Style(Style.Gray1);
         // plt.XLabel("sec");
         // plt.SetCulture(...); // TODO: support different culture decimals
-        // plt.Grid(false);
-        plt.Benchmark(enable: false);
+        plt.Grid(false);
+#if DEBUG
+        plt.Benchmark(enable: true);
+#else
         avaPlot.Configuration.DoubleClickBenchmark = false;
-
-        avaPlot.Configuration.LockVerticalAxis = true;
+#endif
+        avaPlot.Configuration.Quality = QualityMode.Low;
+        
+        avaPlot.Configuration.LockVerticalAxis = true; // temporary, should manually control pan and zoom
         plt.SetAxisLimitsX(xMin: 0, xMax: 10);
-     
+        avaPlot.Configuration.ScrollWheelZoom = false;
+
         plt.XAxis.TickLabelFormat(timeSec => new TimeSpan(ticks: (long)(timeSec * 10000000)).ToString(@"mm\:ss\.ff"));
         // plt.XAxis.TickLabelFormat(timeSec => new TimeSpan(0, 0, (int)timeSec).ToString(@"mm\:ss"));
     }
 
     private void MonitorZoomLimit(object sender, PointerWheelEventArgs e) 
     {
-        var changedPlot = (AvaPlot)sender;
-        if (changedPlot.Plot.GetAxisLimits().XSpan < 5)
-        {
-            changedPlot.Configuration.ScrollWheelZoom = !(e.Delta.Y > 0);
-        }
+        var ap = (AvaPlot)sender;
+#if DEBUG
+        Console.WriteLine("e.Delta.Y: {0}, prev XSpan: {1}", e.Delta.Y, ap.Plot.GetAxisLimits().XSpan);
+#endif
+        if (ap.Plot.GetAxisLimits().XSpan < 5 && e.Delta.Y > 0)
+            return;
+
+        ap.Configuration.ScrollWheelZoom = true;
+        ap.Plot.AxisZoom(e.Delta.Y > 0 ? 1.15 : 1 / 1.15);
+        ap.Refresh();
+        ap.Configuration.ScrollWheelZoom = false;
     }
 
     private void AxesChanged(object sender, EventArgs e)
@@ -154,6 +167,8 @@ public partial class WavPlotWindow : Window
         var newAxisLimits = changedPlot.Plot.GetAxisLimits();
 
         var ap = (changedPlot == wavPlot) ? specPlot : wavPlot;
+        if (ap == specPlot && _viewModel.SpecImg is null)
+            return;
 
         // disable this briefly to avoid infinite loop
         ap.Configuration.AxesChangedEventEnabled = false;
@@ -182,12 +197,29 @@ public partial class WavPlotWindow : Window
                 await Task.Run(() => _viewModel.ReadWavWhileProcess(selectedWav, _cancellationTokenSource.Token));
 
                 _renderTimer?.Stop();
+                
+                var fontSize = 11 * GDI.GetScaleRatio();
+                wavPlot.Configuration.DpiStretch = false;
+                wavPlot.Plot.XAxis.TickLabelStyle(fontSize: fontSize);
+                wavPlot.Plot.YAxis.TickLabelStyle(fontSize: fontSize);
                 wavPlot.Refresh();
+                ClientSizeProperty.Changed.Subscribe(size =>
+                {
+                    wavPlot.Configuration.DpiStretch = true; // temporarily disable DpiStretch when resizing window
+                });
 
                 // _viewModel.PlotNewWav(); // wav plot is loaded while reading wav
                 if (!_cancellationTokenSource.IsCancellationRequested)
                 {
-                    _viewModel.PlotNewSpec();
+                    _viewModel.PlotNewSpec(refresh: false);
+                    specPlot.Configuration.DpiStretch = false;
+                    specPlot.Plot.XAxis.TickLabelStyle(fontSize: fontSize);
+                    specPlot.Plot.YAxis.TickLabelStyle(fontSize: fontSize);
+                    specPlot.Refresh();
+                    ClientSizeProperty.Changed.Subscribe(size =>
+                    {
+                        specPlot.Configuration.DpiStretch = true; // temporarily disable DpiStretch when resizing window
+                    });
                 }
             }
         }
