@@ -144,7 +144,7 @@ public class WavPlotWindowViewModel : ViewModelBase
     /// </summary>
     public void PlotNewWav(bool refresh = true)
     {
-        double totalSec = audio.Length / sampleRate;
+        double totalSec = (double)audio.Length / sampleRate;
         if (totalSec <= 0) { return; }
         nowTotalSec = totalSec;
 
@@ -161,7 +161,7 @@ public class WavPlotWindowViewModel : ViewModelBase
 
         if (false && autoStretchYAxis) // do not auto stretch at the beginning of stream rendering
         {
-            plt.SetOuterViewLimits(); // needed, otherwise AxisAuto won't work
+            plt.SetOuterViewLimits(xMin: 0, xMax: double.PositiveInfinity); // needed, otherwise AxisAuto won't work
             plt.AxisAutoY();
             ChangeLockedYAxisLimit(wavPlot, plt.GetAxisLimits().YMin, plt.GetAxisLimits().YMax);
         }
@@ -229,6 +229,10 @@ public class WavPlotWindowViewModel : ViewModelBase
                 audio = new short[((sampleCount - 1) / Setting.DefaultSamplePeakRatio + 1) * 2]; // HACK: store peaks instead of samples, reducing memory
             }
             this.sampleRate = sampleRate * channelCount * 2 / Setting.DefaultSamplePeakRatio;
+#if DEBUG
+            Console.WriteLine("load wav of {0} samples, {1} sample rate, {2:0.##} total sec", sampleCount, sampleRate, (double)sampleCount / sampleRate / channelCount);
+            Console.WriteLine("wav peak has {0} samples, {1} sample rate, {2:0.##} total sec", audio.Length, this.sampleRate, (double)audio.Length / this.sampleRate);
+#endif
 
             PlotNewWav(refresh: false);
             
@@ -244,7 +248,7 @@ public class WavPlotWindowViewModel : ViewModelBase
                     wavImg!.Update(peaksRead, peaks);
                     //lock (audio)
                     //{
-                    //    Array.Copy(peaks, 0, audio, peaksRead, peaks.Length);
+                    //    Array.Copy(peaks, 0, audio, peaksRead, peaks.Length); // use wavImg!.Update() to stream render the plot
                     //}
                     peaksRead += peaks.Length;
                     if (cancellationToken.IsCancellationRequested)

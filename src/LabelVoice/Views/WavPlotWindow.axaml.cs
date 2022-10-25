@@ -138,20 +138,27 @@ public partial class WavPlotWindow : Window
 #endif
         avaPlot.Configuration.Quality = QualityMode.Low;
         
-        avaPlot.Configuration.LockVerticalAxis = true;
+        avaPlot.Configuration.LockVerticalAxis = true; // temporary, should manually control pan and zoom
         plt.SetAxisLimitsX(xMin: 0, xMax: 10);
-     
+        avaPlot.Configuration.ScrollWheelZoom = false;
+
         plt.XAxis.TickLabelFormat(timeSec => new TimeSpan(ticks: (long)(timeSec * 10000000)).ToString(@"mm\:ss\.ff"));
         // plt.XAxis.TickLabelFormat(timeSec => new TimeSpan(0, 0, (int)timeSec).ToString(@"mm\:ss"));
     }
 
     private void MonitorZoomLimit(object sender, PointerWheelEventArgs e) 
     {
-        var changedPlot = (AvaPlot)sender;
-        if (changedPlot.Plot.GetAxisLimits().XSpan < 5)
-        {
-            changedPlot.Configuration.ScrollWheelZoom = !(e.Delta.Y > 0);
-        }
+        var ap = (AvaPlot)sender;
+#if DEBUG
+        Console.WriteLine("e.Delta.Y: {0}, prev XSpan: {1}", e.Delta.Y, ap.Plot.GetAxisLimits().XSpan);
+#endif
+        if (ap.Plot.GetAxisLimits().XSpan < 5 && e.Delta.Y > 0)
+            return;
+
+        ap.Configuration.ScrollWheelZoom = true;
+        ap.Plot.AxisZoom(e.Delta.Y > 0 ? 1.15 : 1 / 1.15);
+        ap.Refresh();
+        ap.Configuration.ScrollWheelZoom = false;
     }
 
     private void AxesChanged(object sender, EventArgs e)
