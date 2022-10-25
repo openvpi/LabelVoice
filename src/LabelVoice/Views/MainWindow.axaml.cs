@@ -5,6 +5,7 @@ using LabelVoice.Core.Managers;
 using LabelVoice.Core.Utils;
 using LabelVoice.ViewModels;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -216,6 +217,53 @@ namespace LabelVoice.Views
                 Title = name,
                 Speaker = item.Speaker//文件夹的说话人继承自上一级
             });
+        }
+
+        public void OnAddAudioFiles()
+        {
+            if (_viewModel?.SelectedItems == null ||_viewModel.SelectedItems.Count != 1)
+                return;
+            if (_viewModel.SelectedItems[0] is not ItemsTreeItemViewModel item)
+                return;
+            if (item.ItemType == TreeItemType.Item)
+                return;
+            OpenAudioFilesSelectDialogAsync(item);
+        }
+
+        private async void OpenAudioFilesSelectDialogAsync(ItemsTreeItemViewModel selectedItem)
+        {
+            List<FileDialogFilter> filters = new()
+            {
+                new FileDialogFilter()
+                {
+                    Name = "音频文件",
+                    Extensions = new List<string>() { "wav", "flac", "aiff", "mp3" }
+                }
+            };
+            OpenFileDialog dialog = new()
+            {
+                AllowMultiple = true,
+                Filters = filters
+            };
+            if (this.GetVisualRoot() is not Window window)
+            {
+                return;
+            }
+            var result = await dialog.ShowAsync(window);
+            if (result != null)
+            {
+                foreach (var path in result)
+                {
+                    selectedItem.Subfolders?.Add(new()
+                    {
+                        Id = _hexCodeGenerator.Generate(8),
+                        Speaker = selectedItem.Speaker,
+                        Title = Path.GetFileNameWithoutExtension(path),
+                        Language = selectedItem.Language,
+                        ItemType = TreeItemType.Item
+                    });
+                }
+            }
         }
 
         public void OnRenameSlice()

@@ -48,20 +48,17 @@ namespace LabelVoice.Views
                 parent.IsExpanded = true;
         }
 
-        private void OnCreateNewFolder(object sender, RoutedEventArgs e)
-        {
+        private void OnAddAudioFiles(object sender, RoutedEventArgs e) =>
+            _window?.OnAddAudioFiles();
+
+        private void OnCreateNewFolder(object sender, RoutedEventArgs e) =>
             _window?.OnCreateNewFolder();
-        }
 
-        private void OnRenameItem(object sender, RoutedEventArgs e)
-        {
+        private void OnRenameItem(object sender, RoutedEventArgs e) =>
             _window?.OnRenameItem();
-        }
 
-        private void OnRemoveItem(object sender, RoutedEventArgs e)
-        {
+        private void OnRemoveItem(object sender, RoutedEventArgs e) =>
             _window?.OnRemoveItem();
-        }
 
         #endregion Methods
     }

@@ -311,6 +311,18 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
+    //public void AddAudioFilesToActiveItem(string[] paths)
+    //{
+    //    if (SelectedItems == null || SelectedItems.Count == 0)
+    //        return;
+    //    if (SelectedItems[0] is not ItemsTreeItemViewModel firstItem || firstItem.ItemType != TreeItemType.Folder)
+    //        return;
+    //    foreach (var path in paths)
+    //    {
+
+    //    }
+    //}
+
     //public class Node
     //{
     //    public ObservableCollection<Node>? Subfolders { get; set; }
