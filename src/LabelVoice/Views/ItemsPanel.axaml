@@ -40,7 +40,7 @@
 								<!--<MenuItem Header="New Speaker..." Click="OnCreateNewSpeaker" />-->
 								<MenuItem Header="New Folder..." Click="OnCreateNewFolder" />
 								<MenuItem Header="Rename..." Click="OnRenameItem" />
-								<MenuItem Header="Remove" />
+								<MenuItem Header="Remove" Click="OnRemoveItem"/>
 								<MenuItem Header="Move..." />
 							</MenuFlyout>
 						</Setter.Value>

@@ -58,6 +58,11 @@ namespace LabelVoice.Views
             _window?.OnRenameItem();
         }
 
+        private void OnRemoveItem(object sender, RoutedEventArgs e)
+        {
+            _window?.OnRemoveItem();
+        }
+
         #endregion Methods
     }
 }

@@ -276,6 +276,41 @@ public class MainWindowViewModel : ViewModelBase
         ActiveItem = item;
     }
 
+    public void RemoveItems()
+    {
+        if (SelectedItems == null
+            || SelectedItems.Count == 0
+            || Items == null)
+            return;
+        //将已选定的项目添加到列表内
+        var selectedItemsList = new List<ItemsTreeItemViewModel>();
+        foreach (var selectedObject in SelectedItems)
+        {
+            if (selectedObject is ItemsTreeItemViewModel selectedItem)
+                selectedItemsList.Add(selectedItem);
+        }
+        foreach (var selectedItem in selectedItemsList)
+            foreach (var item in Items)
+                RemoveItemFromTree(item, selectedItem);
+    }
+
+    private void RemoveItemFromTree(ItemsTreeItemViewModel tree, ItemsTreeItemViewModel item)
+    {
+        var subItems = tree.Subfolders;
+        if (subItems == null || subItems.Count == 0)
+            return;
+        if (subItems.Contains(item))//当前节点的子项目包含待移除项目
+            subItems.Remove(item);//直接移除
+        else
+        {
+            //当前节点的子项目不包含待移除项目，深入到子项目的子项目移除
+            foreach (var subItem in subItems)
+            {
+                RemoveItemFromTree(subItem, item);
+            }
+        }
+    }
+
     //public class Node
     //{
     //    public ObservableCollection<Node>? Subfolders { get; set; }

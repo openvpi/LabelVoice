@@ -155,6 +155,12 @@ namespace LabelVoice.Views
             item.Title = newName;
         }
 
+        public void OnRemoveItem()
+        {
+            //TODO: Show confirm dialog before removing selected items.
+            _viewModel.RemoveItems();
+        }
+
         public void OnCreateNewSpeaker()
         {
             //if (_viewModel?.SelectedItems == null)
